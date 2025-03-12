@@ -1,13 +1,12 @@
 package org.guanzon.cas.inv.services;
 
-import org.guanzon.appdriver.base.GRider;
+import org.guanzon.appdriver.base.GRiderCAS;
 import org.guanzon.appdriver.base.LogWrapper;
 import org.guanzon.cas.inv.Inv_Master;
 import org.guanzon.cas.inv.Inventory;
-import org.guanzon.cas.inv.InvSerial;
 
 public class InvControllers {
-    public InvControllers(GRider applicationDriver, LogWrapper logWrapper) {
+    public InvControllers(GRiderCAS applicationDriver, LogWrapper logWrapper) {
         poGRider = applicationDriver;
         poLogWrapper = logWrapper;
     }
@@ -24,7 +23,7 @@ public class InvControllers {
 
         poInventory = new Inventory();
         poInventory.setApplicationDriver(poGRider);
-        poInventory.setWithParentClass(true);
+        poInventory.setWithParentClass(false);
         poInventory.setLogWrapper(poLogWrapper);
         poInventory.initialize();
         poInventory.newRecord();
@@ -43,38 +42,38 @@ public class InvControllers {
 
         poInvMaster = new Inv_Master();
         poInvMaster.setApplicationDriver(poGRider);
-        poInvMaster.setWithParentClass(true);
+        poInvMaster.setWithParentClass(false);
         poInvMaster.setLogWrapper(poLogWrapper);
         poInvMaster.initialize();
         poInvMaster.newRecord();
         return poInvMaster;
     }
     
-    public InvSerial InventorySerial() {
-        if (poGRider == null) {
-            poLogWrapper.severe("InvControllers.InventoryMaster: Application driver is not set.");
-            return null;
-        }
-
-        if (poInventorySerial != null) {
-            return poInventorySerial;
-        }
-
-        poInventorySerial = new InvSerial();
-        poInventorySerial.setApplicationDriver(poGRider);
-        poInventorySerial.setWithParentClass(true);
-        poInventorySerial.setLogWrapper(poLogWrapper);
-        poInventorySerial.initialize();
-        poInventorySerial.newRecord();
-        return poInventorySerial;
-    }
+//    public InvSerial InventorySerial() {
+//        if (poGRider == null) {
+//            poLogWrapper.severe("InvControllers.InventoryMaster: Application driver is not set.");
+//            return null;
+//        }
+//
+//        if (poInventorySerial != null) {
+//            return poInventorySerial;
+//        }
+//
+//        poInventorySerial = new InvSerial();
+//        poInventorySerial.setApplicationDriver(poGRider);
+//        poInventorySerial.setWithParentClass(true);
+//        poInventorySerial.setLogWrapper(poLogWrapper);
+//        poInventorySerial.initialize();
+//        poInventorySerial.newRecord();
+//        return poInventorySerial;
+//    }
     
     
 
-    private final GRider poGRider;
+    private final GRiderCAS poGRider;
     private final LogWrapper poLogWrapper;
 
     private Inventory poInventory;
     private Inv_Master poInvMaster;
-    private InvSerial poInventorySerial;
+//    private InvSerial poInventorySerial;
 }

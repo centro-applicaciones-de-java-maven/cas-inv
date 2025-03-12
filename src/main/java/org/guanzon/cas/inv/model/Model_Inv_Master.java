@@ -3,6 +3,7 @@ package org.guanzon.cas.inv.model;
 import java.sql.SQLException;
 import java.util.Date;
 import org.guanzon.appdriver.agent.services.Model;
+import org.guanzon.appdriver.base.GuanzonException;
 import org.guanzon.appdriver.base.MiscUtil;
 import org.guanzon.appdriver.constant.EditMode;
 import org.guanzon.appdriver.constant.InventoryClassification;
@@ -140,11 +141,11 @@ public class Model_Inv_Master extends Model{
     }   
     
     public JSONObject setQuantityOnHand(int quantityOnHand){
-        return setValue("nBegQtyxx", quantityOnHand);
+        return setValue("nQtyOnHnd", quantityOnHand);
     }
     
     public int getQuantityOnHand(){
-        return (int) getValue("nBegQtyxx");
+        return (int) getValue("nQtyOnHnd");
     }  
     
     public JSONObject setLedgerCount(int ledgerCount){
@@ -273,7 +274,7 @@ public class Model_Inv_Master extends Model{
     }
     
     //reference object models
-    public Model_Branch Branch() {
+    public Model_Branch Branch() throws SQLException, GuanzonException{
         if (!"".equals((String) getValue("sBranchCd"))) {
             if (poBranch.getEditMode() == EditMode.READY
                     && poBranch.getBranchCode().equals((String) getValue("sBranchCd"))) {
@@ -294,7 +295,7 @@ public class Model_Inv_Master extends Model{
         }
     }
     
-    public Model_Warehouse Warehouse() {
+    public Model_Warehouse Warehouse() throws SQLException, GuanzonException{
         if (!"".equals((String) getValue("sWHouseID"))) {
             if (poWarehouse.getEditMode() == EditMode.READY
                     && poWarehouse.getWarehouseId().equals((String) getValue("sWHouseID"))) {
@@ -315,7 +316,7 @@ public class Model_Inv_Master extends Model{
         }
     }
     
-    public Model_Inv_Location Location() {
+    public Model_Inv_Location Location() throws SQLException, GuanzonException{
         if (!"".equals((String) getValue("sLocatnID"))) {
             if (poLocation.getEditMode() == EditMode.READY
                     && poLocation.getLocationId().equals((String) getValue("sLocatnID"))) {
@@ -336,7 +337,7 @@ public class Model_Inv_Master extends Model{
         }
     }
     
-    public Model_Inventory Inventory() {
+    public Model_Inventory Inventory() throws SQLException, GuanzonException{
         if (!"".equals((String) getValue("sStockIDx"))) {
             if (poInventory.getEditMode() == EditMode.READY
                     && poInventory.getStockId().equals((String) getValue("sStockIDx"))) {

@@ -1,5 +1,8 @@
-
-import org.guanzon.appdriver.base.GRider;
+import java.awt.Polygon;
+import java.sql.SQLException;
+import org.bouncycastle.jcajce.provider.asymmetric.rsa.AlgorithmParametersSpi;
+import org.guanzon.appdriver.base.GRiderCAS;
+import org.guanzon.appdriver.base.GuanzonException;
 import org.guanzon.appdriver.base.MiscUtil;
 import org.guanzon.cas.inv.Inv_Master;
 import org.guanzon.cas.inv.services.InvControllers;
@@ -13,7 +16,7 @@ import org.junit.runners.MethodSorters;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class testInvMaster {
-    static GRider instance;
+    static GRiderCAS instance;
     static Inv_Master record;
 
     @BeforeClass
@@ -27,52 +30,71 @@ public class testInvMaster {
 
     @Test
     public void testNewRecord() {
-        JSONObject loJSON;
+        try {
+            JSONObject loJSON;
 
-        loJSON = record.newRecord();
-        if ("error".equals((String) loJSON.get("result"))) {
-            Assert.fail((String) loJSON.get("message"));
-        }    
-        
-        loJSON = record.getModel().setStockId("M00124000119");
-        if ("error".equals((String) loJSON.get("result"))) {
-            Assert.fail((String) loJSON.get("message"));
-        }     
-        
-        loJSON = record.getModel().setBranchCode(instance.getBranchCode());
-        if ("error".equals((String) loJSON.get("result"))) {
-            Assert.fail((String) loJSON.get("message"));
-        } 
-        
-        loJSON = record.getModel().setWarehouseId("001");
-        if ("error".equals((String) loJSON.get("result"))) {
-            Assert.fail((String) loJSON.get("message"));
-        } 
-        
-        loJSON = record.getModel().setLocationId("001");
-        if ("error".equals((String) loJSON.get("result"))) {
-            Assert.fail((String) loJSON.get("message"));
-        }  
-        
-        loJSON = record.getModel().setBinId("1");
-        if ("error".equals((String) loJSON.get("result"))) {
-            Assert.fail((String) loJSON.get("message"));
+            loJSON = record.newRecord();
+            if ("error".equals((String) loJSON.get("result"))) {
+                Assert.fail((String) loJSON.get("message"));
+            }    
+
+            loJSON = record.getModel().setStockId("M00125000004");
+            if ("error".equals((String) loJSON.get("result"))) {
+                Assert.fail((String) loJSON.get("message"));
+            }     
+
+            loJSON = record.getModel().setBranchCode("M0W1");
+            if ("error".equals((String) loJSON.get("result"))) {
+                Assert.fail((String) loJSON.get("message"));
+            } 
+
+            loJSON = record.getModel().setWarehouseId("");
+            if ("error".equals((String) loJSON.get("result"))) {
+                Assert.fail((String) loJSON.get("message"));
+            } 
+
+            loJSON = record.getModel().setLocationId("");
+            if ("error".equals((String) loJSON.get("result"))) {
+                Assert.fail((String) loJSON.get("message"));
+            }  
+
+            loJSON = record.getModel().setBinId("");
+            if ("error".equals((String) loJSON.get("result"))) {
+                Assert.fail((String) loJSON.get("message"));
+            }  
+            
+            loJSON = record.getModel().setDateAcquired(instance.getServerDate());
+            if ("error".equals((String) loJSON.get("result"))) {
+                Assert.fail((String) loJSON.get("message"));
+            }  
+            
+            loJSON = record.getModel().setBeginningInventoryDate(instance.getServerDate());
+            if ("error".equals((String) loJSON.get("result"))) {
+                Assert.fail((String) loJSON.get("message"));
+            }  
+            
+            loJSON = record.getModel().setBeginningInventoryQuantity(5);
+            if ("error".equals((String) loJSON.get("result"))) {
+                Assert.fail((String) loJSON.get("message"));
+            }  
+            
+            loJSON = record.getModel().setQuantityOnHand(5);
+            if ("error".equals((String) loJSON.get("result"))) {
+                Assert.fail((String) loJSON.get("message"));
+            }  
+            
+            loJSON = record.getModel().setBinId("");
+            if ("error".equals((String) loJSON.get("result"))) {
+                Assert.fail((String) loJSON.get("message"));
+            }  
+
+            loJSON = record.saveRecord();
+            if ("error".equals((String) loJSON.get("result"))) {
+                Assert.fail((String) loJSON.get("message"));
+            }  
+        } catch (SQLException | GuanzonException e) {
+            Assert.fail(e.getMessage());
         }
-        
-        loJSON = record.getModel().setModifyingId(instance.getUserID());
-        if ("error".equals((String) loJSON.get("result"))) {
-            Assert.fail((String) loJSON.get("message"));
-        }     
-        
-        loJSON = record.getModel().setModifiedDate(instance.getServerDate());
-        if ("error".equals((String) loJSON.get("result"))) {
-            Assert.fail((String) loJSON.get("message"));
-        }     
-        
-        loJSON = record.saveRecord();
-        if ("error".equals((String) loJSON.get("result"))) {
-            Assert.fail((String) loJSON.get("message"));
-        }  
     }
     
 //   

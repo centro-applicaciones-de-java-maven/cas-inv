@@ -2,9 +2,8 @@ package org.guanzon.cas.inv.model;
 
 import java.sql.SQLException;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import org.guanzon.appdriver.agent.services.Model;
+import org.guanzon.appdriver.base.GuanzonException;
 import org.guanzon.appdriver.base.MiscUtil;
 import org.guanzon.appdriver.constant.EditMode;
 import org.guanzon.appdriver.constant.Logical;
@@ -15,6 +14,7 @@ import org.guanzon.cas.parameter.model.Model_Category_Level2;
 import org.guanzon.cas.parameter.model.Model_Category_Level3;
 import org.guanzon.cas.parameter.model.Model_Category_Level4;
 import org.guanzon.cas.parameter.model.Model_Color;
+import org.guanzon.cas.parameter.model.Model_Industry;
 import org.guanzon.cas.parameter.model.Model_Inv_Type;
 import org.guanzon.cas.parameter.model.Model_Measure;
 import org.guanzon.cas.parameter.model.Model_Model;
@@ -22,7 +22,7 @@ import org.guanzon.cas.parameter.services.ParamModels;
 import org.json.simple.JSONObject;
 
 public class Model_Inventory extends Model {
-
+    private Model_Industry poIndustry;
     private Model_Category poCategory;
     private Model_Category_Level2 poCategoryLevel2;
     private Model_Category_Level3 poCategoryLevel3;
@@ -70,6 +70,7 @@ public class Model_Inventory extends Model {
 
             //initialize other connections
             ParamModels model = new ParamModels(poGRider);
+            poIndustry = model.Industry();
             poCategory = model.Category();
             poCategoryLevel2 = model.Category2();
             poCategoryLevel3 = model.Category3();
@@ -87,9 +88,28 @@ public class Model_Inventory extends Model {
         }
     }
 
-    public Model_Category Category() {
-        System.out.println("xml = " + XML);
-        System.out.println("sCategCd1 = " + getValue("sCategCd1"));
+    public Model_Industry Industry() throws SQLException, GuanzonException{
+        if (!"".equals((String) getValue("sIndstCdx"))) {
+            if (poIndustry.getEditMode() == EditMode.READY
+                    && poIndustry.getIndustryId().equals((String) getValue("sIndstCdx"))) {
+                return poIndustry;
+            } else {
+                poJSON = poIndustry.openRecord((String) getValue("sIndstCdx"));
+
+                if ("success".equals((String) poJSON.get("result"))) {
+                    return poIndustry;
+                } else {
+                    poIndustry.initialize();
+                    return poIndustry;
+                }
+            }
+        } else {
+            poCategory.initialize();
+            return poIndustry;
+        }
+    }
+    
+    public Model_Category Category() throws SQLException, GuanzonException{
         if (!"".equals((String) getValue("sCategCd1"))) {
             if (poCategory.getEditMode() == EditMode.READY
                     && poCategory.getCategoryId().equals((String) getValue("sCategCd1"))) {
@@ -110,7 +130,7 @@ public class Model_Inventory extends Model {
         }
     }
 
-    public Model_Category_Level2 CategoryLevel2() {
+    public Model_Category_Level2 CategoryLevel2() throws SQLException, GuanzonException{
         if (!"".equals((String) getValue("sCategCd2"))) {
             if (poCategoryLevel2.getEditMode() == EditMode.READY
                     && poCategoryLevel2.getCategoryId().equals((String) getValue("sCategCd2"))) {
@@ -131,7 +151,7 @@ public class Model_Inventory extends Model {
         }
     }
 
-    public Model_Category_Level3 CategoryLevel3() {
+    public Model_Category_Level3 CategoryLevel3() throws SQLException, GuanzonException{
         if (!"".equals((String) getValue("sCategCd3"))) {
             if (poCategoryLevel3.getEditMode() == EditMode.READY
                     && poCategoryLevel3.getCategoryId().equals((String) getValue("sCategCd3"))) {
@@ -152,7 +172,7 @@ public class Model_Inventory extends Model {
         }
     }
 
-    public Model_Category_Level4 CategoryLevel4() {
+    public Model_Category_Level4 CategoryLevel4() throws SQLException, GuanzonException{
         if (!"".equals((String) getValue("sCategCd4"))) {
             if (poCategoryLevel4.getEditMode() == EditMode.READY
                     && poCategoryLevel4.getCategoryId().equals((String) getValue("sCategCd4"))) {
@@ -173,7 +193,7 @@ public class Model_Inventory extends Model {
         }
     }
 
-    public Model_Brand Brand() {
+    public Model_Brand Brand() throws SQLException, GuanzonException{
         System.out.print("Brand == " + (String) getValue("sBrandIDx") );
         if (!"".equals((String) getValue("sBrandIDx"))) {
             if (poBrand.getEditMode() == EditMode.READY
@@ -195,7 +215,7 @@ public class Model_Inventory extends Model {
         }
     }
 
-    public Model_Model Model() {
+    public Model_Model Model() throws SQLException, GuanzonException{
         if (!"".equals((String) getValue("sModelIDx"))) {
             if (poModel.getEditMode() == EditMode.READY
                     && poModel.getBrandId().equals((String) getValue("sModelIDx"))) {
@@ -216,7 +236,7 @@ public class Model_Inventory extends Model {
         }
     }
 
-    public Model_Color Color() {
+    public Model_Color Color() throws SQLException, GuanzonException{
         if (!"".equals((String) getValue("sColorIDx"))) {
             if (poColor.getEditMode() == EditMode.READY
                     && poColor.getColorId().equals((String) getValue("sColorIDx"))) {
@@ -237,7 +257,7 @@ public class Model_Inventory extends Model {
         }
     }
 
-    public Model_Measure Measure() {
+    public Model_Measure Measure() throws SQLException, GuanzonException{
         if (!"".equals((String) getValue("sMeasurID"))) {
             if (poMeasure.getEditMode() == EditMode.READY
                     && poMeasure.getMeasureId().equals((String) getValue("sMeasurID"))) {
@@ -258,7 +278,7 @@ public class Model_Inventory extends Model {
         }
     }
 
-    public Model_Inv_Type InventoryType() {
+    public Model_Inv_Type InventoryType() throws SQLException, GuanzonException{
         System.out.println("InventoryType = " + (String) getValue("sInvTypCd") ); 
         if (!"".equals((String) getValue("sInvTypCd"))) {
             if (poInventoryType.getEditMode() == EditMode.READY
@@ -375,6 +395,14 @@ public class Model_Inventory extends Model {
     public String getColorId() {
         return (String) getValue("sColorIDx");
     }
+    
+    public JSONObject setVariantId(String variantId) {
+        return setValue("sVrntIDxx", variantId);
+    }
+
+    public String getVariantId() {
+        return (String) getValue("sVrntIDxx");
+    }
 
     public JSONObject setMeasurementId(String measurementId) {
         return setValue("sMeasurID", measurementId);
@@ -390,6 +418,14 @@ public class Model_Inventory extends Model {
 
     public String getInventoryTypeId() {
         return (String) getValue("sInvTypCd");
+    }
+    
+    public JSONObject setIndustryCode(String industryCode) {
+        return setValue("sIndstCdx", industryCode);
+    }
+
+    public String getIndustryCode() {
+        return (String) getValue("sIndstCdx");
     }
 
     public JSONObject setCost(Number cost) {
@@ -538,6 +574,6 @@ public class Model_Inventory extends Model {
 
     @Override
     public String getNextCode() {
-        return MiscUtil.getNextCode(getTable(), ID, true, poGRider.getConnection(), poGRider.getBranchCode());
+        return MiscUtil.getNextCode(getTable(), ID, true, poGRider.getGConnection().getConnection(), poGRider.getBranchCode());
     }
 }

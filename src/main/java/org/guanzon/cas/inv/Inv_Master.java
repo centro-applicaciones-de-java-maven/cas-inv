@@ -1,8 +1,10 @@
 package org.guanzon.cas.inv;
 
+import java.sql.SQLException;
 import org.guanzon.cas.inv.services.InvControllers;
 import org.guanzon.appdriver.agent.ShowDialogFX;
 import org.guanzon.appdriver.agent.services.Parameter;
+import org.guanzon.appdriver.base.GuanzonException;
 import org.guanzon.appdriver.base.MiscUtil;
 import org.guanzon.appdriver.base.SQLUtil;
 import org.guanzon.appdriver.constant.Logical;
@@ -76,7 +78,7 @@ public class Inv_Master extends Parameter{
     }
     
     @Override
-    public JSONObject isEntryOkay() {
+    public JSONObject isEntryOkay() throws SQLException{
         poJSON = new JSONObject();
         
         if (poGRider.getUserLevel() < UserRight.SYSADMIN){
@@ -98,26 +100,23 @@ public class Inv_Master extends Parameter{
                 return poJSON;
             }
             
-            if (poModel.getWarehouseId().isEmpty()){
-                poJSON.put("result", "error");
-                poJSON.put("message", "Warehouse location must not be empty.");
-                return poJSON;
-            }
-            
-            if (poModel.getLocationId().isEmpty()){
-                poJSON.put("result", "error");
-                poJSON.put("message", "Location must not be empty.");
-                return poJSON;
-            }
-            
-            if (poModel.getBinId().isEmpty()){
-                poJSON.put("result", "error");
-                poJSON.put("message", "Bin must not be empty.");
-                return poJSON;
-            }
+//            if (poModel.getWarehouseId().isEmpty()){
+//                poJSON.put("result", "error");
+//                poJSON.put("message", "Warehouse location must not be empty.");
+//                return poJSON;
+//            }
+//            
+//            if (poModel.getLocationId().isEmpty()){
+//                poJSON.put("result", "error");
+//                poJSON.put("message", "Location must not be empty.");
+//                return poJSON;
+//            }     
             
             //todo:
             //  more validations/use of validators per category
+            
+            poModel.setModifyingId(poGRider.Encrypt(poGRider.getUserID()));
+            poModel.setModifiedDate(poGRider.getServerDate());
         }
         
         poJSON.put("result", "success");
@@ -130,7 +129,7 @@ public class Inv_Master extends Parameter{
     }
     
     @Override
-    public JSONObject searchRecord(String value, boolean byCode) {
+    public JSONObject searchRecord(String value, boolean byCode)  throws SQLException, GuanzonException{
         poJSON = ShowDialogFX.Search(poGRider,
                 getSQ_Browse(),
                 value,
@@ -144,7 +143,7 @@ public class Inv_Master extends Parameter{
     
     public JSONObject searchRecord(String value, 
                                     boolean byCode, 
-                                    String inventoryTypeId) {
+                                    String inventoryTypeId)  throws SQLException, GuanzonException{
         String lsSQL = MiscUtil.addCondition(getSQ_Browse(), 
                                                 "a.sInvTypCd = " + SQLUtil.toSQL(inventoryTypeId));
         
@@ -162,7 +161,7 @@ public class Inv_Master extends Parameter{
     public JSONObject searchRecord(String value, 
                                     boolean byCode, 
                                     String inventoryTypeId,
-                                    String categoryIdLevel1) {
+                                    String categoryIdLevel1)  throws SQLException, GuanzonException{
         String lsSQL = MiscUtil.addCondition(getSQ_Browse(), 
                                                 "a.sInvTypCd = " + SQLUtil.toSQL(inventoryTypeId) +
                                                     " AND a.sCategCd1 = " + SQLUtil.toSQL(categoryIdLevel1));
@@ -182,7 +181,7 @@ public class Inv_Master extends Parameter{
                                     boolean byCode, 
                                     String inventoryTypeId,
                                     String categoryIdLevel1,
-                                    String categoryIdLevel2) {
+                                    String categoryIdLevel2)  throws SQLException, GuanzonException{
         String lsSQL = MiscUtil.addCondition(getSQ_Browse(), 
                                                 "a.sInvTypCd = " + SQLUtil.toSQL(inventoryTypeId) +
                                                     " AND a.sCategCd1 = " + SQLUtil.toSQL(categoryIdLevel1) +
@@ -199,7 +198,7 @@ public class Inv_Master extends Parameter{
         return openRecord(poJSON);
     }
     
-    public JSONObject searchRecordAttributes(String value, boolean byCode) {
+    public JSONObject searchRecordAttributes(String value, boolean byCode)  throws SQLException, GuanzonException{
         poJSON = ShowDialogFX.Search(poGRider,
                 getSQ_Browse(),
                 value,
@@ -213,7 +212,7 @@ public class Inv_Master extends Parameter{
     
     public JSONObject searchRecordAttributes(String value, 
                                     boolean byCode, 
-                                    String inventoryTypeId) {
+                                    String inventoryTypeId)  throws SQLException, GuanzonException{
         String lsSQL = MiscUtil.addCondition(getSQ_Browse(), 
                                                 "a.sInvTypCd = " + SQLUtil.toSQL(inventoryTypeId));
         
@@ -231,7 +230,7 @@ public class Inv_Master extends Parameter{
     public JSONObject searchRecordAttributes(String value, 
                                     boolean byCode, 
                                     String inventoryTypeId,
-                                    String categoryIdLevel1) {
+                                    String categoryIdLevel1)  throws SQLException, GuanzonException{
         String lsSQL = MiscUtil.addCondition(getSQ_Browse(), 
                                                 "a.sInvTypCd = " + SQLUtil.toSQL(inventoryTypeId) +
                                                     " AND a.sCategCd1 = " + SQLUtil.toSQL(categoryIdLevel1));
@@ -251,7 +250,7 @@ public class Inv_Master extends Parameter{
                                     boolean byCode, 
                                     String inventoryTypeId,
                                     String categoryIdLevel1,
-                                    String categoryIdLevel2) {
+                                    String categoryIdLevel2)  throws SQLException, GuanzonException{
         String lsSQL = MiscUtil.addCondition(getSQ_Browse(), 
                                                 "a.sInvTypCd = " + SQLUtil.toSQL(inventoryTypeId) +
                                                     " AND a.sCategCd1 = " + SQLUtil.toSQL(categoryIdLevel1) +
@@ -268,7 +267,7 @@ public class Inv_Master extends Parameter{
         return openRecord(poJSON);
     }
     
-    public JSONObject searchRecordWithMeasurement(String value, boolean byCode) {
+    public JSONObject searchRecordWithMeasurement(String value, boolean byCode)  throws SQLException, GuanzonException{
         poJSON = ShowDialogFX.Search(poGRider,
                 getSQ_Browse(),
                 value,
@@ -282,7 +281,7 @@ public class Inv_Master extends Parameter{
     
     public JSONObject searchRecordWithMeasurement(String value, 
                                     boolean byCode, 
-                                    String inventoryTypeId) {
+                                    String inventoryTypeId)  throws SQLException, GuanzonException{
         String lsSQL = MiscUtil.addCondition(getSQ_Browse(), 
                                                 "a.sInvTypCd = " + SQLUtil.toSQL(inventoryTypeId));
         
@@ -300,7 +299,7 @@ public class Inv_Master extends Parameter{
     public JSONObject searchRecordWithMeasurement(String value, 
                                     boolean byCode, 
                                     String inventoryTypeId,
-                                    String categoryIdLevel1) {
+                                    String categoryIdLevel1)  throws SQLException, GuanzonException{
         String lsSQL = MiscUtil.addCondition(getSQ_Browse(), 
                                                 "a.sInvTypCd = " + SQLUtil.toSQL(inventoryTypeId) +
                                                     " AND a.sCategCd1 = " + SQLUtil.toSQL(categoryIdLevel1));
@@ -320,7 +319,7 @@ public class Inv_Master extends Parameter{
                                     boolean byCode, 
                                     String inventoryTypeId,
                                     String categoryIdLevel1,
-                                    String categoryIdLevel2) {
+                                    String categoryIdLevel2)  throws SQLException, GuanzonException{
         String lsSQL = MiscUtil.addCondition(getSQ_Browse(), 
                                                 "a.sInvTypCd = " + SQLUtil.toSQL(inventoryTypeId) +
                                                     " AND a.sCategCd1 = " + SQLUtil.toSQL(categoryIdLevel1) +
@@ -387,9 +386,8 @@ public class Inv_Master extends Parameter{
         
         return lsSQL;
     }
-     private JSONObject openRecord(JSONObject json){
+     private JSONObject openRecord(JSONObject json) throws SQLException, GuanzonException{
         if (json != null) {
-            System.out.println("(String) poJSON.get(\"sBranchCd\") == " + psBranchCd);
             poJSON = poModel.openRecord((String) poJSON.get("sStockIDx"), psBranchCd);
             
             if (!"success".equals((String) poJSON.get("result"))) return poJSON;
@@ -409,50 +407,8 @@ public class Inv_Master extends Parameter{
         
         return poJSON;
     }
-//    private JSONObject openRecord(JSONObject json){
-//        if (json != null) {
-//             System.out.println("stockid == " + (String) poJSON.get("sStockIDx"));
-//             String lsStockID = (String) poJSON.get("sStockIDx");
-//           poJSON = poModel.openRecord((String) poJSON.get("sStockIDx"), (String) poJSON.get("sBranchCd"));
-//           if ("error".equals((String) poJSON.get("result"))){
-//               if ((String) poJSON.get("sBranchCd") == null){
-//                ShowMessageFX.Information("No Inventory found in your warehouse. Please save the record to create.", "Computerized Acounting System", "Inventory Detail");
-//                   System.out.println("stockid == " + lsStockID);
-//                poJSON = poInventory.openRecord((String) poJSON.get("sStockIDx"));
-////                EditMode.ADDNEW;    
-//                } 
-//                return poJSON;
-//            }
-//            
-//            
-//            
-//            else {
-//                poJSON = poModel.openRecord((String) poJSON.get("sStockIDx"), (String) poJSON.get("sBranchCd"));
-//            }
-//            
-////            if ("error".equals((String)poJSON.get("result"))){
-////                ShowMessageFX.Information("No Inventory found in your warehouse. Please save the record to create.", "Computerized Acounting System", "Inventory Detail");
-////                 poJSON = newRecord();
-////            
-////            }
-//            
-//            //load reference records
-//            poInventory.openRecord("sStockIDx");
-//            poBranch.openRecord("sBranchCd");
-//            poWarehouse.openRecord("sWHouseID");
-//            poLocation.openRecord("sLocatnID");
-//            //end -load reference records
-//        } else {
-//            poJSON = new JSONObject();
-//            poJSON.put("result", "error");
-//            poJSON.put("message", "No record loaded.");
-//            return poJSON;
-//        }
-//        
-//        return poJSON;
-//    }
-        public JSONObject searchRecordwithBarrcode(String value, boolean byCode) {
-            
+     
+    public JSONObject searchRecordwithBarrcode(String value, boolean byCode)  throws SQLException, GuanzonException{       
         poJSON = ShowDialogFX.Search(poGRider,
                 getSQ_Browse(),
                 value,
@@ -465,7 +421,7 @@ public class Inv_Master extends Parameter{
     }
     public JSONObject searchRecordwithBarrcode(String value, 
                                     boolean byCode, 
-                                    String stockID) {
+                                    String stockID)  throws SQLException, GuanzonException{
         String lsSQL = MiscUtil.addCondition(getSQ_Browse(), 
                                                     "a.sStockIDx = " + SQLUtil.toSQL(stockID));
         
