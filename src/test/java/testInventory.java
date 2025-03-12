@@ -1,5 +1,8 @@
 
+import java.sql.SQLException;
 import org.guanzon.appdriver.base.GRider;
+import org.guanzon.appdriver.base.GRiderCAS;
+import org.guanzon.appdriver.base.GuanzonException;
 import org.guanzon.appdriver.base.MiscUtil;
 import org.guanzon.cas.inv.Inventory;
 import org.json.simple.JSONObject;
@@ -12,7 +15,7 @@ import org.junit.runners.MethodSorters;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class testInventory {
-    static GRider instance;
+    static GRiderCAS instance;
     static Inventory record;
 
     @BeforeClass
@@ -29,42 +32,72 @@ public class testInventory {
 
     @Test
     public void testNewRecord() {
-        JSONObject loJSON;
+        try {
+            JSONObject loJSON;
 
-        loJSON = record.newRecord();
-        if ("error".equals((String) loJSON.get("result"))) {
-            Assert.fail((String) loJSON.get("message"));
-        }    
-        
-        System.out.println(record.getModel().getStockId());
-        System.out.println(record.getModel().getBarCode());
-        System.out.println(record.getModel().getDescription());
-                
-//        loJSON = record.getModel().setBarCode("000-000-000-111");
-//        if ("error".equals((String) loJSON.get("result"))) {
-//            Assert.fail((String) loJSON.get("message"));
-//        }     
-//        
-//        loJSON = record.getModel().setDescription("Sample item from new program structure.");
-//        if ("error".equals((String) loJSON.get("result"))) {
-//            Assert.fail((String) loJSON.get("message"));
-//        }     
-//        
-//        loJSON = record.getModel().setModifyingId(instance.getUserID());
-//        if ("error".equals((String) loJSON.get("result"))) {
-//            Assert.fail((String) loJSON.get("message"));
-//        }     
-//        
-//        loJSON = record.getModel().setModifiedDate(instance.getServerDate());
-//        if ("error".equals((String) loJSON.get("result"))) {
-//            Assert.fail((String) loJSON.get("message"));
-//        }     
-//        
-//        loJSON = record.saveRecord();
-//        if ("error".equals((String) loJSON.get("result"))) {
-//            Assert.fail((String) loJSON.get("message"));
-//        }  
-//    }
+            loJSON = record.newRecord();
+            if ("error".equals((String) loJSON.get("result"))) {
+                Assert.fail((String) loJSON.get("message"));
+            }    
+
+            loJSON = record.getModel().setBarCode("000-000-000-004");
+            if ("error".equals((String) loJSON.get("result"))) {
+                Assert.fail((String) loJSON.get("message"));
+            }     
+
+            loJSON = record.getModel().setDescription("TMX 125 Alpha Standard 2025");
+            if ("error".equals((String) loJSON.get("result"))) {
+                Assert.fail((String) loJSON.get("message"));
+            }     
+            
+            loJSON = record.getModel().setBriefDescription("TMX 125 Alpha STD");
+            if ("error".equals((String) loJSON.get("result"))) {
+                Assert.fail((String) loJSON.get("message"));
+            }     
+            
+            loJSON = record.getModel().setCategoryFirstLevelId("0010");
+            if ("error".equals((String) loJSON.get("result"))) {
+                Assert.fail((String) loJSON.get("message"));
+            }     
+            
+            loJSON = record.getModel().setBrandId("00001");
+            if ("error".equals((String) loJSON.get("result"))) {
+                Assert.fail((String) loJSON.get("message"));
+            }     
+            
+            loJSON = record.getModel().setModelId("00004");
+            if ("error".equals((String) loJSON.get("result"))) {
+                Assert.fail((String) loJSON.get("message"));
+            }     
+            
+            loJSON = record.getModel().setColorId("00001");
+            if ("error".equals((String) loJSON.get("result"))) {
+                Assert.fail((String) loJSON.get("message"));
+            }     
+            
+            loJSON = record.getModel().setVariantId("00004");
+            if ("error".equals((String) loJSON.get("result"))) {
+                Assert.fail((String) loJSON.get("message"));
+            }     
+            
+            loJSON = record.getModel().setInventoryTypeId("0002");
+            if ("error".equals((String) loJSON.get("result"))) {
+                Assert.fail((String) loJSON.get("message"));
+            }     
+            
+            loJSON = record.getModel().setIndustryCode("02");
+            if ("error".equals((String) loJSON.get("result"))) {
+                Assert.fail((String) loJSON.get("message"));
+            }     
+
+            loJSON = record.saveRecord();
+            if ("error".equals((String) loJSON.get("result"))) {
+                Assert.fail((String) loJSON.get("message"));
+            }  
+        } catch (SQLException | GuanzonException e) {
+            Assert.fail(e.getMessage());
+        }
+    }
 //   
 //    @Test
 //    public void testUpdateRecord() {
@@ -99,7 +132,7 @@ public class testInventory {
 //        if ("error".equals((String) loJSON.get("result"))) {
 //            Assert.fail((String) loJSON.get("message"));
 //        } 
-    }
+//    }
     
 //    @Test
 //    public void testSearch(){

@@ -1,7 +1,9 @@
 package org.guanzon.cas.inv;
 
+import java.sql.SQLException;
 import org.guanzon.appdriver.agent.ShowDialogFX;
 import org.guanzon.appdriver.agent.services.Parameter;
+import org.guanzon.appdriver.base.GuanzonException;
 import org.guanzon.appdriver.base.MiscUtil;
 import org.guanzon.appdriver.base.SQLUtil;
 import org.guanzon.appdriver.constant.Logical;
@@ -24,7 +26,7 @@ public class Inventory extends Parameter{
     }
     
     @Override
-    public JSONObject isEntryOkay() {
+    public JSONObject isEntryOkay() throws SQLException{
         poJSON = new JSONObject();
         
         if (poGRider.getUserLevel() < UserRight.SYSADMIN){
@@ -48,6 +50,9 @@ public class Inventory extends Parameter{
             
             //todo:
             //  more validations/use of validators per category
+            
+            poModel.setModifyingId(poGRider.Encrypt(poGRider.getUserID()));
+            poModel.setModifiedDate(poGRider.getServerDate());
         }
         
         poJSON.put("result", "success");
@@ -60,7 +65,7 @@ public class Inventory extends Parameter{
     }
     
     @Override
-    public JSONObject searchRecord(String value, boolean byCode) {
+    public JSONObject searchRecord(String value, boolean byCode) throws SQLException, GuanzonException {
         poJSON = ShowDialogFX.Search(poGRider,
                 getSQ_Browse(),
                 value,
@@ -82,7 +87,7 @@ public class Inventory extends Parameter{
     
     public JSONObject searchRecord(String value, 
                                     boolean byCode, 
-                                    String inventoryTypeId) {
+                                    String inventoryTypeId) throws SQLException, GuanzonException {
         String lsSQL = MiscUtil.addCondition(getSQ_Browse(), 
                                                 "a.sInvTypCd = " + SQLUtil.toSQL(inventoryTypeId));
         
@@ -107,7 +112,7 @@ public class Inventory extends Parameter{
     public JSONObject searchRecord(String value, 
                                     boolean byCode, 
                                     String inventoryTypeId,
-                                    String categoryIdLevel1) {
+                                    String categoryIdLevel1) throws SQLException, GuanzonException{
         String lsSQL = MiscUtil.addCondition(getSQ_Browse(), 
                                                 "a.sInvTypCd = " + SQLUtil.toSQL(inventoryTypeId) +
                                                     " AND a.sCategCd1 = " + SQLUtil.toSQL(categoryIdLevel1));
@@ -134,7 +139,7 @@ public class Inventory extends Parameter{
                                     boolean byCode, 
                                     String inventoryTypeId,
                                     String categoryIdLevel1,
-                                    String categoryIdLevel2) {
+                                    String categoryIdLevel2) throws SQLException, GuanzonException{
         String lsSQL = MiscUtil.addCondition(getSQ_Browse(), 
                                                 "a.sInvTypCd = " + SQLUtil.toSQL(inventoryTypeId) +
                                                     " AND a.sCategCd1 = " + SQLUtil.toSQL(categoryIdLevel1) +
@@ -158,7 +163,7 @@ public class Inventory extends Parameter{
         }
     }
     
-    public JSONObject searchRecordAttributes(String value, boolean byCode) {
+    public JSONObject searchRecordAttributes(String value, boolean byCode) throws SQLException, GuanzonException {
         poJSON = ShowDialogFX.Search(poGRider,
                 getSQ_Browse(),
                 value,
@@ -179,7 +184,7 @@ public class Inventory extends Parameter{
     
     public JSONObject searchRecordAttributes(String value, 
                                     boolean byCode, 
-                                    String inventoryTypeId) {
+                                    String inventoryTypeId) throws SQLException, GuanzonException {
         String lsSQL = MiscUtil.addCondition(getSQ_Browse(), 
                                                 "a.sInvTypCd = " + SQLUtil.toSQL(inventoryTypeId));
         
@@ -204,7 +209,7 @@ public class Inventory extends Parameter{
     public JSONObject searchRecordAttributes(String value, 
                                     boolean byCode, 
                                     String inventoryTypeId,
-                                    String categoryIdLevel1) {
+                                    String categoryIdLevel1) throws SQLException, GuanzonException {
         String lsSQL = MiscUtil.addCondition(getSQ_Browse(), 
                                                 "a.sInvTypCd = " + SQLUtil.toSQL(inventoryTypeId) +
                                                     " AND a.sCategCd1 = " + SQLUtil.toSQL(categoryIdLevel1));
@@ -231,7 +236,7 @@ public class Inventory extends Parameter{
                                     boolean byCode, 
                                     String inventoryTypeId,
                                     String categoryIdLevel1,
-                                    String categoryIdLevel2) {
+                                    String categoryIdLevel2) throws SQLException, GuanzonException {
         String lsSQL = MiscUtil.addCondition(getSQ_Browse(), 
                                                 "a.sInvTypCd = " + SQLUtil.toSQL(inventoryTypeId) +
                                                     " AND a.sCategCd1 = " + SQLUtil.toSQL(categoryIdLevel1) +
@@ -255,7 +260,7 @@ public class Inventory extends Parameter{
         }
     }
     
-    public JSONObject searchRecordWithMeasurement(String value, boolean byCode) {
+    public JSONObject searchRecordWithMeasurement(String value, boolean byCode) throws SQLException, GuanzonException {
         poJSON = ShowDialogFX.Search(poGRider,
                 getSQ_Browse(),
                 value,
@@ -276,7 +281,7 @@ public class Inventory extends Parameter{
     
     public JSONObject searchRecordWithMeasurement(String value, 
                                     boolean byCode, 
-                                    String inventoryTypeId) {
+                                    String inventoryTypeId) throws SQLException, GuanzonException {
         String lsSQL = MiscUtil.addCondition(getSQ_Browse(), 
                                                 "a.sInvTypCd = " + SQLUtil.toSQL(inventoryTypeId));
         
@@ -301,7 +306,7 @@ public class Inventory extends Parameter{
     public JSONObject searchRecordWithMeasurement(String value, 
                                     boolean byCode, 
                                     String inventoryTypeId,
-                                    String categoryIdLevel1) {
+                                    String categoryIdLevel1) throws SQLException, GuanzonException {
         String lsSQL = MiscUtil.addCondition(getSQ_Browse(), 
                                                 "a.sInvTypCd = " + SQLUtil.toSQL(inventoryTypeId) +
                                                     " AND a.sCategCd1 = " + SQLUtil.toSQL(categoryIdLevel1));
@@ -328,7 +333,7 @@ public class Inventory extends Parameter{
                                     boolean byCode, 
                                     String inventoryTypeId,
                                     String categoryIdLevel1,
-                                    String categoryIdLevel2) {
+                                    String categoryIdLevel2) throws SQLException, GuanzonException {
         String lsSQL = MiscUtil.addCondition(getSQ_Browse(), 
                                                 "a.sInvTypCd = " + SQLUtil.toSQL(inventoryTypeId) +
                                                     " AND a.sCategCd1 = " + SQLUtil.toSQL(categoryIdLevel1) +
