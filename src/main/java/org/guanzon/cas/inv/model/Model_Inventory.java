@@ -87,219 +87,7 @@ public class Model_Inventory extends Model {
             System.exit(1);
         }
     }
-
-    public Model_Industry Industry() throws SQLException, GuanzonException{
-        if (!"".equals((String) getValue("sIndstCdx"))) {
-            if (poIndustry.getEditMode() == EditMode.READY
-                    && poIndustry.getIndustryId().equals((String) getValue("sIndstCdx"))) {
-                return poIndustry;
-            } else {
-                poJSON = poIndustry.openRecord((String) getValue("sIndstCdx"));
-
-                if ("success".equals((String) poJSON.get("result"))) {
-                    return poIndustry;
-                } else {
-                    poIndustry.initialize();
-                    return poIndustry;
-                }
-            }
-        } else {
-            poCategory.initialize();
-            return poIndustry;
-        }
-    }
-    
-    public Model_Category Category() throws SQLException, GuanzonException{
-        if (!"".equals((String) getValue("sCategCd1"))) {
-            if (poCategory.getEditMode() == EditMode.READY
-                    && poCategory.getCategoryId().equals((String) getValue("sCategCd1"))) {
-                return poCategory;
-            } else {
-                poJSON = poCategory.openRecord((String) getValue("sCategCd1"));
-
-                if ("success".equals((String) poJSON.get("result"))) {
-                    return poCategory;
-                } else {
-                    poCategory.initialize();
-                    return poCategory;
-                }
-            }
-        } else {
-            poCategory.initialize();
-            return poCategory;
-        }
-    }
-
-    public Model_Category_Level2 CategoryLevel2() throws SQLException, GuanzonException{
-        if (!"".equals((String) getValue("sCategCd2"))) {
-            if (poCategoryLevel2.getEditMode() == EditMode.READY
-                    && poCategoryLevel2.getCategoryId().equals((String) getValue("sCategCd2"))) {
-                return poCategoryLevel2;
-            } else {
-                poJSON = poCategoryLevel2.openRecord((String) getValue("sCategCd2"));
-
-                if ("success".equals((String) poJSON.get("result"))) {
-                    return poCategoryLevel2;
-                } else {
-                    poCategory.initialize();
-                    return poCategoryLevel2;
-                }
-            }
-        } else {
-            poCategoryLevel2.initialize();
-            return poCategoryLevel2;
-        }
-    }
-
-    public Model_Category_Level3 CategoryLevel3() throws SQLException, GuanzonException{
-        if (!"".equals((String) getValue("sCategCd3"))) {
-            if (poCategoryLevel3.getEditMode() == EditMode.READY
-                    && poCategoryLevel3.getCategoryId().equals((String) getValue("sCategCd3"))) {
-                return poCategoryLevel3;
-            } else {
-                poJSON = poCategoryLevel3.openRecord((String) getValue("sCategCd3"));
-
-                if ("success".equals((String) poJSON.get("result"))) {
-                    return poCategoryLevel3;
-                } else {
-                    poCategory.initialize();
-                    return poCategoryLevel3;
-                }
-            }
-        } else {
-            poCategoryLevel3.initialize();
-            return poCategoryLevel3;
-        }
-    }
-
-    public Model_Category_Level4 CategoryLevel4() throws SQLException, GuanzonException{
-        if (!"".equals((String) getValue("sCategCd4"))) {
-            if (poCategoryLevel4.getEditMode() == EditMode.READY
-                    && poCategoryLevel4.getCategoryId().equals((String) getValue("sCategCd4"))) {
-                return poCategoryLevel4;
-            } else {
-                poJSON = poCategoryLevel4.openRecord((String) getValue("sCategCd4"));
-
-                if ("success".equals((String) poJSON.get("result"))) {
-                    return poCategoryLevel4;
-                } else {
-                    poCategory.initialize();
-                    return poCategoryLevel4;
-                }
-            }
-        } else {
-            poCategoryLevel4.initialize();
-            return poCategoryLevel4;
-        }
-    }
-
-    public Model_Brand Brand() throws SQLException, GuanzonException{
-        System.out.print("Brand == " + (String) getValue("sBrandIDx") );
-        if (!"".equals((String) getValue("sBrandIDx"))) {
-            if (poBrand.getEditMode() == EditMode.READY
-                    && poBrand.getBrandId().equals((String) getValue("sBrandIDx"))) {
-                return poBrand;
-            } else {
-                poJSON = poBrand.openRecord((String) getValue("sBrandIDx"));
-
-                if ("success".equals((String) poJSON.get("result"))) {
-                    return poBrand;
-                } else {
-                    poBrand.initialize();
-                    return poBrand;
-                }
-            }
-        } else {
-            poBrand.initialize();
-            return poBrand;
-        }
-    }
-
-    public Model_Model Model() throws SQLException, GuanzonException{
-        if (!"".equals((String) getValue("sModelIDx"))) {
-            if (poModel.getEditMode() == EditMode.READY
-                    && poModel.getBrandId().equals((String) getValue("sModelIDx"))) {
-                return poModel;
-            } else {
-                poJSON = poModel.openRecord((String) getValue("sModelIDx"));
-
-                if ("success".equals((String) poJSON.get("result"))) {
-                    return poModel;
-                } else {
-                    poCategory.initialize();
-                    return poModel;
-                }
-            }
-        } else {
-            poModel.initialize();
-            return poModel;
-        }
-    }
-
-    public Model_Color Color() throws SQLException, GuanzonException{
-        if (!"".equals((String) getValue("sColorIDx"))) {
-            if (poColor.getEditMode() == EditMode.READY
-                    && poColor.getColorId().equals((String) getValue("sColorIDx"))) {
-                return poColor;
-            } else {
-                poJSON = poColor.openRecord((String) getValue("sColorIDx"));
-
-                if ("success".equals((String) poJSON.get("result"))) {
-                    return poColor;
-                } else {
-                    poCategory.initialize();
-                    return poColor;
-                }
-            }
-        } else {
-            poColor.initialize();
-            return poColor;
-        }
-    }
-
-    public Model_Measure Measure() throws SQLException, GuanzonException{
-        if (!"".equals((String) getValue("sMeasurID"))) {
-            if (poMeasure.getEditMode() == EditMode.READY
-                    && poMeasure.getMeasureId().equals((String) getValue("sMeasurID"))) {
-                return poMeasure;
-            } else {
-                poJSON = poMeasure.openRecord((String) getValue("sMeasurID"));
-
-                if ("success".equals((String) poJSON.get("result"))) {
-                    return poMeasure;
-                } else {
-                    poCategory.initialize();
-                    return poMeasure;
-                }
-            }
-        } else {
-            poMeasure.initialize();
-            return poMeasure;
-        }
-    }
-
-    public Model_Inv_Type InventoryType() throws SQLException, GuanzonException{
-        System.out.println("InventoryType = " + (String) getValue("sInvTypCd") ); 
-        if (!"".equals((String) getValue("sInvTypCd"))) {
-            if (poInventoryType.getEditMode() == EditMode.READY
-                    && poInventoryType.getInventoryTypeId().equals((String) getValue("sInvTypCd"))) {
-                return poInventoryType;
-            } else {
-                poJSON = poInventoryType.openRecord((String) getValue("sInvTypCd"));
-
-                if ("success".equals((String) poJSON.get("result"))) {
-                    return poInventoryType;
-                } else {
-                    poCategory.initialize();
-                    return poInventoryType;
-                }
-            }
-        } else {
-            poInventoryType.initialize();
-            return poInventoryType;
-        }
-    }
-    
+  
     public JSONObject setStockId(String stockId) {
         return setValue("sStockIDx", stockId);
     }
@@ -575,5 +363,215 @@ public class Model_Inventory extends Model {
     @Override
     public String getNextCode() {
         return MiscUtil.getNextCode(getTable(), ID, true, poGRider.getGConnection().getConnection(), poGRider.getBranchCode());
+    }
+    
+    public Model_Industry Industry() throws SQLException, GuanzonException{
+        if (!"".equals((String) getValue("sIndstCdx"))) {
+            if (poIndustry.getEditMode() == EditMode.READY
+                    && poIndustry.getIndustryId().equals((String) getValue("sIndstCdx"))) {
+                return poIndustry;
+            } else {
+                poJSON = poIndustry.openRecord((String) getValue("sIndstCdx"));
+
+                if ("success".equals((String) poJSON.get("result"))) {
+                    return poIndustry;
+                } else {
+                    poIndustry.initialize();
+                    return poIndustry;
+                }
+            }
+        } else {
+            poCategory.initialize();
+            return poIndustry;
+        }
+    }
+    
+    public Model_Category Category() throws SQLException, GuanzonException{
+        if (!"".equals((String) getValue("sCategCd1"))) {
+            if (poCategory.getEditMode() == EditMode.READY
+                    && poCategory.getCategoryId().equals((String) getValue("sCategCd1"))) {
+                return poCategory;
+            } else {
+                poJSON = poCategory.openRecord((String) getValue("sCategCd1"));
+
+                if ("success".equals((String) poJSON.get("result"))) {
+                    return poCategory;
+                } else {
+                    poCategory.initialize();
+                    return poCategory;
+                }
+            }
+        } else {
+            poCategory.initialize();
+            return poCategory;
+        }
+    }
+
+    public Model_Category_Level2 CategoryLevel2() throws SQLException, GuanzonException{
+        if (!"".equals((String) getValue("sCategCd2"))) {
+            if (poCategoryLevel2.getEditMode() == EditMode.READY
+                    && poCategoryLevel2.getCategoryId().equals((String) getValue("sCategCd2"))) {
+                return poCategoryLevel2;
+            } else {
+                poJSON = poCategoryLevel2.openRecord((String) getValue("sCategCd2"));
+
+                if ("success".equals((String) poJSON.get("result"))) {
+                    return poCategoryLevel2;
+                } else {
+                    poCategory.initialize();
+                    return poCategoryLevel2;
+                }
+            }
+        } else {
+            poCategoryLevel2.initialize();
+            return poCategoryLevel2;
+        }
+    }
+
+    public Model_Category_Level3 CategoryLevel3() throws SQLException, GuanzonException{
+        if (!"".equals((String) getValue("sCategCd3"))) {
+            if (poCategoryLevel3.getEditMode() == EditMode.READY
+                    && poCategoryLevel3.getCategoryId().equals((String) getValue("sCategCd3"))) {
+                return poCategoryLevel3;
+            } else {
+                poJSON = poCategoryLevel3.openRecord((String) getValue("sCategCd3"));
+
+                if ("success".equals((String) poJSON.get("result"))) {
+                    return poCategoryLevel3;
+                } else {
+                    poCategory.initialize();
+                    return poCategoryLevel3;
+                }
+            }
+        } else {
+            poCategoryLevel3.initialize();
+            return poCategoryLevel3;
+        }
+    }
+
+    public Model_Category_Level4 CategoryLevel4() throws SQLException, GuanzonException{
+        if (!"".equals((String) getValue("sCategCd4"))) {
+            if (poCategoryLevel4.getEditMode() == EditMode.READY
+                    && poCategoryLevel4.getCategoryId().equals((String) getValue("sCategCd4"))) {
+                return poCategoryLevel4;
+            } else {
+                poJSON = poCategoryLevel4.openRecord((String) getValue("sCategCd4"));
+
+                if ("success".equals((String) poJSON.get("result"))) {
+                    return poCategoryLevel4;
+                } else {
+                    poCategory.initialize();
+                    return poCategoryLevel4;
+                }
+            }
+        } else {
+            poCategoryLevel4.initialize();
+            return poCategoryLevel4;
+        }
+    }
+
+    public Model_Brand Brand() throws SQLException, GuanzonException{
+        if (!"".equals((String) getValue("sBrandIDx"))) {
+            if (poBrand.getEditMode() == EditMode.READY
+                    && poBrand.getBrandId().equals((String) getValue("sBrandIDx"))) {
+                return poBrand;
+            } else {
+                poJSON = poBrand.openRecord((String) getValue("sBrandIDx"));
+
+                if ("success".equals((String) poJSON.get("result"))) {
+                    return poBrand;
+                } else {
+                    poBrand.initialize();
+                    return poBrand;
+                }
+            }
+        } else {
+            poBrand.initialize();
+            return poBrand;
+        }
+    }
+
+    public Model_Model Model() throws SQLException, GuanzonException{
+        if (!"".equals((String) getValue("sModelIDx"))) {
+            if (poModel.getEditMode() == EditMode.READY
+                    && poModel.getBrandId().equals((String) getValue("sModelIDx"))) {
+                return poModel;
+            } else {
+                poJSON = poModel.openRecord((String) getValue("sModelIDx"));
+
+                if ("success".equals((String) poJSON.get("result"))) {
+                    return poModel;
+                } else {
+                    poCategory.initialize();
+                    return poModel;
+                }
+            }
+        } else {
+            poModel.initialize();
+            return poModel;
+        }
+    }
+
+    public Model_Color Color() throws SQLException, GuanzonException{
+        if (!"".equals((String) getValue("sColorIDx"))) {
+            if (poColor.getEditMode() == EditMode.READY
+                    && poColor.getColorId().equals((String) getValue("sColorIDx"))) {
+                return poColor;
+            } else {
+                poJSON = poColor.openRecord((String) getValue("sColorIDx"));
+
+                if ("success".equals((String) poJSON.get("result"))) {
+                    return poColor;
+                } else {
+                    poCategory.initialize();
+                    return poColor;
+                }
+            }
+        } else {
+            poColor.initialize();
+            return poColor;
+        }
+    }
+
+    public Model_Measure Measure() throws SQLException, GuanzonException{
+        if (!"".equals((String) getValue("sMeasurID"))) {
+            if (poMeasure.getEditMode() == EditMode.READY
+                    && poMeasure.getMeasureId().equals((String) getValue("sMeasurID"))) {
+                return poMeasure;
+            } else {
+                poJSON = poMeasure.openRecord((String) getValue("sMeasurID"));
+
+                if ("success".equals((String) poJSON.get("result"))) {
+                    return poMeasure;
+                } else {
+                    poCategory.initialize();
+                    return poMeasure;
+                }
+            }
+        } else {
+            poMeasure.initialize();
+            return poMeasure;
+        }
+    }
+
+    public Model_Inv_Type InventoryType() throws SQLException, GuanzonException{
+        if (!"".equals((String) getValue("sInvTypCd"))) {
+            if (poInventoryType.getEditMode() == EditMode.READY
+                    && poInventoryType.getInventoryTypeId().equals((String) getValue("sInvTypCd"))) {
+                return poInventoryType;
+            } else {
+                poJSON = poInventoryType.openRecord((String) getValue("sInvTypCd"));
+
+                if ("success".equals((String) poJSON.get("result"))) {
+                    return poInventoryType;
+                } else {
+                    poCategory.initialize();
+                    return poInventoryType;
+                }
+            }
+        } else {
+            poInventoryType.initialize();
+            return poInventoryType;
+        }
     }
 }
