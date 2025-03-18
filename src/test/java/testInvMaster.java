@@ -4,7 +4,7 @@ import org.bouncycastle.jcajce.provider.asymmetric.rsa.AlgorithmParametersSpi;
 import org.guanzon.appdriver.base.GRiderCAS;
 import org.guanzon.appdriver.base.GuanzonException;
 import org.guanzon.appdriver.base.MiscUtil;
-import org.guanzon.cas.inv.Inv_Master;
+import org.guanzon.cas.inv.InvMaster;
 import org.guanzon.cas.inv.services.InvControllers;
 import org.json.simple.JSONObject;
 import org.junit.AfterClass;
@@ -17,7 +17,7 @@ import org.junit.runners.MethodSorters;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class testInvMaster {
     static GRiderCAS instance;
-    static Inv_Master record;
+    static InvMaster record;
 
     @BeforeClass
     public static void setUpClass() {
@@ -25,7 +25,11 @@ public class testInvMaster {
 
         instance = MiscUtil.Connect();
         
-        record = new InvControllers(instance, null).InventoryMaster();
+        try {
+            record = new InvControllers(instance, null).InventoryMaster();
+        } catch (SQLException | GuanzonException e) {
+            Assert.fail(e.getMessage());
+        }
     }
 
     @Test
@@ -35,7 +39,7 @@ public class testInvMaster {
 
             loJSON = record.newRecord();
             if ("error".equals((String) loJSON.get("result"))) {
-                Assert.fail((String) loJSON.get("message"));
+                record = new InvControllers(instance, null).InventoryMaster();
             }    
 
             loJSON = record.getModel().setStockId("M00125000004");

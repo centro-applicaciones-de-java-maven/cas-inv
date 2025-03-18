@@ -1,8 +1,11 @@
 package org.guanzon.cas.inv.services;
 
+import java.sql.SQLException;
 import org.guanzon.appdriver.base.GRiderCAS;
+import org.guanzon.appdriver.base.GuanzonException;
 import org.guanzon.appdriver.base.LogWrapper;
-import org.guanzon.cas.inv.Inv_Master;
+import org.guanzon.cas.inv.InvMaster;
+import org.guanzon.cas.inv.InvSerial;
 import org.guanzon.cas.inv.Inventory;
 
 public class InvControllers {
@@ -11,7 +14,7 @@ public class InvControllers {
         poLogWrapper = logWrapper;
     }
 
-    public Inventory Inventory() {
+    public Inventory Inventory() throws SQLException, GuanzonException{
         if (poGRider == null) {
             poLogWrapper.severe("InvControllers.Inventory: Application driver is not set.");
             return null;
@@ -30,7 +33,7 @@ public class InvControllers {
         return poInventory;
     }
 
-    public Inv_Master InventoryMaster() {
+    public InvMaster InventoryMaster() throws SQLException, GuanzonException{
         if (poGRider == null) {
             poLogWrapper.severe("InvControllers.InventoryMaster: Application driver is not set.");
             return null;
@@ -40,7 +43,7 @@ public class InvControllers {
             return poInvMaster;
         }
 
-        poInvMaster = new Inv_Master();
+        poInvMaster = new InvMaster();
         poInvMaster.setApplicationDriver(poGRider);
         poInvMaster.setWithParentClass(false);
         poInvMaster.setLogWrapper(poLogWrapper);
@@ -49,24 +52,24 @@ public class InvControllers {
         return poInvMaster;
     }
     
-//    public InvSerial InventorySerial() {
-//        if (poGRider == null) {
-//            poLogWrapper.severe("InvControllers.InventoryMaster: Application driver is not set.");
-//            return null;
-//        }
-//
-//        if (poInventorySerial != null) {
-//            return poInventorySerial;
-//        }
-//
-//        poInventorySerial = new InvSerial();
-//        poInventorySerial.setApplicationDriver(poGRider);
-//        poInventorySerial.setWithParentClass(true);
-//        poInventorySerial.setLogWrapper(poLogWrapper);
-//        poInventorySerial.initialize();
-//        poInventorySerial.newRecord();
-//        return poInventorySerial;
-//    }
+    public InvSerial InventorySerial() throws SQLException, GuanzonException{
+        if (poGRider == null) {
+            poLogWrapper.severe("InvControllers.InventoryMaster: Application driver is not set.");
+            return null;
+        }
+
+        if (poInventorySerial != null) {
+            return poInventorySerial;
+        }
+
+        poInventorySerial = new InvSerial();
+        poInventorySerial.setApplicationDriver(poGRider);
+        poInventorySerial.setWithParentClass(false);
+        poInventorySerial.setLogWrapper(poLogWrapper);
+        poInventorySerial.initialize();
+        poInventorySerial.newRecord();
+        return poInventorySerial;
+    }
     
     
 
@@ -74,6 +77,6 @@ public class InvControllers {
     private final LogWrapper poLogWrapper;
 
     private Inventory poInventory;
-    private Inv_Master poInvMaster;
-//    private InvSerial poInventorySerial;
+    private InvMaster poInvMaster;
+    private InvSerial poInventorySerial;
 }

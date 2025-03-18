@@ -34,8 +34,8 @@ public class Model_Inv_Master extends Model{
             MiscUtil.initRowSet(poEntity);
             
             //assign default values
-            poEntity.updateObject("dAcquired", "0000-00-00");
-            poEntity.updateObject("dBegInvxx", "0000-00-00");
+            poEntity.updateObject("dAcquired", "1900-01-01");
+            poEntity.updateObject("dBegInvxx", "1900-01-01");
             poEntity.updateObject("nBegQtyxx", 0);
             poEntity.updateObject("nQtyOnHnd", 0);
             poEntity.updateObject("nLedgerNo", 0);
@@ -47,7 +47,7 @@ public class Model_Inv_Master extends Model{
             poEntity.updateObject("nBackOrdr", 0);
             poEntity.updateObject("nResvOrdr", 0);
             poEntity.updateObject("nFloatQty", 0);
-            poEntity.updateObject("dLastTran", "0000-00-00");
+            poEntity.updateObject("dLastTran", "1900-01-01");
             poEntity.updateString("cPrimaryx", Logical.NO);
             poEntity.updateString("cRecdStat", RecordStatus.ACTIVE);
             //end - assign default values
@@ -267,6 +267,30 @@ public class Model_Inv_Master extends Model{
     
     @Override
     public JSONObject openRecord(String Id1) {
+        JSONObject loJSON = new JSONObject();
+        loJSON.put("result", "error");
+        loJSON.put("message", "This feature is not supported.");
+        return loJSON;
+    }
+    
+    @Override
+    public JSONObject openRecord(String Id1, Object Id2, Object Id3){
+        JSONObject loJSON = new JSONObject();
+        loJSON.put("result", "error");
+        loJSON.put("message", "This feature is not supported.");
+        return loJSON;
+    }
+    
+    @Override
+    public JSONObject openRecord(String Id1, Object Id2, Object Id3, Object Id4){
+        JSONObject loJSON = new JSONObject();
+        loJSON.put("result", "error");
+        loJSON.put("message", "This feature is not supported.");
+        return loJSON;
+    }
+    
+    @Override
+    public JSONObject openRecord(String Id1, Object Id2, Object Id3, Object Id4, Object Id5){
         JSONObject loJSON = new JSONObject();
         loJSON.put("result", "error");
         loJSON.put("message", "This feature is not supported.");
