@@ -185,7 +185,6 @@ public class Model_Inv_Serial extends Model {
     }
     
     public Model_Branch Branch() throws SQLException, GuanzonException{
-            System.out.println("Branch == " + (String) getValue("sBranchCd"));
         if (!"".equals((String) getValue("sBranchCd"))) {
             if (poBranch.getEditMode() == EditMode.READY
                     && poBranch.getBranchCode().equals((String) getValue("sBranchCd"))) {

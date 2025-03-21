@@ -6,23 +6,28 @@ import org.guanzon.appdriver.agent.services.Parameter;
 import org.guanzon.appdriver.base.GuanzonException;
 import org.guanzon.appdriver.base.MiscUtil;
 import org.guanzon.appdriver.base.SQLUtil;
+import org.guanzon.appdriver.constant.EditMode;
 import org.guanzon.appdriver.constant.Logical;
 import org.guanzon.appdriver.constant.UserRight;
 import org.guanzon.cas.inv.model.Model_Inventory;
+import org.guanzon.cas.inv.services.InvModels;
+import org.guanzon.cas.parameter.model.Model_Variant;
+import org.guanzon.cas.parameter.services.ParamModels;
 import org.json.simple.JSONObject;
 
 public class Inventory extends Parameter{
     Model_Inventory poModel;
+    Model_Variant poVariant;
     
     @Override
     public void initialize() {
         psRecdStat = Logical.YES;
         
-        poModel = new Model_Inventory();
-        poModel.setApplicationDriver(poGRider);
-        poModel.setXML("Model_Inventory");
-        poModel.setTableName("Inventory");
-        poModel.initialize();
+        InvModels inv = new InvModels(poGRider);
+        poModel = inv.Inventory();
+        
+        ParamModels model = new ParamModels(poGRider);
+        poVariant = model.ModelVariant();
     }
     
     @Override
@@ -111,6 +116,35 @@ public class Inventory extends Parameter{
         }
     }
     
+    public JSONObject searchRecord(String value, boolean byCode, String supplierId, String brandId) throws SQLException, GuanzonException {
+        String lsSQL = getSQ_Browse();
+        
+        if (supplierId != null){
+            lsSQL = MiscUtil.addCondition(lsSQL, "g.sSupplier = " + SQLUtil.toSQL(supplierId));
+        }
+        
+        if (brandId != null){
+            lsSQL = MiscUtil.addCondition(lsSQL, "a.sBrandIDx = " + SQLUtil.toSQL(brandId));
+        }
+        
+        poJSON = ShowDialogFX.Search(poGRider,
+                lsSQL,
+                value,
+                "Bar Code»Description»Brand»Model»UOM",
+                "sBarCodex»sDescript»xBrandNme»xModelNme»xMeasurNm",
+                "a.sBarCodex»a.sDescript»IFNULL(b.sDescript, '')»IFNULL(c.sDescript, '')»IFNULL(e.sDescript, '')",
+                byCode ? 0 : 1);
+
+        if (poJSON != null) {
+            return poModel.openRecord((String) poJSON.get("sStockIDx"));
+        } else {
+            poJSON = new JSONObject();
+            poJSON.put("result", "error");
+            poJSON.put("message", "No record loaded.");
+            return poJSON;
+        }
+    }
+    
     public JSONObject searchRecordOfVariants(String value, boolean byCode) throws SQLException, GuanzonException {
         String lsSQL = getSQ_Browse();
         
@@ -137,6 +171,35 @@ public class Inventory extends Parameter{
         
         if (supplierId != null){
             lsSQL = MiscUtil.addCondition(lsSQL, "g.sSupplier = " + SQLUtil.toSQL(supplierId));
+        }
+        
+        poJSON = ShowDialogFX.Search(poGRider,
+                lsSQL,
+                value,
+                "Brand»Model»Variant»Code»Color",
+                "xBrandNme»xModelNme»xVrntName»xModelCde»xColorNme",
+                "IFNULL(b.sDescript, '')»IFNULL(c.sDescript, '')»TRIM(CONCAT(IFNULL(f.sDescript, ''), ' ', IFNULL(f.nYearMdlx, '')))»IFNULL(c.sModelCde, '') xModelCde»IFNULL(d.sDescript, '')",
+                byCode ? 0 : 1);
+
+        if (poJSON != null) {
+            return poModel.openRecord((String) poJSON.get("sStockIDx"));
+        } else {
+            poJSON = new JSONObject();
+            poJSON.put("result", "error");
+            poJSON.put("message", "No record loaded.");
+            return poJSON;
+        }
+    }
+    
+    public JSONObject searchRecordOfVariants(String value, boolean byCode, String supplierId, String brandId) throws SQLException, GuanzonException {
+        String lsSQL = getSQ_Browse();
+        
+        if (supplierId != null){
+            lsSQL = MiscUtil.addCondition(lsSQL, "g.sSupplier = " + SQLUtil.toSQL(supplierId));
+        }
+        
+        if (brandId != null){
+            lsSQL = MiscUtil.addCondition(lsSQL, "a.sBrandIDx = " + SQLUtil.toSQL(brandId));
         }
         
         poJSON = ShowDialogFX.Search(poGRider,
@@ -221,5 +284,26 @@ public class Inventory extends Parameter{
                             " LEFT JOIN Inv_Supplier g ON a.sStockIDx = g.sStockIDx";
         
         return MiscUtil.addCondition(lsSQL, lsCondition);
+    }
+    
+    public Model_Variant Variant() throws SQLException, GuanzonException{
+        if (!"".equals((String) getModel().getValue("sVrntIDxx"))) {
+            if (poVariant.getEditMode() == EditMode.READY
+                    && poVariant.getVariantId().equals((String) getModel().getValue("sVrntIDxx"))) {
+                return poVariant;
+            } else {
+                poJSON = poVariant.openRecord((String) getModel().getValue("sVrntIDxx"));
+
+                if ("success".equals((String) poJSON.get("result"))) {
+                    return poVariant;
+                } else {
+                    poVariant.initialize();
+                    return poVariant;
+                }
+            }
+        } else {
+            poVariant.initialize();
+            return poVariant;
+        }
     }
 }

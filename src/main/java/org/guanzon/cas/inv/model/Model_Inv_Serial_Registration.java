@@ -85,6 +85,14 @@ public class Model_Inv_Serial_Registration extends Model {
     public String getCRNumber() {
         return (String) getValue("sCRNoxxxx");
     }
+    
+    public JSONObject setConductionStickerNo(String conductionSticker){
+        return setValue("sCStckrNo", conductionSticker);
+    }
+    
+    public String getConductionStickerNo() {
+        return (String) getValue("sCStckrNo");
+    }
 
     public JSONObject setPlateNoP(String plateNo) {
         return setValue("sPlateNoP", plateNo);
