@@ -79,7 +79,7 @@ public class testInvSerial {
             if ("error".equals((String) loJSON.get("result"))) {
                 Assert.fail((String) loJSON.get("message"));
             }  
-        } catch (SQLException | GuanzonException e) {
+        } catch (SQLException | GuanzonException | CloneNotSupportedException e) {
             Assert.fail(e.getMessage());
         }
     }

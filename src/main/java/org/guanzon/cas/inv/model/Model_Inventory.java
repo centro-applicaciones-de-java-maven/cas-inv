@@ -18,6 +18,7 @@ import org.guanzon.cas.parameter.model.Model_Industry;
 import org.guanzon.cas.parameter.model.Model_Inv_Type;
 import org.guanzon.cas.parameter.model.Model_Measure;
 import org.guanzon.cas.parameter.model.Model_Model;
+import org.guanzon.cas.parameter.model.Model_Model_Variant;
 import org.guanzon.cas.parameter.services.ParamModels;
 import org.json.simple.JSONObject;
 
@@ -32,6 +33,7 @@ public class Model_Inventory extends Model {
     private Model_Color poColor;
     private Model_Measure poMeasure;
     private Model_Inv_Type poInventoryType;
+    private Model_Model_Variant poVariant;
 
     @Override
     public void initialize() {
@@ -80,6 +82,7 @@ public class Model_Inventory extends Model {
             poColor = model.Color();
             poMeasure = model.Measurement();
             poInventoryType = model.InventoryType();
+            poVariant = model.ModelVariant();
             
             pnEditMode = EditMode.UNKNOWN;
         } catch (SQLException e) {
@@ -418,7 +421,7 @@ public class Model_Inventory extends Model {
                 if ("success".equals((String) poJSON.get("result"))) {
                     return poCategoryLevel2;
                 } else {
-                    poCategory.initialize();
+                    poCategoryLevel2.initialize();
                     return poCategoryLevel2;
                 }
             }
@@ -439,7 +442,7 @@ public class Model_Inventory extends Model {
                 if ("success".equals((String) poJSON.get("result"))) {
                     return poCategoryLevel3;
                 } else {
-                    poCategory.initialize();
+                    poCategoryLevel3.initialize();
                     return poCategoryLevel3;
                 }
             }
@@ -460,7 +463,7 @@ public class Model_Inventory extends Model {
                 if ("success".equals((String) poJSON.get("result"))) {
                     return poCategoryLevel4;
                 } else {
-                    poCategory.initialize();
+                    poCategoryLevel4.initialize();
                     return poCategoryLevel4;
                 }
             }
@@ -502,7 +505,7 @@ public class Model_Inventory extends Model {
                 if ("success".equals((String) poJSON.get("result"))) {
                     return poModel;
                 } else {
-                    poCategory.initialize();
+                    poModel.initialize();
                     return poModel;
                 }
             }
@@ -523,7 +526,7 @@ public class Model_Inventory extends Model {
                 if ("success".equals((String) poJSON.get("result"))) {
                     return poColor;
                 } else {
-                    poCategory.initialize();
+                    poColor.initialize();
                     return poColor;
                 }
             }
@@ -544,7 +547,7 @@ public class Model_Inventory extends Model {
                 if ("success".equals((String) poJSON.get("result"))) {
                     return poMeasure;
                 } else {
-                    poCategory.initialize();
+                    poMeasure.initialize();
                     return poMeasure;
                 }
             }
@@ -565,13 +568,34 @@ public class Model_Inventory extends Model {
                 if ("success".equals((String) poJSON.get("result"))) {
                     return poInventoryType;
                 } else {
-                    poCategory.initialize();
+                    poInventoryType.initialize();
                     return poInventoryType;
                 }
             }
         } else {
             poInventoryType.initialize();
             return poInventoryType;
+        }
+    }
+    
+    public Model_Model_Variant Variant() throws SQLException, GuanzonException{
+        if (!"".equals((String) getValue("sVrntIDxx"))) {
+            if (poVariant.getEditMode() == EditMode.READY
+                    && poVariant.getVariantId().equals((String) getValue("sVrntIDxx"))) {
+                return poVariant;
+            } else {
+                poJSON = poVariant.openRecord((String) getValue("sVrntIDxx"));
+
+                if ("success".equals((String) poJSON.get("result"))) {
+                    return poVariant;
+                } else {
+                    poVariant.initialize();
+                    return poVariant;
+                }
+            }
+        } else {
+            poVariant.initialize();
+            return poVariant;
         }
     }
 }

@@ -178,6 +178,7 @@ public class InvSerial extends Parameter{
         
         return lsSQL;
     }
+    
     @Override
     protected JSONObject initFields() throws SQLException, GuanzonException{
         poJSON = poRegistration.newRecord();

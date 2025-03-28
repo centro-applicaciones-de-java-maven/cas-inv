@@ -6,18 +6,14 @@ import org.guanzon.appdriver.agent.services.Parameter;
 import org.guanzon.appdriver.base.GuanzonException;
 import org.guanzon.appdriver.base.MiscUtil;
 import org.guanzon.appdriver.base.SQLUtil;
-import org.guanzon.appdriver.constant.EditMode;
 import org.guanzon.appdriver.constant.Logical;
 import org.guanzon.appdriver.constant.UserRight;
 import org.guanzon.cas.inv.model.Model_Inventory;
 import org.guanzon.cas.inv.services.InvModels;
-import org.guanzon.cas.parameter.model.Model_Variant;
-import org.guanzon.cas.parameter.services.ParamModels;
 import org.json.simple.JSONObject;
 
 public class Inventory extends Parameter{
     Model_Inventory poModel;
-    Model_Variant poVariant;
     
     @Override
     public void initialize() {
@@ -25,9 +21,6 @@ public class Inventory extends Parameter{
         
         InvModels inv = new InvModels(poGRider);
         poModel = inv.Inventory();
-        
-        ParamModels model = new ParamModels(poGRider);
-        poVariant = model.ModelVariant();
     }
     
     @Override
@@ -284,26 +277,5 @@ public class Inventory extends Parameter{
                             " LEFT JOIN Inv_Supplier g ON a.sStockIDx = g.sStockIDx";
         
         return MiscUtil.addCondition(lsSQL, lsCondition);
-    }
-    
-    public Model_Variant Variant() throws SQLException, GuanzonException{
-        if (!"".equals((String) getModel().getValue("sVrntIDxx"))) {
-            if (poVariant.getEditMode() == EditMode.READY
-                    && poVariant.getVariantId().equals((String) getModel().getValue("sVrntIDxx"))) {
-                return poVariant;
-            } else {
-                poJSON = poVariant.openRecord((String) getModel().getValue("sVrntIDxx"));
-
-                if ("success".equals((String) poJSON.get("result"))) {
-                    return poVariant;
-                } else {
-                    poVariant.initialize();
-                    return poVariant;
-                }
-            }
-        } else {
-            poVariant.initialize();
-            return poVariant;
-        }
     }
 }
