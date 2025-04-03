@@ -138,6 +138,39 @@ public class Inventory extends Parameter{
         }
     }
     
+    public JSONObject searchRecord(String value, boolean byCode, String supplierId, String brandId, String industryId) throws SQLException, GuanzonException {
+        String lsSQL = getSQ_Browse();
+        
+        if (supplierId != null){
+            lsSQL = MiscUtil.addCondition(lsSQL, "g.sSupplier = " + SQLUtil.toSQL(supplierId));
+        }
+        
+        if (brandId != null){
+            lsSQL = MiscUtil.addCondition(lsSQL, "a.sBrandIDx = " + SQLUtil.toSQL(brandId));
+        }
+        
+        if (industryId != null){
+            lsSQL = MiscUtil.addCondition(lsSQL, "a.sIndstCdx = " + SQLUtil.toSQL(industryId));
+        }
+        
+        poJSON = ShowDialogFX.Search(poGRider,
+                lsSQL,
+                value,
+                "Bar Code»Description»Brand»Model»UOM",
+                "sBarCodex»sDescript»xBrandNme»xModelNme»xMeasurNm",
+                "a.sBarCodex»a.sDescript»IFNULL(b.sDescript, '')»IFNULL(c.sDescript, '')»IFNULL(e.sDescript, '')",
+                byCode ? 0 : 1);
+
+        if (poJSON != null) {
+            return poModel.openRecord((String) poJSON.get("sStockIDx"));
+        } else {
+            poJSON = new JSONObject();
+            poJSON.put("result", "error");
+            poJSON.put("message", "No record loaded.");
+            return poJSON;
+        }
+    }
+    
     public JSONObject searchRecordOfVariants(String value, boolean byCode) throws SQLException, GuanzonException {
         String lsSQL = getSQ_Browse();
         
@@ -184,7 +217,7 @@ public class Inventory extends Parameter{
         }
     }
     
-    public JSONObject searchRecordOfVariants(String value, boolean byCode, String supplierId, String brandId) throws SQLException, GuanzonException {
+    public JSONObject searchRecordOfVariants(String value, boolean byCode, String supplierId, String brandId, String industryId) throws SQLException, GuanzonException {
         String lsSQL = getSQ_Browse();
         
         if (supplierId != null){
@@ -193,6 +226,10 @@ public class Inventory extends Parameter{
         
         if (brandId != null){
             lsSQL = MiscUtil.addCondition(lsSQL, "a.sBrandIDx = " + SQLUtil.toSQL(brandId));
+        }
+        
+        if (industryId != null){
+            lsSQL = MiscUtil.addCondition(lsSQL, "a.sIndstCdx = " + SQLUtil.toSQL(industryId));
         }
         
         poJSON = ShowDialogFX.Search(poGRider,

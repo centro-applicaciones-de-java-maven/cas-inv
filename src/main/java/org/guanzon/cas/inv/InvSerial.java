@@ -22,13 +22,15 @@ public class InvSerial extends Parameter{
     ArrayList<Model_Inv_Serial_Ledger> paLedger;
 
     @Override
-    public void initialize() {
+    public void initialize() throws SQLException, GuanzonException{
         psRecdStat = Logical.YES;
 
         InvModels inv = new InvModels(poGRider);
         poModel = inv.InventorySerial();       
         
         poRegistration = inv.InventorySerialRegistration();   
+        
+        super.initialize();
     }
     
     public Model_Inv_Serial_Registration SerialRegistration(){
