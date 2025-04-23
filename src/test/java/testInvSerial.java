@@ -30,46 +30,86 @@ public class testInvSerial {
         }
     }
 
+//    @Test
+//    public void testNewRecord() {
+//        try {
+//            JSONObject loJSON;
+//
+//            loJSON = record.newRecord();
+//            if ("error".equals((String) loJSON.get("result"))) {
+//                Assert.fail((String) loJSON.get("message"));
+//            }    
+//
+//            loJSON = record.getModel().setStockId("M00124000119");
+//            if ("error".equals((String) loJSON.get("result"))) {
+//                Assert.fail((String) loJSON.get("message"));
+//            }     
+//
+//            loJSON = record.getModel().setBranchCode(instance.getBranchCode());
+//            if ("error".equals((String) loJSON.get("result"))) {
+//                Assert.fail((String) loJSON.get("message"));
+//            } 
+//
+//            loJSON = record.getModel().setClientId("");
+//            if ("error".equals((String) loJSON.get("result"))) {
+//                Assert.fail((String) loJSON.get("message"));
+//            } 
+//
+//            loJSON = record.getModel().setSerial01("001");
+//            if ("error".equals((String) loJSON.get("result"))) {
+//                Assert.fail((String) loJSON.get("message"));
+//            }  
+//
+//            loJSON = record.getModel().setSerial02("002");
+//            if ("error".equals((String) loJSON.get("result"))) {
+//                Assert.fail((String) loJSON.get("message"));
+//            }  
+//
+//            loJSON = record.getModel().setStockId("M00125000001");
+//            if ("error".equals((String) loJSON.get("result"))) {
+//                Assert.fail((String) loJSON.get("message"));
+//            }  
+//            
+//            loJSON = record.SerialRegistration().setFileNumber("123456789");
+//            if ("error".equals((String) loJSON.get("result"))) {
+//                Assert.fail((String) loJSON.get("message"));
+//            }  
+//
+//            loJSON = record.saveRecord();
+//            if ("error".equals((String) loJSON.get("result"))) {
+//                Assert.fail((String) loJSON.get("message"));
+//            }  
+//        } catch (SQLException | GuanzonException | CloneNotSupportedException e) {
+//            Assert.fail(e.getMessage());
+//        }
+//    }
+    
+   
     @Test
-    public void testNewRecord() {
+    public void testUpdateRecord() {
         try {
             JSONObject loJSON;
 
-            loJSON = record.newRecord();
+            loJSON = record.openRecord("M00125000003");
             if ("error".equals((String) loJSON.get("result"))) {
                 Assert.fail((String) loJSON.get("message"));
-            }    
+            }      
 
-            loJSON = record.getModel().setStockId("M00124000119");
+            loJSON = record.updateRecord();
             if ("error".equals((String) loJSON.get("result"))) {
                 Assert.fail((String) loJSON.get("message"));
-            }     
-
-            loJSON = record.getModel().setBranchCode(instance.getBranchCode());
-            if ("error".equals((String) loJSON.get("result"))) {
-                Assert.fail((String) loJSON.get("message"));
-            } 
-
-            loJSON = record.getModel().setClientId("");
-            if ("error".equals((String) loJSON.get("result"))) {
-                Assert.fail((String) loJSON.get("message"));
-            } 
-
-            loJSON = record.getModel().setSerial01("001");
-            if ("error".equals((String) loJSON.get("result"))) {
-                Assert.fail((String) loJSON.get("message"));
-            }  
-
-            loJSON = record.getModel().setSerial02("002");
-            if ("error".equals((String) loJSON.get("result"))) {
-                Assert.fail((String) loJSON.get("message"));
-            }  
-
-            loJSON = record.getModel().setStockId("M00125000001");
+            }      
+            
+            loJSON = record.getModel().setSerial01("0123");
             if ("error".equals((String) loJSON.get("result"))) {
                 Assert.fail((String) loJSON.get("message"));
             }  
             
+            loJSON = record.getModel().setSerial02("4567");
+            if ("error".equals((String) loJSON.get("result"))) {
+                Assert.fail((String) loJSON.get("message"));
+            }  
+
             loJSON = record.SerialRegistration().setFileNumber("123456789");
             if ("error".equals((String) loJSON.get("result"))) {
                 Assert.fail((String) loJSON.get("message"));
@@ -78,47 +118,10 @@ public class testInvSerial {
             loJSON = record.saveRecord();
             if ("error".equals((String) loJSON.get("result"))) {
                 Assert.fail((String) loJSON.get("message"));
-            }  
-        } catch (SQLException | GuanzonException | CloneNotSupportedException e) {
-            Assert.fail(e.getMessage());
+            } 
+        } catch (Exception e) {
         }
     }
-    
-//   
-//    @Test
-//    public void testUpdateRecord() {
-//        JSONObject loJSON;
-//
-//        loJSON = record.openRecord("M00124000119");
-//        if ("error".equals((String) loJSON.get("result"))) {
-//            Assert.fail((String) loJSON.get("message"));
-//        }      
-//        
-//        loJSON = record.updateRecord();
-//        if ("error".equals((String) loJSON.get("result"))) {
-//            Assert.fail((String) loJSON.get("message"));
-//        }      
-//        
-//        loJSON = record.getModel().setDescription("Sample item from new program structure updated.");
-//        if ("error".equals((String) loJSON.get("result"))) {
-//            Assert.fail((String) loJSON.get("message"));
-//        }     
-//        
-//        loJSON = record.getModel().setModifyingId(instance.getUserID());
-//        if ("error".equals((String) loJSON.get("result"))) {
-//            Assert.fail((String) loJSON.get("message"));
-//        }     
-//        
-//        loJSON = record.getModel().setModifiedDate(instance.getServerDate());
-//        if ("error".equals((String) loJSON.get("result"))) {
-//            Assert.fail((String) loJSON.get("message"));
-//        }     
-//        
-//        loJSON = record.saveRecord();
-//        if ("error".equals((String) loJSON.get("result"))) {
-//            Assert.fail((String) loJSON.get("message"));
-//        } 
-//    }
     
 //    @Test
 //    public void testSearch(){

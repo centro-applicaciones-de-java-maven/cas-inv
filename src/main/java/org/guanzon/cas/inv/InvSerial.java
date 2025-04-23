@@ -114,11 +114,8 @@ public class InvSerial extends Parameter{
                 byCode ? 0 : 1);
 
         if (poJSON != null) {
-            poJSON =  poModel.openRecord((String) poJSON.get("sSerialID"));
-            if ("success".equals((String) poJSON.get("result"))) {
-                loadLedger();
-                poRegistration.openRecord(poModel.getSerialId());
-            }
+            poJSON =  openRecord((String) poJSON.get("sSerialID"));
+            if (!"success".equals((String) poJSON.get("result"))) return poJSON;
             
             poJSON = new JSONObject();
             poJSON.put("result", "success");
@@ -130,6 +127,44 @@ public class InvSerial extends Parameter{
             poJSON.put("message", "No record loaded.");
             return poJSON;
         }
+    }
+    
+    @Override
+    public JSONObject openRecord(String Id) throws SQLException, GuanzonException {        
+        poJSON = super.openRecord(Id);
+        
+        loadLedger();
+                
+        poJSON = poRegistration.openRecord(poModel.getSerialId());
+        if (!"success".equals((String) poJSON.get("result"))) return poJSON;
+        
+        poJSON = new JSONObject();
+        poJSON.put("result", "success");
+        poJSON.put("message", "Record loaded successfully.");
+        return poJSON;
+    }
+    
+    @Override
+    public JSONObject updateRecord() {
+        if (!pbInitRec){
+            poJSON = new JSONObject();
+            poJSON.put("result", "error");
+            poJSON.put("message", "Object is not initialized.");
+            return poJSON;
+        }
+        
+        poJSON =  getModel().updateRecord();
+        if (!"success".equals((String) poJSON.get("result"))) return poJSON;
+        
+        poJSON = poRegistration.updateRecord();
+        if (!"success".equals((String) poJSON.get("result"))) return poJSON;
+        
+        if ("success".equals((String) poJSON.get("result"))){
+            poEvent = new JSONObject();
+            poEvent.put("event", "UPDATE");            
+        }
+                
+        return poJSON;
     }
     
     private void loadLedger() throws SQLException, GuanzonException{        
