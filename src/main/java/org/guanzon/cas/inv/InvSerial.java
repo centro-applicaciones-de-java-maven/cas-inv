@@ -51,11 +51,11 @@ public class InvSerial extends Parameter{
     public JSONObject isEntryOkay() throws SQLException, GuanzonException{
         poJSON = new JSONObject();
         
-        if (poGRider.getUserLevel() < UserRight.SYSADMIN){
-            poJSON.put("result", "error");
-            poJSON.put("message", "User is not allowed to save record.");
-            return poJSON;
-        } else {
+//        if (poGRider.getUserLevel() < UserRight.SYSADMIN){
+//            poJSON.put("result", "error");
+//            poJSON.put("message", "User is not allowed to save record.");
+//            return poJSON;
+//        } else {
             poJSON = new JSONObject();
             
             if (poModel.getSerialId().isEmpty()){
@@ -92,7 +92,7 @@ public class InvSerial extends Parameter{
             
             //todo:
             //  more validations/use of validators per category
-        }
+//        }
         
         poJSON.put("result", "success");
         return poJSON;
