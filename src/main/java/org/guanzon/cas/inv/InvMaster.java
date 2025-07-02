@@ -174,6 +174,68 @@ public class InvMaster extends Parameter{
         }
     }
     
+    public JSONObject searchRecord(String value, boolean byCode, String supplierId, String industryCode) throws SQLException, GuanzonException {
+        String lsSQL = getSQ_Browse();
+        
+        if (supplierId != null){
+            lsSQL = MiscUtil.addCondition(lsSQL, "h.sSupplier = " + SQLUtil.toSQL(supplierId));
+        }
+        
+        if (industryCode != null){
+            lsSQL = MiscUtil.addCondition(lsSQL, "a.sIndstCdx = " + SQLUtil.toSQL(industryCode));
+        }
+        
+        poJSON = ShowDialogFX.Search(poGRider,
+                lsSQL,
+                value,
+                "Bar Code»Description»Brand»Model»UOM»QOH",
+                "sBarCodex»sDescript»xBrandNme»xModelNme»xMeasurNm»xQtyOnHnd",
+                "a.sBarCodex»a.sDescript»IFNULL(b.sDescript, '')»IFNULL(c.sDescript, '')»IFNULL(e.sDescript, '')»b.nQtyOnHnd",
+                byCode ? 0 : 1);
+ 
+        if (poJSON != null) {
+            return poModel.openRecord((String) poJSON.get("sStockIDx"), (String) poJSON.get("xBranchCd"));
+        } else {
+            poJSON = new JSONObject();
+            poJSON.put("result", "error");
+            poJSON.put("message", "No record loaded.");
+            return poJSON;
+        }
+    }
+    
+    public JSONObject searchRecord(String value, boolean byCode, String supplierId, String industryCode, String brandId) throws SQLException, GuanzonException {
+        String lsSQL = getSQ_Browse();
+        
+        if (supplierId != null){
+            lsSQL = MiscUtil.addCondition(lsSQL, "h.sSupplier = " + SQLUtil.toSQL(supplierId));
+        }
+        
+        if (industryCode != null){
+            lsSQL = MiscUtil.addCondition(lsSQL, "a.sIndstCdx = " + SQLUtil.toSQL(industryCode));
+        }
+        
+        if (brandId != null){
+            lsSQL = MiscUtil.addCondition(lsSQL, "a.sBrandIDx = " + SQLUtil.toSQL(brandId));
+        }
+        
+        poJSON = ShowDialogFX.Search(poGRider,
+                lsSQL,
+                value,
+                "Bar Code»Description»Brand»Model»UOM»QOH",
+                "sBarCodex»sDescript»xBrandNme»xModelNme»xMeasurNm»xQtyOnHnd",
+                "a.sBarCodex»a.sDescript»IFNULL(b.sDescript, '')»IFNULL(c.sDescript, '')»IFNULL(e.sDescript, '')»b.nQtyOnHnd",
+                byCode ? 0 : 1);
+ 
+        if (poJSON != null) {
+            return poModel.openRecord((String) poJSON.get("sStockIDx"), (String) poJSON.get("xBranchCd"));
+        } else {
+            poJSON = new JSONObject();
+            poJSON.put("result", "error");
+            poJSON.put("message", "No record loaded.");
+            return poJSON;
+        }
+    }
+    
     public JSONObject searchRecordOfVariants(String value, boolean byCode) throws SQLException, GuanzonException {
         String lsSQL = getSQ_Browse();
         
