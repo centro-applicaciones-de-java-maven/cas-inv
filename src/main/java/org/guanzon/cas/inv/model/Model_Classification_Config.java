@@ -241,11 +241,11 @@ public class Model_Classification_Config extends Model{
         return Double.parseDouble(String.valueOf(getValue("nPurcLdTm")));
     }
     
-    public JSONObject setNoOfMonthsF(int value){
+    public JSONObject setNoOfMonths(int value){
         return setValue("nNoMonths", value);
     }
     
-    public int getNoOfMonthsF(){
+    public int getNoOfMonths(){
         return (int) getValue("nNoMonths");
     }
     
