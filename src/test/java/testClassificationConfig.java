@@ -59,7 +59,7 @@ public class testClassificationConfig {
             System.out.println(record.getModel().getMinimumStockE());
             System.out.println(record.getModel().getMinimumStockF());
             System.out.println(record.getModel().getNoMinMax());
-            System.out.println(record.getModel().getNoOfMonthsF());
+            System.out.println(record.getModel().getNoOfMonths());
             System.out.println(record.getModel().getOrderFrequency());
             System.out.println(record.getModel().getPurchaseLeadTime());
             System.out.println(record.getModel().getSafetyA());

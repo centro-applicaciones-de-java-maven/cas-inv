@@ -1,9 +1,9 @@
 package org.guanzon.cas.inv.roq;
 
+import com.sun.rowset.CachedRowSetImpl;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import javax.sql.rowset.CachedRowSet;
@@ -27,6 +27,7 @@ public class ClassifySP implements iClassify{
     private boolean pbMinMax;
     
     private CachedRowSet poROQ;
+    private CachedRowSet poDetail;
     private JSONObject poJSON;
     
     private int pnYear;
@@ -144,6 +145,9 @@ public class ClassifySP implements iClassify{
         String lsSQL_ULock = "UNLOCK TABLES";
         String lsSQL_Lock = "LOCK TABLES TABLENAME READ/WRITE";
         
+        System.out.println("Setting Required Information");
+        
+        System.out.println("Retrieving Computation Variable...");
         if (!getOthers()){
             poJSON = new JSONObject();
             poJSON.put("result", "error");
@@ -151,6 +155,7 @@ public class ClassifySP implements iClassify{
             return poJSON;
         }
         
+        System.out.println("Retriving period to process...");
         poJSON = checkPeriod();
         
         if ("error".equals((String) poJSON.get("result"))) return poJSON;
@@ -168,17 +173,27 @@ public class ClassifySP implements iClassify{
                                         " FROM Inventory" +
                                         " WHERE sCategCd1 = " + SQLUtil.toSQL(psCategrCd) +")";
         
+        System.out.println("Setting initial values...");
         poGRider.executeQuery(lsSQL, "Inv_Master", psBranchCd, "", "");
         
         if (poGRider.isWarehouse()){
             //for warehouse, post all confirm PO and cancel all unconfirm PO
+            
+            //todo:
+            System.out.println("Removing all Unconfirmed Order...");
+            System.out.println("Removing all Pending Order...");
+            System.out.println("Posting all Confirmed Order...");
         } else {
             lsSQL = "UPDATE Inv_Stock_Transfer_Master SET " +
                         "  cTranStat = '3'" +
                     " WHERE sTransNox LIKE " + SQLUtil.toSQL(psBranchCd + "%") +
                         " AND cTranStat = '0'";
             
+            System.out.println("Removing all Unconfirmed Order...");
             poGRider.executeQuery(lsSQL, "Inv_Stock_Transfer_Master", psBranchCd, "", "");
+            
+            //todo:
+            System.out.println("Removing all Pending Order...");
         }
         
         lsSQL = "SELECT" +
@@ -196,6 +211,7 @@ public class ClassifySP implements iClassify{
                     " AND b.sBranchCd = " + SQLUtil.toSQL(psBranchCd) +
                 " ORDER BY b.dAcquired"; 
         
+        System.out.println("Retrieving items...");
         ResultSet loRS = poGRider.executeQuery(lsSQL);
         
         ResultSet loTmp;
@@ -204,12 +220,14 @@ public class ClassifySP implements iClassify{
         int lnPeriod;
         int lnYear;
         int lnMonth;
-        int lnTotal;
+        double lnTotal = 0.00;
+        double lnPerTotal = 0.00;
+        double lnRunTotal = 0.00;
                 
         if (MiscUtil.RecordCount(loRS) > 0){
-            
-            
+            System.out.println("Assigning date acquired for the existing items.");
             while (loRS.next()){
+                System.out.println(loRS.getString("sBarCodex") +  " - " + loRS.getString("sDesript"));
                 lsSQL = "SELECT dTransact" +
                         " FROM Inv_Ledger" +
                         " WHERE sStockIDx = " + SQLUtil.toSQL(loRS.getString("sStockIDx")) +
@@ -306,26 +324,165 @@ public class ClassifySP implements iClassify{
             lnYear = lnPeriod / 100;       //2025
             lnMonth = lnPeriod % 100;      //07            
 
-            while (CommonUtils.dateDiff(LocalDate.now(), LocalDate.of(lnYear, lnMonth, 28), ChronoUnit.MONTHS) > 0) {
+            while (CommonUtils.dateDiff(LocalDate.now(), LocalDate.of(pnYear, pnMonth, 28), ChronoUnit.MONTHS) > 0) {
+                System.out.println("Initializing period info...");
+                
                 //initialize period
                 initPeriod();
                 
                 //after initializing period, check if Min Max must be calculated
                 pbMinMax = isComputeMinMax();
+                System.out.println("Finalizing...");
                 
+                System.out.println("Retrieving statement information...");
                 if (pbProcessed){
                     lsSQL = getCompDemandSQL();
                 } else {
                     lsSQL = getDemand4ClassSQL();
                 }
+                System.out.println("Finalizing...");
                 
-                //lnTotal = getTotal();
+                System.out.println("Retreiving sales total...");
+                lnTotal = getTotal();
                 
+                if (lnTotal == 0.00) {
+                    //trap the processing if no sales exist
+                    if (poGRider.getClientID().equals("GGC_BGMO1")) {
+                        poJSON = updateClassification(lnPerTotal);
+                        
+                        if (!"success".equals((String) poJSON.get("result"))){
+                            poGRider.rollbackTrans();
+                            return poJSON;
+                        }
+                    }
+                } else {
+                    ResultSet loDetail = poGRider.executeQuery(lsSQL);
+                    
+                    if (MiscUtil.RecordCount(loRS) == 0){
+                        poGRider.rollbackTrans();
+                        
+                        poJSON = new JSONObject();
+                        poJSON.put("result", "error");
+                        poJSON.put("message", "Unable to retrieve items for classification!\n" +
+                                                        "Please Inform SEG/SSG of Guanzon Group of Companies on this Matter!!!");
+                        
+                        return poJSON;
+                    }                   
+                    
+                    poDetail = new CachedRowSetImpl();
+                    poDetail.populate(loDetail);
+                    
+                    lnRunTotal = 0.00;
+                    lnPerTotal = 0.00;
+                    while (poDetail.next()){
+                        System.out.println(poDetail.getString("sBarCodex") +  " - " + poDetail.getString("sDesript"));
+                        lnRunTotal += poDetail.getDouble("xTotlSold");
+                        lnPerTotal += poDetail.getDouble("nSoldQty1");
+                        poDetail.setObject("nTotlSumx", lnRunTotal);
+                        poDetail.setObject("nTotlSumP", lnRunTotal / lnTotal);
+                        
+                        //todo: if classify parts
+                    }
+                    
+                    poJSON = updateClassification(lnPerTotal);
+
+                    if (!"success".equals((String) poJSON.get("result"))){
+                        poGRider.rollbackTrans();
+                        return poJSON;
+                    }
+                }
+                
+                //increment period
+                ldAcquired = LocalDate.of(pnYear, pnMonth, 28);
+                ldAcquired = CommonUtils.dateAdd(ldAcquired, 1, ChronoUnit.MONTHS);
+                pnYear = ldAcquired.getYear();
+                pnMonth = ldAcquired.getMonthValue();
             }
-            
         }
         
         return poJSON;
+    }
+    
+    private JSONObject updateClassification(double lnPerTotal) throws SQLException, GuanzonException{
+        String lsSQL;
+        
+        if (pbProcessed){
+            lsSQL = "UPDATE Inv_Classification_Master SET" +
+                        "  nTotlSale = " + lnPerTotal +
+                        ", sPostedxx = " + SQLUtil.toSQL(poGRider.getUserID()) +
+                        ", dPostedxx = " + SQLUtil.toSQL(poGRider.getServerDate()) +
+                        ", cTranStat = " + SQLUtil.toSQL("2") +
+                    " WHERE sCategrCd = " + SQLUtil.toSQL(psCategrCd) +
+                        " AND sBranchCd = " + SQLUtil.toSQL(psBranchCd) +
+                        " AND sPeriodxx = " + SQLUtil.toSQL(pasPeriod[0]);
+        } else {
+            lsSQL = "INSERT INTO Inv_Classification_Master SET" +
+                        "  sCategrCd = " + SQLUtil.toSQL(psCategrCd) +
+                        ", sBranchCd = " + SQLUtil.toSQL(psBranchCd) +
+                        ", sPeriodxx = " + SQLUtil.toSQL(pasPeriod[0]) +
+                        ", nTotlSale = " + lnPerTotal + 
+                        ", sProcessd = " + SQLUtil.toSQL(poGRider.getUserID()) +
+                        ", dProcessd = " + SQLUtil.toSQL(poGRider.getServerDate()) +
+                        ", sPostedxx = " + SQLUtil.toSQL(poGRider.getUserID()) +
+                        ", dPostedxx = " + SQLUtil.toSQL(poGRider.getServerDate()) +
+                        ", cTranStat = " + SQLUtil.toSQL("2");
+        }
+        
+        poJSON = new JSONObject();
+        
+        if (poGRider.executeQuery(lsSQL, "Inv_Classification_Master", psBranchCd, "", "") <= 0){
+            poJSON.put("result", "error");
+            poJSON.put("message", "Unable to Finalize Spareparts Classification Info!\n" +
+                                        "Please Inform SEG/SSG of Guanzon Group of Companies on this Matter!!!");
+            return poJSON;
+        }
+        
+        poJSON.put("result", "success");
+        return poJSON;
+    }
+    
+    
+    
+    private double getTotal() throws SQLException{
+        String lsSQL;
+        
+        if (pbProcessed){
+            lsSQL = "SELECT SUM(nTotlSale) xTotlSold" +
+                    " FROM Inv_Classification_Master" +
+                    " WHERE sBranchCd = " + SQLUtil.toSQL(psBranchCd) +
+                        " AND sCategrCd = " + SQLUtil.toSQL(psCategrCd) +
+                        " AND sPeriodxx BETWEEN " + SQLUtil.toSQL(pasPeriod[pasPeriod.length - 1]) +
+                        " AND " + SQLUtil.toSQL(pasPeriod[0]);
+        } else {
+            lsSQL = "SELECT IFNULL(SUM(xTotlSold), 0) xTotlSold" +
+                    " FROM (SELECT SUM(nTotlSale) xTotlSold" +
+                            " FROM Inv_Classification_Master" +
+                            " WHERE sBranchCd = " + SQLUtil.toSQL(psBranchCd) +
+                                " AND sCategrCd = " + SQLUtil.toSQL(psCategrCd) +
+                                " AND sPeriodxx BETWEEN " + SQLUtil.toSQL(pasPeriod[pasPeriod.length - 1]) +
+                                " AND " + SQLUtil.toSQL(pasPeriod[1]) +
+                            " UNION SELECT SUM(nQtyOutxx - nQtyInxxx) xTotlSold" +
+                            " FROM Inv_Ledger" +
+                                " WHERE sBranchCd = " + SQLUtil.toSQL(psBranchCd) +
+                                   " AND sSourceCd IN ('', '', '', '', '', '', '', '')" +
+                                   " AND DATE_FORMAT(dTransact, '%Y%m') = " + SQLUtil.toSQL(pasPeriod[1]) + ") x";
+//                    strParm(pxeSPJobOrder) & ", " & _
+//                    strParm(pxeSPJobOrder) & ", " & _
+//                    strParm(pxeSPSales) & ", " & _
+//                    strParm(pxeSPWholesale) & ", " & _
+//                    strParm(pxeSPSalesGiveAway) & ", " & _
+//                    strParm(pxeSPWarrantyRelease) & ", " & _
+//                    strParm(pxeSPWholesaleReturn) & ", " & _
+//                    strParm(pxeSPSalesReturn) & ")" & _
+        }
+        
+        ResultSet loRS = poGRider.executeQuery(lsSQL);
+        
+        if (loRS.next()){
+            return loRS.getDouble("xTotlSold");
+        } else {
+            return 0.00;
+        }
     }
     
     private void initPeriod(){
