@@ -13,6 +13,7 @@ import org.guanzon.appdriver.base.GuanzonException;
 import org.guanzon.appdriver.base.MiscUtil;
 import org.guanzon.appdriver.base.SQLUtil;
 import org.json.simple.JSONObject;
+import java.util.Date;
 
 public class ClassifySP implements iClassify{
     private GRiderCAS poGRider;
@@ -164,7 +165,7 @@ public class ClassifySP implements iClassify{
         
         lsSQL = "UPDATE Inv_Master SET" +
                     "  nMaxLevel = 0" +
-                    ", nAveMonSl = 0" +
+                    ", nAvgMonSl = 0" +
                     ", nResvOrdr = 0" +
                     ", nBackOrdr = 0" +
                     ", nFloatQty = 0" +
@@ -401,6 +402,88 @@ public class ClassifySP implements iClassify{
         }
         
         return poJSON;
+    }
+    
+    private boolean classifyParts() throws SQLException{
+        int lnDivisor = getDivisor();
+        
+        if (lnDivisor == 0) return false;
+        
+        if (poDetail.getDouble("xTotlSold") > 0.00){
+            if (poDetail.getDouble("xTotlSold") <= poOthers.getModel().getVolumeRateA()){
+                poDetail.updateString("cClassify", "A");
+            } else if (poDetail.getDouble("xTotlSold") <= poOthers.getModel().getVolumeRateB()){
+                poDetail.updateString("cClassify", "B");
+            } else if (poDetail.getDouble("xTotlSold") <= poOthers.getModel().getVolumeRateC()){
+                poDetail.updateString("cClassify", "C");
+            } else {
+                poDetail.updateString("cClassify", "D");
+            }
+            
+            poDetail.updateDouble("nAvgMonSl", poDetail.getDouble("xTotlSold") / lnDivisor);
+        } else {
+            if (lnDivisor == pasPeriod.length){
+                if (poDetail.getDouble("nSoldQty" + String.valueOf(lnDivisor)) == 0.00){ //null
+                    if (getPeriodDiff(poDetail.getDate("dAcquired")) > poOthers.getModel().getNoOfMonths()){
+                        poDetail.updateString("cClassify", "D");
+                    } else {
+                        poDetail.updateString("cClassify", "F");
+                    }
+                } else {
+                    poDetail.updateString("cClassify", "E");
+                }
+            } else {
+                if (getPeriodDiff(poDetail.getDate("dAcquired")) > poOthers.getModel().getNoOfMonths()){
+                    poDetail.updateString("cClassify", "D");
+                } else {
+                    poDetail.updateString("cClassify", "F");
+                }
+            }
+            
+            poDetail.updateDouble("nAvgMonSl", 0.00);
+        }
+        
+        poDetail.updateRow();
+                
+        return true;
+    }
+    
+    private int getPeriodDiff() throws SQLException{
+        int lnYear = poDetail.getDate("dAcquired").getYear();
+        int lnMonth = poDetail.getDate("dAcquired").getMonth();
+        
+        int lnPeriod = CommonUtils.dateDiff(LocalDate.of(pnYear, pnMonth, 1), LocalDate.of(lnYear, lnMonth, 1), ChronoUnit.MONTHS);
+        
+        if (lnPeriod < 0) {
+            lnPeriod = 0;
+        } else {
+            lnPeriod += 1;
+        }
+        
+        return lnPeriod;
+    }
+    
+    private int getDivisor() throws SQLException{
+        int lnDivisor = 0;
+        
+        if (poDetail.getDate("dAcquired") == null){
+            return lnDivisor;
+        } else {
+            int lnYear = poDetail.getDate("dAcquired").getYear();
+            int lnMonth = poDetail.getDate("dAcquired").getMonth();
+            
+            lnDivisor = CommonUtils.dateDiff(LocalDate.of(pnYear, pnMonth, 1), LocalDate.of(lnYear, lnMonth, 1), ChronoUnit.MONTHS);
+            
+            if (lnDivisor >= pasPeriod.length) {
+                lnDivisor = pasPeriod.length;
+            } else if (lnDivisor < 0) {
+                lnDivisor = 0;
+            } else {
+                lnDivisor += 1;
+            }
+        }
+        
+        return lnDivisor;
     }
     
     private JSONObject updateClassification(double lnPerTotal) throws SQLException, GuanzonException{

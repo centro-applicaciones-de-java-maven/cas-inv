@@ -6,5 +6,6 @@ import org.guanzon.appdriver.base.SQLUtil;
 
 public class testRandom {
     public static void main(String [] args){
+        System.out.println(10.00/3.00);
     }
 }
