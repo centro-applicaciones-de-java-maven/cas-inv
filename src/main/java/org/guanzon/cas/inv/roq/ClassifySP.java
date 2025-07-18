@@ -13,7 +13,6 @@ import org.guanzon.appdriver.base.GuanzonException;
 import org.guanzon.appdriver.base.MiscUtil;
 import org.guanzon.appdriver.base.SQLUtil;
 import org.json.simple.JSONObject;
-import java.util.Date;
 
 public class ClassifySP implements iClassify{
     private GRiderCAS poGRider;
@@ -109,9 +108,106 @@ public class ClassifySP implements iClassify{
             return firstClassify();
         }
         
+        String lsSQL;
+        String lsSQL_ULock = "UNLOCK TABLES";
+        String lsSQL_Lock = "LOCK TABLES TABLENAME READ/WRITE";
+        
+        System.out.println("Setting Required Information");
+        
+        System.out.println("Retrieving Computation Variable...");
+        if (!getOthers()){
+            poJSON = new JSONObject();
+            poJSON.put("result", "error");
+            poJSON.put("message", "Unable to retrieve configuration.");
+            return poJSON;
+        }
+        
+        System.out.println("Retrieving period to process...");
+        poJSON = checkPeriod();
+        if ("error".equals((String) poJSON.get("result"))) return poJSON;
+        
+        System.out.println("Initializing period info...");
+        initPeriod();
+        
+        System.out.println("Checking Unposted Transfers...");
+        if (hasUnpostedTransfer()) {
+            poJSON = new JSONObject();
+            poJSON.put("result", "error");
+            poJSON.put("message", "Unposted Transfer Exists!\n" +
+                                        "Please Accept all pending transfer before proceeding!\n" +
+                                        "Try again later!!!");
+            return poJSON;
+        }
+        
+        System.out.println("Retrieving statement information...");
+        if (pbProcessed){
+            lsSQL = getCompDemandSQL();
+        } else {
+            lsSQL = getDemand4ClassSQL();
+        }
+        
+        System.out.println("Retrieving sales total...");
+        double lnTotal = getTotal();
+        
+        if (lnTotal == 0){
+            poJSON = new JSONObject();
+            poJSON.put("result", "error");
+            poJSON.put("message", "No spareparts sale was detected!\n" +
+                                        "Please Inform SEG/SSG of Guanzon Group of Companies on this Matter!!!");
+            return poJSON;
+        }
+        
+        ResultSet loDetail = poGRider.executeQuery(lsSQL);
+        
+        poDetail = new CachedRowSetImpl();
+        poDetail.populate(loDetail);
+
+        double lnPerTotal = 0.00;
+        double lnRunTotal = 0.00;
+        
+        while (poDetail.next()){
+            System.out.println(poDetail.getString("sBarCodex") +  " - " + poDetail.getString("sDesript"));
+            lnRunTotal += poDetail.getDouble("xTotlSold");
+            lnPerTotal += poDetail.getDouble("nSoldQty1");
+            poDetail.setObject("nTotlSumx", lnRunTotal);
+            poDetail.setObject("nTotlSumP", lnRunTotal / lnTotal);
+
+            if (classifyParts()){
+                //only save classification included in the period specified
+                poJSON = saveClassification();
+
+                if (!"success".equals((String) poJSON.get("result"))){
+                    poGRider.rollbackTrans();
+                    return poJSON;
+                }
+            }
+        }
+        
+        poJSON = updateClassification(lnPerTotal);
+
+        if (!"success".equals((String) poJSON.get("result"))){
+            poGRider.rollbackTrans();
+            return poJSON;
+        }
+                
+        System.out.println("Commiting updates to database...");
+        poGRider.commitTrans();
         
         poJSON.put("result", "success");
         return poJSON;
+    }
+    
+    private boolean hasUnpostedTransfer() throws SQLException{
+        String lsSQL = "SELECT sTransNox" +
+                        " FROM Inv_Transfer_Master" +
+                        " WHERE sCategrCd = " + SQLUtil.toSQL(psCategrCd) +
+                            " AND sDestinat = " + SQLUtil.toSQL(psBranchCd) +
+                            " AND DATE_FORMAT(dTransact, '%Y%m') = " + SQLUtil.toSQL(pasPeriod[1]) +
+                            " AND cTranStat IN ('0', '1)";
+        
+        ResultSet loRS = poGRider.executeQuery(lsSQL);
+        
+        return MiscUtil.RecordCount(loRS) > 0;
     }
     
     private boolean isFirstClassify() throws SQLException{
@@ -156,9 +252,8 @@ public class ClassifySP implements iClassify{
             return poJSON;
         }
         
-        System.out.println("Retriving period to process...");
+        System.out.println("Retrieving period to process...");
         poJSON = checkPeriod();
-        
         if ("error".equals((String) poJSON.get("result"))) return poJSON;
         
         poGRider.beginTrans("Inventory Classification", psBranchCd + "-" + psCategrCd, "CLASS", "");
@@ -320,10 +415,6 @@ public class ClassifySP implements iClassify{
                 pnYear = ldAcquired.getYear();
                 pnMonth = ldAcquired.getMonthValue();
             }
-            
-            lnPeriod = Integer.parseInt(loRS.getString("sPeriodxx"));
-            lnYear = lnPeriod / 100;       //2025
-            lnMonth = lnPeriod % 100;      //07            
 
             while (CommonUtils.dateDiff(LocalDate.now(), LocalDate.of(pnYear, pnMonth, 28), ChronoUnit.MONTHS) > 0) {
                 System.out.println("Initializing period info...");
@@ -382,7 +473,15 @@ public class ClassifySP implements iClassify{
                         poDetail.setObject("nTotlSumx", lnRunTotal);
                         poDetail.setObject("nTotlSumP", lnRunTotal / lnTotal);
                         
-                        //todo: if classify parts
+                        if (classifyParts()){
+                            //only save classification included in the period specified
+                            poJSON = saveClassification();
+                            
+                            if (!"success".equals((String) poJSON.get("result"))){
+                                poGRider.rollbackTrans();
+                                return poJSON;
+                            }
+                        }
                     }
                     
                     poJSON = updateClassification(lnPerTotal);
@@ -401,7 +500,196 @@ public class ClassifySP implements iClassify{
             }
         }
         
+        System.out.println("Commiting updates to database...");
+        poGRider.commitTrans();
+        
+        poJSON = new JSONObject();
+        poJSON.put("result", "success");
+        
         return poJSON;
+    }
+    
+    private JSONObject saveClassification() throws SQLException, GuanzonException{
+        String lsSQL;
+        String lsMinMax = "";
+        
+        poJSON = new JSONObject();
+        
+        if (pbMinMax) {
+            compMinMax();
+            
+            lsMinMax = ", nMinLevel = " + poDetail.getDouble("nMinLevel") +
+                        ", nMaxLevel = " + poDetail.getDouble("nMaxLevel");
+        }
+        
+        if (pbProcessed){
+            lsSQL = "UPDATE Inv_Classification_Detail SET" +
+                        "  nTotlSold = " + poDetail.getDouble("nTotlSold") +
+                        ", nTotlSumx = " + poDetail.getDouble("nTotlSumx") +
+                        ", nTotlSumP = " + poDetail.getDouble("nTotlSumP") +
+                        ", cClassify = " + SQLUtil.toSQL(poDetail.getString("cClassify")) +
+                        ", nAvgMonSl = " + poDetail.getDouble("nAvgMonSl") +
+                        lsMinMax +
+                    " WHERE sBranchCd = " + SQLUtil.toSQL(psBranchCd) +
+                        " AND sCategrCd = " + SQLUtil.toSQL(psCategrCd) +
+                        " AND sPeriodxx = " + SQLUtil.toSQL(pasPeriod[0]) +
+                        " AND sStockIDx = " + SQLUtil.toSQL(poDetail.getString("sStockIDx"));
+        } else {
+            lsSQL = "INSERT INT Inv_Classification_Detail SET" +
+                        "  sBranchCd = " + SQLUtil.toSQL(psBranchCd) +
+                        ", sCategrCd = " + SQLUtil.toSQL(psCategrCd) +
+                        ", sPeriodxx = " + SQLUtil.toSQL(pasPeriod[0]) +
+                        ", sStockIDx = " + SQLUtil.toSQL(poDetail.getString("sStockIDx")) +
+                        ", nAbnrmQty = 0.00" +
+                        ", nTotlSold = " + poDetail.getDouble("nTotlSold") +
+                        ", nTotlSumx = " + poDetail.getDouble("nTotlSumx") +
+                        ", nTotlSumP = " + poDetail.getDouble("nTotlSumP") +
+                        ", cClassify = " + SQLUtil.toSQL(poDetail.getString("cClassify")) +
+                        ", nAvgMonSl = " + poDetail.getDouble("nAvgMonSl") +
+                        lsMinMax;
+                    
+        }
+        
+        double lnBackOrder = getBackOrder(poDetail.getString("sStockIDx"));
+        double lnResvOrder = getReserveOrder(poDetail.getString("sStockIDx"));
+        
+        if (lnResvOrder < 0.00) lnResvOrder = 0.00;
+        
+        if (poGRider.executeQuery(lsSQL, "Inv_Classification_Detail", psBranchCd, "", "") <= 0){
+            poJSON.put("result", "error");
+            poJSON.put("message", "Unable to update Classification Detail Info!\n" +
+                                            "Barcode: " + poDetail.getString("sBarCodex") + "\n\n" +
+                                            "Please Inform SEG/SSG of Guanzon Group of Companies on this Matter!!!");
+            return poJSON;
+        }
+        
+        lsSQL = "";
+        
+        if (poDetail.getDouble("xAveMonSl") == 0.00){ //isnull
+            lsSQL = ", nAvgMonSl = " + poDetail.getDouble("nAveMonSl");
+        } else if (poDetail.getDouble("xAveMonSl") != poDetail.getDouble("nAveMonSl")){
+            lsSQL = ", nAvgMonSl = " + poDetail.getDouble("nAveMonSl");
+        }
+        
+        if (poDetail.getString("xClassify") == null){
+            lsSQL += ", cClassify = null";
+        } else if (!poDetail.getString("xClassify").equals(poDetail.getString("cClassify"))){
+            lsSQL += ", cClassify = " + SQLUtil.toSQL(poDetail.getString("cClassify"));
+        }
+        
+        if (poDetail.getDouble("nBackOrdr") == 0.00){ //isnull
+            lsSQL += ", nBackOrdr = " + lnBackOrder;
+        } else if (poDetail.getDouble("nBackOrdr") != lnBackOrder){
+            lsSQL += ", nBackOrdr = " + lnBackOrder;
+        }
+        
+        if (poDetail.getDouble("nResvOrdr") == 0.00){ //isnull
+            lsSQL += ", nResvOrdr = " + lnResvOrder;
+        } else if (poDetail.getDouble("nResvOrdr") != lnResvOrder){
+            lsSQL += ", nResvOrdr = " + lnResvOrder;
+        }
+        
+        lsSQL += lsMinMax;
+        if (!lsSQL.isEmpty()){
+            lsSQL = "UPDATE Inv_Master SET" +
+                        lsSQL.substring(2) +
+                    " WHERE sStockIDx = " + SQLUtil.toSQL(poDetail.getString("sStockIDx")) +
+                        " AND sBranchCd = " + SQLUtil.toSQL(psBranchCd);
+            
+            if (poGRider.executeQuery(lsSQL, "Inv_Master", psBranchCd, "", "") <= 0){
+                poJSON.put("result", "error");
+                poJSON.put("message", "Unable to update Classification Detail Info!\n" +
+                                                "Barcode: " + poDetail.getString("sBarCodex") + "\n\n" +
+                                                "Please Inform SEG/SSG of Guanzon Group of Companies on this Matter!!!");
+                return poJSON;
+            }
+        }
+        
+        poJSON.put("result", "success");
+        return poJSON;
+    }
+    
+    private double getBackOrder(String stockId) throws SQLException{
+        String lsSQL = "SELECT SUM(aa.nQuantity - (aa.nIssuedxx + aa.nCancelld)) nBackOrdr" +
+                        " FROM Inv_Stock_Request_Detail aa" +
+                           ", Inv_Stock_Request_Master bb" +
+                        " WHERE aa.sTransNox = bb.sTransNox" +
+                           " AND bb.sCategrCd = " + SQLUtil.toSQL(psCategrCd) +
+                           " AND bb.cTranStat = '1'" +
+                           " AND aa.sPartsIDx = " + SQLUtil.toSQL(stockId) +
+                           " AND aa.sTransNox LIKE " + SQLUtil.toSQL(psBranchCd + "%");
+        
+        ResultSet loRS = poGRider.executeQuery(lsSQL);
+        
+        if (!loRS.next()){
+            return 0.00;
+        } else if (loRS.getDouble("nBackOrdr") == 0.00){ //isnull
+            return 0.00;
+        } else {
+            return loRS.getDouble("nBackOrdr") < 0.00 ? 0.00 : loRS.getDouble("nBackOrdr");
+        }
+    }
+    
+    private double getReserveOrder(String stockId) throws SQLException{
+        String lsSQL = "SELECT SUM(aa.nQuantity - (aa.nIssuedxx + aa.nCanceled)) nResvOrdr" +
+                        " FROM Retail_Order_Detail aa" +
+                           ", Retail_Order_Master bb" +
+                        " WHERE aa.sTransNox = bb.sTransNox" +
+                           " AND bb.sCategrCd = " + SQLUtil.toSQL(psCategrCd) +
+                           " AND bb.cTranStat <> '3'" +
+                           " AND aa.sPartsIDx = " + SQLUtil.toSQL(stockId) +
+                           " AND aa.sTransNox LIKE " + SQLUtil.toSQL(psBranchCd + "%");
+        
+        ResultSet loRS = poGRider.executeQuery(lsSQL);
+        
+        if (!loRS.next()){
+            return 0.00;
+        } else if (loRS.getDouble("nResvOrdr") == 0.00){ //isnull
+            return 0.00;
+        } else {
+            return loRS.getDouble("nResvOrdr") < 0.00 ? 0.00 : loRS.getDouble("nResvOrdr");
+        }
+    }
+    
+    private boolean compMinMax() throws SQLException{
+        double lnTempAMC;
+        double lnTempQty;
+        String lsClassify = poDetail.getString("cClassify");
+        
+        switch (lsClassify){
+            case "A":
+            case "B":
+            case "C":
+                lnTempAMC = poDetail.getDouble("nAvgMonSl") * 
+                            (double) poOthers.getModel().getValue("nMinStcC" + lsClassify);
+                poDetail.setDouble("nMinLevel", Math.round(lnTempAMC));
+                
+                lnTempAMC = poDetail.getDouble("nAvgMonSl") * 
+                            (double) poOthers.getModel().getValue("nMaxStcC" + lsClassify);
+                poDetail.setDouble("nMaxLevel", Math.round(lnTempAMC));
+                break;
+            case "D":
+            case "F":
+                lnTempAMC = poDetail.getDouble("nAvgMonSl") * 
+                            (double) poOthers.getModel().getValue("nMinStcC" + lsClassify);
+                poDetail.setDouble("nMinLevel", Math.round(lnTempAMC));
+                
+                lnTempQty = (double) poOthers.getModel().getValue("nMaxQtyC" + lsClassify);
+                
+                if (lnTempAMC > lnTempQty){
+                    poDetail.setDouble("nMaxLevel", Math.round(lnTempAMC));
+                } else {
+                    poDetail.setDouble("nMaxLevel", Math.round(lnTempQty));
+                }
+                break;
+            default:
+                poDetail.setDouble("nMinLevel", 0.00);
+                poDetail.setDouble("nMaxLevel", 0.00);
+        }
+        
+        poDetail.updateRow();
+        
+        return true;
     }
     
     private boolean classifyParts() throws SQLException{
@@ -424,7 +712,7 @@ public class ClassifySP implements iClassify{
         } else {
             if (lnDivisor == pasPeriod.length){
                 if (poDetail.getDouble("nSoldQty" + String.valueOf(lnDivisor)) == 0.00){ //null
-                    if (getPeriodDiff(poDetail.getDate("dAcquired")) > poOthers.getModel().getNoOfMonths()){
+                    if (getPeriodDiff() > poOthers.getModel().getNoOfMonths()){
                         poDetail.updateString("cClassify", "D");
                     } else {
                         poDetail.updateString("cClassify", "F");
@@ -433,7 +721,7 @@ public class ClassifySP implements iClassify{
                     poDetail.updateString("cClassify", "E");
                 }
             } else {
-                if (getPeriodDiff(poDetail.getDate("dAcquired")) > poOthers.getModel().getNoOfMonths()){
+                if (getPeriodDiff() > poOthers.getModel().getNoOfMonths()){
                     poDetail.updateString("cClassify", "D");
                 } else {
                     poDetail.updateString("cClassify", "F");
