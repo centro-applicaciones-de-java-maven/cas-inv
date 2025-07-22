@@ -246,7 +246,7 @@ public class Model_Classification_Config extends Model{
     }
     
     public int getNoOfMonths(){
-        return (int) getValue("nNoMonths");
+        return Integer.parseInt(String.valueOf(getValue("nNoMonths")));
     }
     
     public JSONObject setNoMinMax(int value){
@@ -254,7 +254,7 @@ public class Model_Classification_Config extends Model{
     }
     
     public int getNoMinMax(){
-        return (int) getValue("nNoMinMax");
+        return Integer.parseInt(String.valueOf(getValue("nNoMinMax")));
     }
     
     public JSONObject setStartMinMax(int value){
@@ -262,7 +262,7 @@ public class Model_Classification_Config extends Model{
     }
     
     public int getStartMinMax(){
-        return (int) getValue("nNoMinMax");
+        return Integer.parseInt(String.valueOf(getValue("nNoMinMax")));
     }
     
     public JSONObject setModifyingId(String modifiedBy) {

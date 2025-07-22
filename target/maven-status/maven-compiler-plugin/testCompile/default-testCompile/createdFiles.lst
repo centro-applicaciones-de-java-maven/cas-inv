@@ -2,4 +2,6 @@ testClassificationConfig.class
 testInvSerial.class
 testInventory.class
 testGetROQ.class
+testClassify.class
 testInvMaster.class
+testRandom.class

@@ -115,12 +115,8 @@ public class ClassifySP implements iClassify{
         System.out.println("Setting Required Information");
         
         System.out.println("Retrieving Computation Variable...");
-        if (!getOthers()){
-            poJSON = new JSONObject();
-            poJSON.put("result", "error");
-            poJSON.put("message", "Unable to retrieve configuration.");
-            return poJSON;
-        }
+        poJSON = getOthers();
+        if (!"success".equals((String) poJSON.get("result"))) return poJSON;
         
         System.out.println("Retrieving period to process...");
         poJSON = checkPeriod();
@@ -203,7 +199,7 @@ public class ClassifySP implements iClassify{
                         " WHERE sCategrCd = " + SQLUtil.toSQL(psCategrCd) +
                             " AND sDestinat = " + SQLUtil.toSQL(psBranchCd) +
                             " AND DATE_FORMAT(dTransact, '%Y%m') = " + SQLUtil.toSQL(pasPeriod[1]) +
-                            " AND cTranStat IN ('0', '1)";
+                            " AND cTranStat IN ('0', '1')";
         
         ResultSet loRS = poGRider.executeQuery(lsSQL);
         
@@ -212,14 +208,14 @@ public class ClassifySP implements iClassify{
     
     private boolean isFirstClassify() throws SQLException{
         String lsSQL = "SELECT sPeriodxx" +
-                        " FROM Inv_Classificaton_Master" +
+                        " FROM Inv_Classification_Master" +
                         " WHERE sBranchCd = " + SQLUtil.toSQL(psBranchCd) +
                             " AND sCategrCd = " + SQLUtil.toSQL(psCategrCd) +
                         " ORDER BY sPeriodxx DESC LIMIT 1";
         
         ResultSet loRS = poGRider.executeQuery(lsSQL);
         
-        if (loRS.next()){
+        if (!loRS.next()){
             return true;
         } else {
             int lnPeriod = Integer.parseInt(loRS.getString("sPeriodxx"));
@@ -245,18 +241,14 @@ public class ClassifySP implements iClassify{
         System.out.println("Setting Required Information");
         
         System.out.println("Retrieving Computation Variable...");
-        if (!getOthers()){
-            poJSON = new JSONObject();
-            poJSON.put("result", "error");
-            poJSON.put("message", "Unable to retrieve configuration.");
-            return poJSON;
-        }
+        poJSON = getOthers();
+        if (!"success".equals((String) poJSON.get("result"))) return poJSON;
         
         System.out.println("Retrieving period to process...");
         poJSON = checkPeriod();
         if ("error".equals((String) poJSON.get("result"))) return poJSON;
         
-        poGRider.beginTrans("Inventory Classification", psBranchCd + "-" + psCategrCd, "CLASS", "");
+        poGRider.beginTrans("Inventory Classification", psBranchCd + "-" + psCategrCd, "Clsf", "");
         
         lsSQL = "UPDATE Inv_Master SET" +
                     "  nMaxLevel = 0" +
@@ -280,13 +272,13 @@ public class ClassifySP implements iClassify{
             System.out.println("Removing all Pending Order...");
             System.out.println("Posting all Confirmed Order...");
         } else {
-            lsSQL = "UPDATE Inv_Stock_Transfer_Master SET " +
+            lsSQL = "UPDATE Inv_Transfer_Master SET " +
                         "  cTranStat = '3'" +
                     " WHERE sTransNox LIKE " + SQLUtil.toSQL(psBranchCd + "%") +
                         " AND cTranStat = '0'";
             
             System.out.println("Removing all Unconfirmed Order...");
-            poGRider.executeQuery(lsSQL, "Inv_Stock_Transfer_Master", psBranchCd, "", "");
+            poGRider.executeQuery(lsSQL, "Inv_Transfer_Master", psBranchCd, "", "");
             
             //todo:
             System.out.println("Removing all Pending Order...");
@@ -394,7 +386,7 @@ public class ClassifySP implements iClassify{
             }
         } else {
             lsSQL = "SELECT sPeriodxx" +
-                    " FROM Inv_Classificaton_Master" +
+                    " FROM Inv_Classification_Master" +
                     " WHERE sBranchCd = " + SQLUtil.toSQL(psBranchCd) +
                         " AND sCategrCd = " + SQLUtil.toSQL(psCategrCd) +
                     " ORDER BY sPeriodxx DESC LIMIT 1";
@@ -869,18 +861,20 @@ public class ClassifySP implements iClassify{
         }
     }
     
-    private boolean getOthers() throws SQLException, GuanzonException{
+    private JSONObject getOthers() throws SQLException, GuanzonException{
+        poOthers = new ClassificationConfig();
         poOthers.setApplicationDriver(poGRider);
         poOthers.setWithParentClass(false);
         poOthers.initialize();
-        return true;
+        
+        return poOthers.openRecord(System.getProperty("store.industry.code"), psCategrCd);
     }
     
     private JSONObject checkPeriod() throws SQLException{
         poJSON = new JSONObject();
         
         String lsSQL = "SELECT sPeriodxx, sPostedxx" +
-                        " FROM Inv_Classificaton_Master" +
+                        " FROM Inv_Classification_Master" +
                         " WHERE sBranchCd = " + SQLUtil.toSQL(psBranchCd) +
                             " AND sCategrCd = " + SQLUtil.toSQL(psCategrCd) +
                         " ORDER BY sPeriodxx DESC LIMIT 1";
@@ -924,7 +918,7 @@ public class ClassifySP implements iClassify{
                 
         pbMinMax = isComputeMinMax();
         
-        poJSON.put("result", "error");
+        poJSON.put("result", "success");
         return poJSON;
     }
     
