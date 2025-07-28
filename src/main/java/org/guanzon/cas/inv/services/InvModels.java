@@ -1,6 +1,7 @@
 package org.guanzon.cas.inv.services;
 
 import org.guanzon.appdriver.base.GRiderCAS;
+import org.guanzon.cas.inv.model.Model_Classification_Config;
 import org.guanzon.cas.inv.model.Model_Inv_Master;
 import org.guanzon.cas.inv.model.Model_Inv_Serial;
 import org.guanzon.cas.inv.model.Model_Inv_Serial_Ledger;
@@ -115,6 +116,23 @@ public class InvModels {
 
         return poInvSerialReg;
     }
+    
+    public Model_Classification_Config ClassificationConfig() {
+        if (poGRider == null) {
+            System.err.println("InvModels.ClassificationConfig: Application driver is not set.");
+            return null;
+        }
+
+        if (poClassificationConfig == null) {
+            poClassificationConfig = new Model_Classification_Config();
+            poClassificationConfig.setApplicationDriver(poGRider);
+            poClassificationConfig.setXML("Model_xxxClassificationConfig");
+            poClassificationConfig.setTableName("xxxClassificationConfig");
+            poClassificationConfig.initialize();
+        }
+
+        return poClassificationConfig;
+    }
 //
 //    public Model_Inv_Classification_Detail InventoryClassificationDetail() {
 //        if (poGRider == null) {
@@ -159,6 +177,7 @@ public class InvModels {
     private Model_Inv_Serial poInvSerial;
     private Model_Inv_Serial_Ledger poInvSerialLeger;
     private Model_Inv_Serial_Registration poInvSerialReg;
+    private Model_Classification_Config poClassificationConfig;
 //    private Model_Inv_Classification_Detail poInvClassDetail;
 //    private Model_Inv_Classification_Master poInvClassMaster;
 }
