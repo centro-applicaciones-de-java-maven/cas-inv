@@ -1,4 +1,5 @@
 org\guanzon\cas\inv\roq\iROQ.class
+org\guanzon\cas\inv\InventoryTransaction$SerialEntry.class
 org\guanzon\cas\inv\model\Model_Classification_Config.class
 org\guanzon\cas\inv\roq\ROQ_MC.class
 org\guanzon\cas\inv\InvMaster.class
@@ -14,6 +15,8 @@ org\guanzon\cas\inv\model\Model_Inventory.class
 org\guanzon\cas\inv\InventoryClassification.class
 org\guanzon\cas\inv\roq\ROQ_MCSP.class
 org\guanzon\cas\inv\model\Model_Inv_Serial.class
+org\guanzon\cas\inv\InvTransCons.class
+org\guanzon\cas\inv\InventoryTransaction$DetailEntry.class
 org\guanzon\cas\inv\services\InvControllers.class
 org\guanzon\cas\inv\model\Model_Inv_Master.class
 org\guanzon\cas\inv\roq\ClassificationConfig.class
