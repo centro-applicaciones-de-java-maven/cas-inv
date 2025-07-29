@@ -291,6 +291,49 @@ public class Inventory extends Parameter{
         }
     }
     
+    public JSONObject searchRecord(String categoryId, String brandId, String modelId, String variantId, String colorId) throws SQLException, GuanzonException {
+        String lsSQL = getSQ_Browse();
+        
+        if (categoryId != null){
+            lsSQL = MiscUtil.addCondition(lsSQL, "a.sCategCd1 = " + SQLUtil.toSQL(categoryId));
+        }
+        
+        if (brandId != null){
+            lsSQL = MiscUtil.addCondition(lsSQL, "a.sBrandIDx = " + SQLUtil.toSQL(brandId));
+        }
+        
+        if (modelId != null){
+            lsSQL = MiscUtil.addCondition(lsSQL, "a.sModelIDx = " + SQLUtil.toSQL(modelId));
+        }
+        
+        if (variantId != null){
+            lsSQL = MiscUtil.addCondition(lsSQL, "a.sVrntIDxx = " + SQLUtil.toSQL(variantId));
+        }
+        
+        if (colorId != null){
+            lsSQL = MiscUtil.addCondition(lsSQL, "a.sColorIDx = " + SQLUtil.toSQL(colorId));
+        }
+        
+        lsSQL += " GROUP BY a.sStockIDx";
+        
+        poJSON = ShowDialogFX.Search(poGRider,
+                lsSQL,
+                "",
+                "Stock ID»Brand»Model»Variant»Code»Color",
+                "sStockIDx»xBrandNme»xModelNme»xVrntName»xModelCde»xColorNme",
+                "a.sStockIDx»IFNULL(b.sDescript, '')»IFNULL(c.sDescript, '')»TRIM(CONCAT(IFNULL(f.sDescript, ''), ' ', IFNULL(f.nYearMdlx, '')))»IFNULL(c.sModelCde, '') xModelCde»IFNULL(d.sDescript, '')",
+                0);
+
+        if (poJSON != null) {
+            return poModel.openRecord((String) poJSON.get("sStockIDx"));
+        } else {
+            poJSON = new JSONObject();
+            poJSON.put("result", "error");
+            poJSON.put("message", "No record loaded.");
+            return poJSON;
+        }
+    }
+    
     @Override
     public String getSQ_Browse(){
         String lsCondition = "";
