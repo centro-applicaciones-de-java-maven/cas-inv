@@ -497,7 +497,7 @@ public class Model_Inventory extends Model {
     public Model_Model Model() throws SQLException, GuanzonException{
         if (!"".equals((String) getValue("sModelIDx"))) {
             if (poModel.getEditMode() == EditMode.READY
-                    && poModel.getBrandId().equals((String) getValue("sModelIDx"))) {
+                    && poModel.getModelId().equals((String) getValue("sModelIDx"))) {
                 return poModel;
             } else {
                 poJSON = poModel.openRecord((String) getValue("sModelIDx"));
