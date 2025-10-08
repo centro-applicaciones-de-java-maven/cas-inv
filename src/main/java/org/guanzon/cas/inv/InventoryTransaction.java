@@ -253,8 +253,26 @@ public class InventoryTransaction {
             else{
                 //Check if item is serialized
                 if(loRS.getString("cSerialze").equals("1")){
-                    //If item is serialized and transaction type is not credit/debit memo, throw an error
-                    if(!(InvTransCons.CREDIT_MEMO + ":" + InvTransCons.DEBIT_MEMO).toUpperCase().contains(psSourceCD.toUpperCase())){
+                    String lsNotAllow = InvTransCons.BRANCH_JOBORDER + 
+                                  ":" + InvTransCons.BRANCH_TRANSFER + 
+                                  ":" + InvTransCons.BRANCH_TRANSFER_ACCEPTANCE + 
+                                  ":" + InvTransCons.GCARD_REDEMPTION + 
+                                  ":" + InvTransCons.IMPOUND + 
+                                  ":" + InvTransCons.IMPOUND_RELEASE + 
+                                  ":" + InvTransCons.PURCHASE_RECEIVING + 
+                                  ":" + InvTransCons.PURCHASE_REPLACEMENT + 
+                                  ":" + InvTransCons.PURCHASE_RETURN + 
+                                  ":" + InvTransCons.SALES + 
+                                  ":" + InvTransCons.SALES_GIVEAWAY + 
+                                  ":" + InvTransCons.SALES_GIVEAWAY_RELEASE + 
+                                  ":" + InvTransCons.SALES_REPLACEMENT + 
+                                  ":" + InvTransCons.SALES_RETURN + 
+                                  ":" + InvTransCons.WARRANTY_RELEASE + 
+                                  ":" + InvTransCons.WHOLESALE + 
+                                  ":" + InvTransCons.WHOLESALE_REPLACEMENT + 
+                                  ":" + InvTransCons.WHOLESALE_RETURN;
+                            
+                    if((lsNotAllow).toUpperCase().contains(psSourceCD.toUpperCase())){
                         //throw new GuanzonException(GuanzonException.GE_SEQUENCE_EXCEPTION, "Invalid function called! Please use addSerial if inventory has serial.");
                         throw new GuanzonException(GuanzonException.GE_SEQUENCE_EXCEPTION);
                     }
