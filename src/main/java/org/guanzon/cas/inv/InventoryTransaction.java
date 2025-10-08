@@ -110,10 +110,35 @@ public class InventoryTransaction {
         initTransaction(InvTransCons.PURCHASE_ORDER, fsSourceNo, fdTransact);
     }
 
-    public void PurchaseOrderCancellation(String fsSourceNo, Date fdTransact){
-        initTransaction(InvTransCons.PURCHASE_ORDER_CANCELLATION, fsSourceNo, fdTransact);
+    /**
+     * Initiate Purchase Order cancellation directly through the Purchase Order Transaction module.
+     * + Purchase order should not have a partial cancellation nor partial delivery 
+     * @param fsSourceNo
+     * @param fdTransact 
+     */
+    public void PO_Full_Cancellation(String fsSourceNo, Date fdTransact){
+        initTransaction(InvTransCons.PURCHASE_ORDER_FULL_CANCELLATION, fsSourceNo, fdTransact);
     }
 
+    /**
+     * 
+     * @param fsSourceNo
+     * @param fdTransact 
+     */
+    public void PO_ND_Cancellation(String fsSourceNo, Date fdTransact){
+        initTransaction(InvTransCons.PURCHASE_ORDER_ND_CANCELLATION, fsSourceNo, fdTransact);
+    }
+
+    /**
+     * Initiate the cancellation thru the PO Cancellation Module
+     * @param fsSourceNo
+     * @param fdTransact 
+     */
+    public void PO_Partial_Cancellation(String fsSourceNo, Date fdTransact){
+        initTransaction(InvTransCons.PURCHASE_ORDER_PARTIAL_CANCELLATION, fsSourceNo, fdTransact);
+    }
+    
+    
     public void PurchaseReceiving(String fsSourceNo, Date fdTransact){
         initTransaction(InvTransCons.PURCHASE_RECEIVING, fsSourceNo, fdTransact);
     }
