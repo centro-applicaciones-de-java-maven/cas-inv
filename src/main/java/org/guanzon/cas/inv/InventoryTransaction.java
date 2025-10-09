@@ -263,6 +263,7 @@ public class InventoryTransaction {
                                   ":" + InvTransCons.IMPOUND + 
                                   ":" + InvTransCons.IMPOUND_RELEASE + 
                                   ":" + InvTransCons.PURCHASE_RECEIVING + 
+                                  ":" + InvTransCons.PURCHASE_RECEIVING_CANCELLATION + 
                                   ":" + InvTransCons.PURCHASE_REPLACEMENT + 
                                   ":" + InvTransCons.PURCHASE_RETURN + 
                                   ":" + InvTransCons.SALES + 
