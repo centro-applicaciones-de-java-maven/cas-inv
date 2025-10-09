@@ -138,11 +138,14 @@ public class InventoryTransaction {
         initTransaction(InvTransCons.PURCHASE_ORDER_PARTIAL_CANCELLATION, fsSourceNo, fdTransact);
     }
     
-    
     public void PurchaseReceiving(String fsSourceNo, Date fdTransact){
         initTransaction(InvTransCons.PURCHASE_RECEIVING, fsSourceNo, fdTransact);
     }
 
+    public void PurchaseReceivingCancellation(String fsSourceNo, Date fdTransact){
+        initTransaction(InvTransCons.PURCHASE_RECEIVING_CANCELLATION, fsSourceNo, fdTransact);
+    }
+    
     public void PurchaseReplacement(String fsSourceNo, Date fdTransact){
         initTransaction(InvTransCons.PURCHASE_REPLACEMENT, fsSourceNo, fdTransact);
     }
