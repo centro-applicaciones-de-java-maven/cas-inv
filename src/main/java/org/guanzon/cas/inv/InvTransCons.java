@@ -15,11 +15,8 @@ public class InvTransCons {
     public final static String BRANCH_JOBORDER = "JOxx";          //JOxx
     
     public final static String PURCHASE_ORDER = "POxx";           //POxx
-    public final static String PURCHASE_ORDER_FULL_CANCELLATION = "POFC";           //POxx
-    public final static String PURCHASE_ORDER_ND_CANCELLATION = "PONC";           //POxx
-    public final static String PURCHASE_ORDER_PARTIAL_CANCELLATION = "POPC";           //POxx
+    public final static String PURCHASE_ORDER_CANCELLATION = "POCx";           //POxx
     public final static String PURCHASE_RECEIVING = "PODA";       //PODA 
-    public final static String PURCHASE_RECEIVING_CANCELLATION = "PODc";       //PODA 
 
     public final static String PURCHASE_RETURN = "PORt";          //PORt
     public final static String PURCHASE_REPLACEMENT = "PORp";     //PORp
@@ -73,7 +70,6 @@ public class InvTransCons {
     public static String getCreditTrans(){
         return BRANCH_TRANSFER + ":" +
                BRANCH_JOBORDER + ":" +
-               PURCHASE_RECEIVING_CANCELLATION + ":" +
                PURCHASE_RETURN + ":" +
                SALES + ":" +
                SALES_GIVEAWAY + ":" +
@@ -110,7 +106,6 @@ public class InvTransCons {
     //+Inv_Ledger->nQtyOrder
     public static String getRecvOrderDebit(){
         return PURCHASE_ORDER + ":" +
-               PURCHASE_RECEIVING + ":" +
                BRANCH_ORDER; 
     }
     
@@ -118,18 +113,14 @@ public class InvTransCons {
     //-Inv_Ledger->nQtyOrder
     public static String getRecvOrderCredit(){
         return BRANCH_ORDER_BRANCH_CANCELLATION + ":" +
-               PURCHASE_ORDER_FULL_CANCELLATION + ":" +
-               PURCHASE_ORDER_PARTIAL_CANCELLATION + ":" +
-               PURCHASE_ORDER_ND_CANCELLATION + ":" +
-               PURCHASE_RECEIVING_CANCELLATION + ":" +
+               PURCHASE_ORDER_CANCELLATION + ":" +
+               PURCHASE_RECEIVING + ":" +
                BRANCH_TRANSFER_ACCEPTANCE; 
     }
     
     public static String getOrderTrans(){
         return PURCHASE_ORDER + ":" +
-               PURCHASE_ORDER_FULL_CANCELLATION + ":" +
-               PURCHASE_ORDER_PARTIAL_CANCELLATION + ":" +
-               PURCHASE_ORDER_ND_CANCELLATION + ":" +
+               PURCHASE_ORDER_CANCELLATION + ":" +
                BRANCH_ORDER + ":" + 
                BRANCH_ORDER_CONFIRMATION + ":" +
                BRANCH_ORDER_BRANCH_CANCELLATION + ":" +

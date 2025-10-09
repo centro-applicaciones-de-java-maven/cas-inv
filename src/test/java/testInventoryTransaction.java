@@ -61,7 +61,7 @@ public class testInventoryTransaction {
         
         instance.beginTrans("CREATE", "Create Purchase Order", InvTransCons.PURCHASE_ORDER, "M0012500002");
         poTrans = new InventoryTransaction(instance, "M001", false, "02", "M001250002");
-        poTrans.PurchaseOrder("M0012500002", SQLUtil.toDate("2025-07-22", SQLUtil.FORMAT_SHORT_DATE));
+        poTrans.PurchaseOrder("M0012500002", SQLUtil.toDate("2025-07-22", SQLUtil.FORMAT_SHORT_DATE), false);
         poTrans.addDetail("02", "M00115049321", "0", 0, 5, 0);
         poTrans.saveTransaction();
         instance.commitTrans();
@@ -103,7 +103,7 @@ public class testInventoryTransaction {
 
         instance.beginTrans("CREATE", "Create Purchase Order", InvTransCons.PURCHASE_ORDER, "M0012500001");
         poTrans = new InventoryTransaction(instance, "M001", false, "02", "M001250002");
-        poTrans.PurchaseOrder("M0012500001", SQLUtil.toDate("2025-07-22", SQLUtil.FORMAT_SHORT_DATE));
+        poTrans.PurchaseOrder("M0012500001", SQLUtil.toDate("2025-07-22", SQLUtil.FORMAT_SHORT_DATE), false);
         poTrans.addDetail("02", "M00124112", "0", 0, 1, 0);
         poTrans.saveTransaction();
         instance.commitTrans();
@@ -137,7 +137,7 @@ public class testInventoryTransaction {
         
         instance.beginTrans("CREATE", "Create Purchase Order Receiving", InvTransCons.PURCHASE_RECEIVING, "M0012500002");
         poTrans = new InventoryTransaction(instance, "M001", false, "02", "M001250002");
-        poTrans.PurchaseReceiving("M0012500002", SQLUtil.toDate("2025-07-23", SQLUtil.FORMAT_SHORT_DATE));
+        poTrans.PurchaseReceiving("M0012500002", SQLUtil.toDate("2025-07-23", SQLUtil.FORMAT_SHORT_DATE), false);
         poTrans.addDetail("02", "M0W323000395", "0", 5, 2, 0);
         poTrans.saveTransaction();
         instance.commitTrans();
@@ -171,7 +171,7 @@ public class testInventoryTransaction {
         
         instance.beginTrans("CREATE", "Create Purchase Order", InvTransCons.PURCHASE_ORDER, "M0012500001");
         poTrans = new InventoryTransaction(instance, "M001", false, "02", "M001250002");
-        poTrans.PurchaseReceiving("M0012500001", SQLUtil.toDate("2025-07-23", SQLUtil.FORMAT_SHORT_DATE));
+        poTrans.PurchaseReceiving("M0012500001", SQLUtil.toDate("2025-07-23", SQLUtil.FORMAT_SHORT_DATE), false);
         poTrans.addSerial("02", "M09525000285", true, 0, "001");
         poTrans.saveTransaction();
         instance.commitTrans();
@@ -207,7 +207,7 @@ public class testInventoryTransaction {
 
         instance.beginTrans("POSTING", "Accept Branch Transfer", InvTransCons.BRANCH_TRANSFER_ACCEPTANCE, "M0012500002");
         poTrans = new InventoryTransaction(instance, "M001", false, "02", "M001250002");
-        poTrans.DeliveryAcceptance("M0012500001", SQLUtil.toDate("2025-07-22", SQLUtil.FORMAT_SHORT_DATE));
+        poTrans.DeliveryAcceptance("M0012500001", SQLUtil.toDate("2025-07-22", SQLUtil.FORMAT_SHORT_DATE), false);
         poTrans.addSerial("02", "M09525000287", true, 0, "001");
         //poTrans.addDetail("02", "M00124112", "0", 1, 1, 0);
         poTrans.saveTransaction();

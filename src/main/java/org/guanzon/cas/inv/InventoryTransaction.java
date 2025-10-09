@@ -28,6 +28,7 @@ public class InventoryTransaction {
     private String psIndstCdx;
     private String psUserIDxx;
     private boolean pbIsWhsexx;
+    private boolean pbIsReverse;
     //private boolean pbDeductxx = true; 
     private String psSourceNo = "";
     private String psSourceCD = "";
@@ -53,153 +54,132 @@ public class InventoryTransaction {
         psIndstCdx = fsIndstCdx;
         psUserIDxx = fsUserIDxx;
         pbIsWhsexx = fbIsWarehouse;
-        
+        pbIsReverse = false;
         paDetailEntry = new ArrayList<>();
         paSerialEntry = new ArrayList<>();
     }
 
-    public void JobOrder(String fsSourceNo, Date fdTransact){
-        initTransaction(InvTransCons.BRANCH_JOBORDER, fsSourceNo, fdTransact);
+    public void JobOrder(String fsSourceNo, Date fdTransact, boolean fbIsReverse){
+        initTransaction(InvTransCons.BRANCH_JOBORDER, fsSourceNo, fdTransact, fbIsReverse);
     }
 
-    public void BranchOrder(String fsSourceNo, Date fdTransact){
-        initTransaction(InvTransCons.BRANCH_ORDER, fsSourceNo, fdTransact);
+    public void BranchOrder(String fsSourceNo, Date fdTransact, boolean fbIsReverse){
+        initTransaction(InvTransCons.BRANCH_ORDER, fsSourceNo, fdTransact, fbIsReverse);
     }
 
-    public void BranchOrderCancellation(String fsSourceNo, Date fdTransact){
-        initTransaction(InvTransCons.BRANCH_ORDER_BRANCH_CANCELLATION, fsSourceNo, fdTransact);
+    public void BranchOrderCancellation(String fsSourceNo, Date fdTransact, boolean fbIsReverse){
+        initTransaction(InvTransCons.BRANCH_ORDER_BRANCH_CANCELLATION, fsSourceNo, fdTransact, fbIsReverse);
     }
 
-    public void BranchOrderWHSECancellation(String fsSourceNo, Date fdTransact){
-        initTransaction(InvTransCons.BRANCH_ORDER_WAREHOUSE_CANCELLATION, fsSourceNo, fdTransact);
+    public void BranchOrderWHSECancellation(String fsSourceNo, Date fdTransact, boolean fbIsReverse){
+        initTransaction(InvTransCons.BRANCH_ORDER_WAREHOUSE_CANCELLATION, fsSourceNo, fdTransact, fbIsReverse);
     }
     
-    public void BranchOrderWHSEConfirmation(String fsSourceNo, Date fdTransact){
-        initTransaction(InvTransCons.BRANCH_ORDER_CONFIRMATION, fsSourceNo, fdTransact);
+    public void BranchOrderWHSEConfirmation(String fsSourceNo, Date fdTransact, boolean fbIsReverse){
+        initTransaction(InvTransCons.BRANCH_ORDER_CONFIRMATION, fsSourceNo, fdTransact, fbIsReverse);
     }
 
-    public void Delivery(String fsSourceNo, Date fdTransact){
-        initTransaction(InvTransCons.BRANCH_TRANSFER, fsSourceNo, fdTransact);
+    public void Delivery(String fsSourceNo, Date fdTransact, boolean fbIsReverse){
+        initTransaction(InvTransCons.BRANCH_TRANSFER, fsSourceNo, fdTransact, fbIsReverse);
     }
 
-    public void DeliveryAcceptance(String fsSourceNo, Date fdTransact){
-        initTransaction(InvTransCons.BRANCH_TRANSFER_ACCEPTANCE, fsSourceNo, fdTransact);
+    public void DeliveryAcceptance(String fsSourceNo, Date fdTransact, boolean fbIsReverse){
+        initTransaction(InvTransCons.BRANCH_TRANSFER_ACCEPTANCE, fsSourceNo, fdTransact, fbIsReverse);
     }
 
-    public void CustomerOrder(String fsSourceNo, Date fdTransact){
-        initTransaction(InvTransCons.CUSTOMER_ORDER, fsSourceNo, fdTransact);
+    public void CustomerOrder(String fsSourceNo, Date fdTransact, boolean fbIsReverse){
+        initTransaction(InvTransCons.CUSTOMER_ORDER, fsSourceNo, fdTransact, fbIsReverse);
     }
 
-    public void CustomerOrderCancellation(String fsSourceNo, Date fdTransact){
-        initTransaction(InvTransCons.CUSTOMER_ORDER_CANCELLATION, fsSourceNo, fdTransact);
+    public void CustomerOrderCancellation(String fsSourceNo, Date fdTransact, boolean fbIsReverse){
+        initTransaction(InvTransCons.CUSTOMER_ORDER_CANCELLATION, fsSourceNo, fdTransact, fbIsReverse);
     }
 
-    public void GCardRedemption(String fsSourceNo, Date fdTransact){
-        initTransaction(InvTransCons.GCARD_REDEMPTION, fsSourceNo, fdTransact);
+    public void GCardRedemption(String fsSourceNo, Date fdTransact, boolean fbIsReverse){
+        initTransaction(InvTransCons.GCARD_REDEMPTION, fsSourceNo, fdTransact, fbIsReverse);
     }
 
-    public void Impound(String fsSourceNo, Date fdTransact){
-        initTransaction(InvTransCons.IMPOUND, fsSourceNo, fdTransact);
+    public void Impound(String fsSourceNo, Date fdTransact, boolean fbIsReverse){
+        initTransaction(InvTransCons.IMPOUND, fsSourceNo, fdTransact, fbIsReverse);
     }
 
-    public void ImpoundRelease(String fsSourceNo, Date fdTransact){
-        initTransaction(InvTransCons.IMPOUND_RELEASE, fsSourceNo, fdTransact);
+    public void ImpoundRelease(String fsSourceNo, Date fdTransact, boolean fbIsReverse){
+        initTransaction(InvTransCons.IMPOUND_RELEASE, fsSourceNo, fdTransact, fbIsReverse);
     }
     
-    public void PurchaseOrder(String fsSourceNo, Date fdTransact){
-        initTransaction(InvTransCons.PURCHASE_ORDER, fsSourceNo, fdTransact);
-    }
-
-    /**
-     * Initiate Purchase Order cancellation directly through the Purchase Order Transaction module.
-     * + Purchase order should not have a partial cancellation nor partial delivery 
-     * @param fsSourceNo
-     * @param fdTransact 
-     */
-    public void PO_Full_Cancellation(String fsSourceNo, Date fdTransact){
-        initTransaction(InvTransCons.PURCHASE_ORDER_FULL_CANCELLATION, fsSourceNo, fdTransact);
-    }
-
-    /**
-     * 
-     * @param fsSourceNo
-     * @param fdTransact 
-     */
-    public void PO_ND_Cancellation(String fsSourceNo, Date fdTransact){
-        initTransaction(InvTransCons.PURCHASE_ORDER_ND_CANCELLATION, fsSourceNo, fdTransact);
+    public void PurchaseOrder(String fsSourceNo, Date fdTransact, boolean fbIsReverse){
+        initTransaction(InvTransCons.PURCHASE_ORDER, fsSourceNo, fdTransact, fbIsReverse);
     }
 
     /**
      * Initiate the cancellation thru the PO Cancellation Module
      * @param fsSourceNo
-     * @param fdTransact 
+     * @param fdTransact
+     * @param fbIsReverse
      */
-    public void PO_Partial_Cancellation(String fsSourceNo, Date fdTransact){
-        initTransaction(InvTransCons.PURCHASE_ORDER_PARTIAL_CANCELLATION, fsSourceNo, fdTransact);
+    public void PurchaseOrder_Cancellation(String fsSourceNo, Date fdTransact, boolean fbIsReverse){
+        initTransaction(InvTransCons.PURCHASE_ORDER_CANCELLATION, fsSourceNo, fdTransact, fbIsReverse);
     }
     
-    public void PurchaseReceiving(String fsSourceNo, Date fdTransact){
-        initTransaction(InvTransCons.PURCHASE_RECEIVING, fsSourceNo, fdTransact);
+    public void PurchaseReceiving(String fsSourceNo, Date fdTransact, boolean fbIsReverse){
+        initTransaction(InvTransCons.PURCHASE_RECEIVING, fsSourceNo, fdTransact, fbIsReverse);
     }
 
-    public void PurchaseReceivingCancellation(String fsSourceNo, Date fdTransact){
-        initTransaction(InvTransCons.PURCHASE_RECEIVING_CANCELLATION, fsSourceNo, fdTransact);
+    public void PurchaseReplacement(String fsSourceNo, Date fdTransact, boolean fbIsReverse){
+        initTransaction(InvTransCons.PURCHASE_REPLACEMENT, fsSourceNo, fdTransact, fbIsReverse);
+    }
+
+    public void PurchaseReturn(String fsSourceNo, Date fdTransact, boolean fbIsReverse){
+        initTransaction(InvTransCons.PURCHASE_RETURN, fsSourceNo, fdTransact, fbIsReverse);
+    }
+
+    public void RetailOrder(String fsSourceNo, Date fdTransact, boolean fbIsReverse){
+        initTransaction(InvTransCons.RETAIL_ORDER, fsSourceNo, fdTransact, fbIsReverse);
+    }
+
+    public void RetailOrderCancellation(String fsSourceNo, Date fdTransact, boolean fbIsReverse){
+        initTransaction(InvTransCons.RETAIL_ORDER_CANCELLATION, fsSourceNo, fdTransact, fbIsReverse);
     }
     
-    public void PurchaseReplacement(String fsSourceNo, Date fdTransact){
-        initTransaction(InvTransCons.PURCHASE_REPLACEMENT, fsSourceNo, fdTransact);
+    public void Sales(String fsSourceNo, Date fdTransact, boolean fbIsReverse){
+        initTransaction(InvTransCons.SALES, fsSourceNo, fdTransact, fbIsReverse);
     }
 
-    public void PurchaseReturn(String fsSourceNo, Date fdTransact){
-        initTransaction(InvTransCons.PURCHASE_RETURN, fsSourceNo, fdTransact);
+    public void SalesGiveaway(String fsSourceNo, Date fdTransact, boolean fbIsReverse){
+        initTransaction(InvTransCons.SALES_GIVEAWAY, fsSourceNo, fdTransact, fbIsReverse);
     }
 
-    public void RetailOrder(String fsSourceNo, Date fdTransact){
-        initTransaction(InvTransCons.RETAIL_ORDER, fsSourceNo, fdTransact);
-    }
-
-    public void RetailOrderCancellation(String fsSourceNo, Date fdTransact){
-        initTransaction(InvTransCons.RETAIL_ORDER_CANCELLATION, fsSourceNo, fdTransact);
+    public void GiveawayRelease(String fsSourceNo, Date fdTransact, boolean fbIsReverse){
+        initTransaction(InvTransCons.SALES_GIVEAWAY_RELEASE, fsSourceNo, fdTransact, fbIsReverse);
     }
     
-    public void Sales(String fsSourceNo, Date fdTransact){
-        initTransaction(InvTransCons.SALES, fsSourceNo, fdTransact);
+    public void SalesReplacement(String fsSourceNo, Date fdTransact, boolean fbIsReverse){
+        initTransaction(InvTransCons.SALES_REPLACEMENT, fsSourceNo, fdTransact, fbIsReverse);
     }
 
-    public void SalesGiveaway(String fsSourceNo, Date fdTransact){
-        initTransaction(InvTransCons.SALES_GIVEAWAY, fsSourceNo, fdTransact);
+    public void SalesReturn(String fsSourceNo, Date fdTransact, boolean fbIsReverse){
+        initTransaction(InvTransCons.SALES_RETURN, fsSourceNo, fdTransact, fbIsReverse);
     }
 
-    public void GiveawayRelease(String fsSourceNo, Date fdTransact){
-        initTransaction(InvTransCons.SALES_GIVEAWAY_RELEASE, fsSourceNo, fdTransact);
+    public void WarrantyRelease(String fsSourceNo, Date fdTransact, boolean fbIsReverse){
+        initTransaction(InvTransCons.WARRANTY_RELEASE, fsSourceNo, fdTransact, fbIsReverse);
     }
     
-    public void SalesReplacement(String fsSourceNo, Date fdTransact){
-        initTransaction(InvTransCons.SALES_REPLACEMENT, fsSourceNo, fdTransact);
+    public void CreditMemo(String fsSourceNo, Date fdTransact, boolean fbIsReverse){
+        initTransaction(InvTransCons.CREDIT_MEMO, fsSourceNo, fdTransact, fbIsReverse);
+    }
+    public void DebitMemo(String fsSourceNo, Date fdTransact, boolean fbIsReverse){
+        initTransaction(InvTransCons.DEBIT_MEMO, fsSourceNo, fdTransact, fbIsReverse);
     }
 
-    public void SalesReturn(String fsSourceNo, Date fdTransact){
-        initTransaction(InvTransCons.SALES_RETURN, fsSourceNo, fdTransact);
-    }
-
-    public void WarrantyRelease(String fsSourceNo, Date fdTransact){
-        initTransaction(InvTransCons.WARRANTY_RELEASE, fsSourceNo, fdTransact);
-    }
-    
-    public void CreditMemo(String fsSourceNo, Date fdTransact){
-        initTransaction(InvTransCons.CREDIT_MEMO, fsSourceNo, fdTransact);
-    }
-    public void DebitMemo(String fsSourceNo, Date fdTransact){
-        initTransaction(InvTransCons.DEBIT_MEMO, fsSourceNo, fdTransact);
-    }
-
-    private void initTransaction(String fsSourceCD, String fsSourceNo, Date fdTransact){
+    private void initTransaction(String fsSourceCD, String fsSourceNo, Date fdTransact, boolean fbIsReverse){
         psSourceCD = fsSourceCD;
         psSourceNo = fsSourceNo;
         pdTranDate = fdTransact;
+        pbIsReverse = fbIsReverse;
     }
     
-    public void addDetail(String fsIndstCdx, String fsStockIDx, String fcConditnx, double fnQuantity, double fnOrderQty, double fnUnitPrice ) throws SQLException, GuanzonException{
+    public void addDetail(String fsIndstCdx, String fsStockIDx, String fcConditnx, double fnQuantity, double fnOrderQty, double fnUnitPrice) throws SQLException, GuanzonException{
         if(psSourceNo.isEmpty()){
             //throw new GuanzonException(GuanzonException.GE_SEQUENCE_EXCEPTION, "Invalid Source No detected!");
             throw new GuanzonException(GuanzonException.GE_SEQUENCE_EXCEPTION);
@@ -263,7 +243,6 @@ public class InventoryTransaction {
                                   ":" + InvTransCons.IMPOUND + 
                                   ":" + InvTransCons.IMPOUND_RELEASE + 
                                   ":" + InvTransCons.PURCHASE_RECEIVING + 
-                                  ":" + InvTransCons.PURCHASE_RECEIVING_CANCELLATION + 
                                   ":" + InvTransCons.PURCHASE_REPLACEMENT + 
                                   ":" + InvTransCons.PURCHASE_RETURN + 
                                   ":" + InvTransCons.SALES + 
@@ -409,28 +388,55 @@ public class InventoryTransaction {
             case InvTransCons.IMPOUND:
                 //Warehouse/Customer
                 lcConditnx = "1";
-                lcLocation = pbIsWhsexx ? "0" : "1";
+                if(pbIsReverse){
+                    lcLocation = "3";
+                }
+                else{
+                    lcLocation = pbIsWhsexx ? "0" : "1";
+                }
                 break;
             case InvTransCons.IMPOUND_RELEASE:
                 //Customer
-                lcLocation = "3";
+                if(pbIsReverse){
+                    lcLocation = pbIsWhsexx ? "0" : "1";
+                }
+                else{
+                    lcLocation = "3";
+                }
                 break;
             case InvTransCons.SALES:
             case InvTransCons.WHOLESALE:
             case InvTransCons.SALES_REPLACEMENT:
             case InvTransCons.WHOLESALE_REPLACEMENT:    
                 //Customer
-                lcLocation = "3";
+                if(pbIsReverse){
+                    lcLocation = pbIsWhsexx ? "0" : "1";
+                }
+                else{
+                    lcLocation = "3";
+                }
                 lcSoldStat = "1";
                 break;
             case InvTransCons.SALES_RETURN:
             case InvTransCons.WHOLESALE_RETURN:
                 //Warehouse/Branch
-                lcLocation = pbIsWhsexx ? "0" : "1";
+                if(pbIsReverse){
+                    lcLocation = "3";
+                }
+                else{
+                    lcLocation = pbIsWhsexx ? "0" : "1";
+                }
+                
                 break;
             case InvTransCons.BRANCH_TRANSFER:
                 //On-Transit
-                lcLocation = "4";
+                if(pbIsReverse){
+                    lcLocation = pbIsWhsexx ? "0" : "1";
+                }
+                else{
+                    lcLocation = "4";
+                }
+                
                 break;
             case InvTransCons.BRANCH_TRANSFER_ACCEPTANCE:
                 //Warehouse/Branch
@@ -438,18 +444,30 @@ public class InventoryTransaction {
                 break;
             case InvTransCons.PURCHASE_RECEIVING:    
                 //Warehouse/Branch
-                lcLocation = pbIsWhsexx ? "0" : "1";
-                break;
-            case InvTransCons.PURCHASE_RECEIVING_CANCELLATION:    
-                lcLocation = "2";
+                if(pbIsReverse){
+                    lcLocation = "2";
+                }
+                else{
+                    lcLocation = pbIsWhsexx ? "0" : "1";
+                }
                 break;
             case InvTransCons.PURCHASE_REPLACEMENT:    
                 //Warehouse/Branch
-                lcLocation = pbIsWhsexx ? "0" : "1";
+                if(pbIsReverse){
+                    lcLocation = "2";
+                }
+                else{
+                    lcLocation = pbIsWhsexx ? "0" : "1";
+                }
                 break;
             case InvTransCons.PURCHASE_RETURN:    
                 //Supplier
-                lcLocation = "2";
+                if(pbIsReverse){
+                    lcLocation = pbIsWhsexx ? "0" : "1";
+                }
+                else{
+                    lcLocation = "2";
+                }
                 break;
         }
         
@@ -561,30 +579,63 @@ public class InventoryTransaction {
             double lnQtyIssue = 0;
             double lnQtyOrder = 0;        
 
-            
-            //identify the type of changes in the stock(quantity/order)
-            if(InvTransCons.getDebitTrans().toUpperCase().contains(psSourceCD.toUpperCase())){
-                lnQtyInxxx += loDetail.pnQuantity;
-            } 
-            
-            if(InvTransCons.getCreditTrans().toUpperCase().contains(psSourceCD.toUpperCase())){
-                lnQtyOutxx += loDetail.pnQuantity;
-            }
-            
-            if(InvTransCons.getIssOrderDebit().toUpperCase().contains(psSourceCD.toUpperCase())){
-                lnQtyIssue += loDetail.pnOrderQty;
-            }
+            if(pbIsReverse){
+                //identify the type of changes in the stock(quantity/order)
+                if(InvTransCons.getDebitTrans().toUpperCase().contains(psSourceCD.toUpperCase())){
+                    //lnQtyInxxx += loDetail.pnQuantity;
+                    lnQtyOutxx += loDetail.pnQuantity;
+                } 
 
-            if(InvTransCons.getIssOrderCredit().toUpperCase().contains(psSourceCD.toUpperCase())){
-                lnQtyIssue -= loDetail.pnOrderQty;
-            }
+                if(InvTransCons.getCreditTrans().toUpperCase().contains(psSourceCD.toUpperCase())){
+                    //lnQtyOutxx += loDetail.pnQuantity;
+                    lnQtyInxxx += loDetail.pnQuantity;
+                }
 
-            if(InvTransCons.getRecvOrderDebit().toUpperCase().contains(psSourceCD.toUpperCase())){
-                lnQtyOrder += loDetail.pnOrderQty;
-            }
+                if(InvTransCons.getIssOrderDebit().toUpperCase().contains(psSourceCD.toUpperCase())){
+                    //lnQtyIssue += loDetail.pnOrderQty;
+                    lnQtyIssue -= loDetail.pnOrderQty;
+                }
 
-            if(InvTransCons.getRecvOrderCredit().toUpperCase().contains(psSourceCD.toUpperCase())){
-                lnQtyOrder -= loDetail.pnOrderQty;
+                if(InvTransCons.getIssOrderCredit().toUpperCase().contains(psSourceCD.toUpperCase())){
+                    //lnQtyIssue -= loDetail.pnOrderQty;
+                    lnQtyIssue += loDetail.pnOrderQty;
+                }
+
+                if(InvTransCons.getRecvOrderDebit().toUpperCase().contains(psSourceCD.toUpperCase())){
+                    //lnQtyOrder += loDetail.pnOrderQty;
+                    lnQtyOrder -= loDetail.pnOrderQty;
+                }
+
+                if(InvTransCons.getRecvOrderCredit().toUpperCase().contains(psSourceCD.toUpperCase())){
+                    //lnQtyOrder -= loDetail.pnOrderQty;
+                    lnQtyOrder += loDetail.pnOrderQty;
+                }
+            }
+            else{
+                //identify the type of changes in the stock(quantity/order)
+                if(InvTransCons.getDebitTrans().toUpperCase().contains(psSourceCD.toUpperCase())){
+                    lnQtyInxxx += loDetail.pnQuantity;
+                } 
+
+                if(InvTransCons.getCreditTrans().toUpperCase().contains(psSourceCD.toUpperCase())){
+                    lnQtyOutxx += loDetail.pnQuantity;
+                }
+
+                if(InvTransCons.getIssOrderDebit().toUpperCase().contains(psSourceCD.toUpperCase())){
+                    lnQtyIssue += loDetail.pnOrderQty;
+                }
+
+                if(InvTransCons.getIssOrderCredit().toUpperCase().contains(psSourceCD.toUpperCase())){
+                    lnQtyIssue -= loDetail.pnOrderQty;
+                }
+
+                if(InvTransCons.getRecvOrderDebit().toUpperCase().contains(psSourceCD.toUpperCase())){
+                    lnQtyOrder += loDetail.pnOrderQty;
+                }
+
+                if(InvTransCons.getRecvOrderCredit().toUpperCase().contains(psSourceCD.toUpperCase())){
+                    lnQtyOrder -= loDetail.pnOrderQty;
+                }
             }
 
             //Update Inv_Master
