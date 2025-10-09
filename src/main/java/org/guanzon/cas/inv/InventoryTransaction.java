@@ -436,6 +436,9 @@ public class InventoryTransaction {
                 //Warehouse/Branch
                 lcLocation = pbIsWhsexx ? "0" : "1";
                 break;
+            case InvTransCons.PURCHASE_RECEIVING_CANCELLATION:    
+                lcLocation = "2";
+                break;
             case InvTransCons.PURCHASE_REPLACEMENT:    
                 //Warehouse/Branch
                 lcLocation = pbIsWhsexx ? "0" : "1";
