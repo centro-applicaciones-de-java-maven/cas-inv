@@ -132,20 +132,20 @@ public class Model_Inv_Master extends Model{
         return (Date) getValue("dBegInvxx");
     }
     
-    public JSONObject setBeginningInventoryQuantity(int beginningInventoryQuantity){
+    public JSONObject setBeginningInventoryQuantity(double beginningInventoryQuantity){
         return setValue("nBegQtyxx", beginningInventoryQuantity);
     }
     
-    public int getBeginningInventoryQuantity(){
-        return (int) getValue("nBegQtyxx");
+    public double getBeginningInventoryQuantity(){
+        return Double.parseDouble(String.valueOf(getValue("nBegQtyxx")));
     }   
     
-    public JSONObject setQuantityOnHand(int quantityOnHand){
+    public JSONObject setQuantityOnHand(double quantityOnHand){
         return setValue("nQtyOnHnd", quantityOnHand);
     }
     
-    public int getQuantityOnHand(){
-        return (int) getValue("nQtyOnHnd");
+    public double getQuantityOnHand(){
+        return Double.parseDouble(String.valueOf(getValue("nQtyOnHnd")));
     }  
     
     public JSONObject setLedgerCount(int ledgerCount){
@@ -156,28 +156,28 @@ public class Model_Inv_Master extends Model{
         return (int) getValue("nLedgerNo");
     }   
     
-    public JSONObject setMinimumLevel(int minimumInventoryLevel){
+    public JSONObject setMinimumLevel(double minimumInventoryLevel){
         return setValue("nMinLevel", minimumInventoryLevel);
     }
     
-    public int getMinimumLevel(){
-        return (int) getValue("nMinLevel");
+    public double getMinimumLevel(){
+        return Double.parseDouble(String.valueOf(getValue("nMinLevel")));
     }   
     
-    public JSONObject setMaximumLevel(int maximumInventoryLevel){
+    public JSONObject setMaximumLevel(double maximumInventoryLevel){
         return setValue("nMaxLevel", maximumInventoryLevel);
     }
     
-    public int getMaximumLevel(){
-        return (int) getValue("nMaxLevel");
+    public double getMaximumLevel(){
+        return Double.parseDouble(String.valueOf(getValue("nMaxLevel")));
     }   
     
-    public JSONObject setAverageMonthlySale(int averageMonthlySale){
+    public JSONObject setAverageMonthlySale(double averageMonthlySale){
         return setValue("nMaxLevel", averageMonthlySale);
     }
     
-    public int getAverageMonthlySales(){
-        return (int) getValue("nMaxLevel");
+    public double getAverageMonthlySales(){
+        return Double.parseDouble(String.valueOf(getValue("nAvgMonSl")));        
     }   
     
     public JSONObject setAverageCost(double averageCost){
@@ -185,7 +185,7 @@ public class Model_Inv_Master extends Model{
     }
     
     public double getAverageCost(){
-        return (double) getValue("nAvgCostx");
+        return Double.parseDouble(String.valueOf(getValue("nAvgCostx")));                
     }   
     
     public JSONObject setInventoryClassification(String inventoryClassification){
@@ -196,28 +196,28 @@ public class Model_Inv_Master extends Model{
         return (String) getValue("cClassify");
     }
     
-    public JSONObject setBackOrderQuantity(int backOrderQuantity){
+    public JSONObject setBackOrderQuantity(double backOrderQuantity){
         return setValue("nBackOrdr", backOrderQuantity);
     }
     
-    public int getBackOrderQuantity(){
-        return (int) getValue("nBackOrdr");
+    public double getBackOrderQuantity(){
+        return Double.parseDouble(String.valueOf(getValue("nAvgMonSl")));        
     }   
     
-    public JSONObject setReserveOrderQuantity(int reserveOrderQuantity){
+    public JSONObject setReserveOrderQuantity(double reserveOrderQuantity){
         return setValue("nResvOrdr", reserveOrderQuantity);
     }
     
-    public int getReserveOrderQuantity(){
-        return (int) getValue("nResvOrdr");
+    public double getReserveOrderQuantity(){
+        return Double.parseDouble(String.valueOf(getValue("nResvOrdr")));
     }   
     
-    public JSONObject setFloatQuantity(int reserveQuantity){
+    public JSONObject setFloatQuantity(double reserveQuantity){
         return setValue("nFloatQty", reserveQuantity);
     }
     
-    public int getFloatQuantity(){
-        return (int) getValue("nFloatQty");
+    public double getFloatQuantity(){
+        return Double.parseDouble(String.valueOf(getValue("nFloatQty")));
     }   
     
     public JSONObject setLastTransactionDate(Date lastTransactionDate){
