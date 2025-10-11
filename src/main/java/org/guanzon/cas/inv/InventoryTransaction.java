@@ -562,8 +562,8 @@ public class InventoryTransaction {
                           ", cConditnx = " + SQLUtil.toSQL(loDetail.pcConditnx) +  
                           ", sPayLoadx = " + SQLUtil.toSQL("") +  
                           ", cRecdStat = " + SQLUtil.toSQL("1") +
-                          ", sModified = " + SQLUtil.toSQL("") +
-                          ", dModified = " + SQLUtil.toSQL(""); 
+                          ", sModified = " + SQLUtil.toSQL(psUserIDxx) +
+                          ", dModified = " + SQLUtil.toSQL(poDriver.getServerDate()) +
                         
                 poDriver.executeQuery(lsSQL, "Inv_Master", psBranchCD, "", psIndstCdx);
 
