@@ -191,7 +191,7 @@ public class InventoryTransaction {
                             ", a.sStockIDx" +
                             ", a.sBranchCD" +
                             ", a.cConditnx" + 
-                            ", b.nPurPrice" + 
+                            ", b.nUnitPrce" + 
                             ", b.cSerialze" +
                             ", b.sStockIDx sStockIDy" +
                        " FROM Inventory b" +  
@@ -277,7 +277,7 @@ public class InventoryTransaction {
                     , fnOrderQty
                     , null
                     , fcConditnx
-                    , loRS.getDouble("nPurPrice")
+                    , loRS.getDouble("nUnitPrce")
                     , fnUnitPrice);
         }
         else{
@@ -355,7 +355,7 @@ public class InventoryTransaction {
                         "  IFNULL(a.sWHouseID, '001') sWHouseID" + 
                         ", b.sStockIDx" +
                         ", c.cConditnx" + 
-                        ", b.nPurPrice" + 
+                        ", b.nUnitPrce" + 
                         ", b.cSerialze" +
                         ", c.sSerialID" +
                         ", a.sBranchCd" +
@@ -495,7 +495,7 @@ public class InventoryTransaction {
                 , fbWithOrdr ? 1 : 0
                 , null
                 , lcConditnx
-                , loRS.getDouble("nPurPrice")
+                , loRS.getDouble("nUnitPrce")
                 , fnUnitPrice);
 
         if(paDetailEntry.isEmpty()){

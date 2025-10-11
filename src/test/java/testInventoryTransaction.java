@@ -496,5 +496,6 @@ public class testInventoryTransaction {
         lsSQL = "INSERT INTO Inv_Master SET sStockIDx = 'M0W323000395', sBranchCd = 'M001', sWHouseID = '001', sIndstCdx = '02', sLocatnID = '', nBegQtyxx = 0, nQtyOnHnd = 4, nLedgerNo = 2, nBackOrdr = 4, nResvOrdr = 1, nFloatQty = 0, cPrimaryx = '1', cConditnx = '0', sPayLoadx = '', cRecdStat = '1', sModified = '', dModified = null";
         instance.executeUpdate(lsSQL);
     }
+  
     
 }

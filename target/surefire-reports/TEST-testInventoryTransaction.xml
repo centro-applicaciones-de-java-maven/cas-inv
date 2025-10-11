@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="5" failures="0" name="testInventoryTransaction" time="0.275" errors="0" skipped="0">
+<testsuite tests="5" failures="0" name="testInventoryTransaction" time="0.365" errors="0" skipped="0">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk-1.8\jre\bin"/>
@@ -66,9 +66,9 @@
     <property name="sun.desktop" value="windows"/>
     <property name="sun.cpu.isalist" value="amd64"/>
   </properties>
-  <testcase classname="testInventoryTransaction" name="testPORcv_MC" time="0.212"/>
-  <testcase classname="testInventoryTransaction" name="testPORcv_SP" time="0.011"/>
-  <testcase classname="testInventoryTransaction" name="testPO_MC" time="0.013"/>
-  <testcase classname="testInventoryTransaction" name="testPO_SP" time="0.017"/>
-  <testcase classname="testInventoryTransaction" name="testDeliveryAcceptance_MC" time="0.022"/>
+  <testcase classname="testInventoryTransaction" name="testPORcv_MC" time="0.321"/>
+  <testcase classname="testInventoryTransaction" name="testPORcv_SP" time="0.012"/>
+  <testcase classname="testInventoryTransaction" name="testPO_MC" time="0.01"/>
+  <testcase classname="testInventoryTransaction" name="testPO_SP" time="0.008"/>
+  <testcase classname="testInventoryTransaction" name="testDeliveryAcceptance_MC" time="0.014"/>
 </testsuite>
