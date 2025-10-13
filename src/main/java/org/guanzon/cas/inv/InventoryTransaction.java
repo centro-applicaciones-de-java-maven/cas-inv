@@ -685,6 +685,7 @@ public class InventoryTransaction {
                       ", nPurPrice = " + SQLUtil.toSQL(loDetail.pnPurPrice) +
                       ", nUnitPrce = " + SQLUtil.toSQL(loDetail.pnUnitPrce) +
                       ", cConditnx = " + SQLUtil.toSQL(loDetail.pcConditnx) +
+                      ", cReversex = " + SQLUtil.toSQL((pbIsReverse ? "1" : "0")) +
                       ", sModified = " + SQLUtil.toSQL(psUserIDxx) +
                       ", dModified = " + SQLUtil.toSQL(poDriver.getServerDate());
             System.out.println(lsSQL);
@@ -729,6 +730,7 @@ public class InventoryTransaction {
                       ", cLocation = " + SQLUtil.toSQL(loSerial.pcLocation) +
                       ", cConditnx = " + SQLUtil.toSQL(loSerial.pcConditnx) +
                       ", cSoldStat = " + SQLUtil.toSQL(loSerial.pcSoldStat) +
+                      ", cReversex = " + SQLUtil.toSQL((pbIsReverse ? "1" : "0")) +
                       ", sModified = " + SQLUtil.toSQL(psUserIDxx) +
                       ", dModified = " + SQLUtil.toSQL(poDriver.getServerDate());
             System.out.println(lsSQL);
