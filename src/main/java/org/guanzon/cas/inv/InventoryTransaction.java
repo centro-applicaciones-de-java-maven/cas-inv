@@ -1,15 +1,31 @@
 package org.guanzon.cas.inv;
 
+//Initialize Object
+//PurchaseReceiving loRecv = new PurchaseReceiving(gRiderCAS);
+//JsonObject loJson = loRecv.InitTransaction();
+//if(!"success".equalignorecase((String) loJson.get("result")){
+//    
+//}
+//loJson = loRecv.NewTransaction(); 
+//if(!"success".equalignorecase((String) loJson.get("result")){
+//    
+//}
+//loRecv.Master("") = ""
+//loRecv.
+//loJson = loRecv.SaveTransaction()
 
-// InventoryTransaction poTrans = InventoryTransaction(foGRider, fsBranchCD);
-// ??poTrans.initTransaction(String fsSourceCD, String fsSourceNo, Date fdTransact);
-// poTrans.JobOrder(String fsSourceNo, Date fdTransact)
-// ++++ non-serial
-// poTrans.addDetail(fsIndstCdx, fsStockIDx, fcConditnx, fnQuantity, fnOrderQty, fnUnitPrice)
-// ++++ serial
-// poTrans.addSerial(fsSerialID, fnOrderQty, fnUnitPrice);
-// poTrans.SaveTransaction();
-
+/**
+ * Author: marlon
+ * Date  : 10/12/2024
+ * InventoryTransaction poTrans = InventoryTransaction(foGRider, fsBranchCD);
+ * poTrans.JobOrder(String fsSourceNo, Date fdTransact)
+ * ++++ non-serial
+ * poTrans.addDetail(fsIndstCdx, fsStockIDx, fcConditnx, fnQuantity, fnOrderQty, fnUnitPrice)
+ * ++++ serial
+ * poTrans.addSerial(fsSerialID, fnOrderQty, fnUnitPrice);
+ * poTrans.SaveTransaction();
+ * 
+ */
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -215,8 +231,8 @@ public class InventoryTransaction {
 //        ResultSet loRS = stmt.executeQuery(lsSQL);
         
         if(!loRS.next()){
-            //throw new GuanzonException(GuanzonException.GE_NOTFOUND_EXCEPTION, "Stock Item does not exist!");
-            throw new GuanzonException(GuanzonException.GE_HOSTNAME_EXCEPTION);
+            throw new GuanzonException(GuanzonException.GE_NOTFOUND_EXCEPTION, "Stock Item does not exist!");
+//            throw new GuanzonException(GuanzonException.GE_HOSTNAME_EXCEPTION);
         }
 
         if(fnQuantity > 0){
@@ -289,7 +305,7 @@ public class InventoryTransaction {
                     , fnOrderQty
                     , null
                     , fcConditnx
-                    , loRS.getDouble("nPurPrice")
+                    , loRS.getDouble("nUnitPrce")
                     , fnUnitPrice);
         }
         
