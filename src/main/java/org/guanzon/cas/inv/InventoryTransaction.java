@@ -347,7 +347,7 @@ public class InventoryTransaction {
                         "  IFNULL(a.sWHouseID, " + SQLUtil.toSQL(fsWHouseID) + ") sWHouseID" + 
                         ", b.sStockIDx" +
                         ", c.cConditnx" + 
-                        ", b.nPurPrice" + 
+                        ", b.nUnitPrce" + 
                         ", b.cSerialze" +
                         ", c.sSerialID" +
                         ", a.sBranchCd" +
