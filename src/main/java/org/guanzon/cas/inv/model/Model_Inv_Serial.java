@@ -61,6 +61,14 @@ public class Model_Inv_Serial extends Model {
     public String getSerialId() {
         return (String) getValue("sSerialID");
     }
+    
+    public JSONObject setIndustryCode(String industryCode) {
+        return setValue("sIndstCdx", industryCode);
+    }
+
+    public String getIndustryCode() {
+        return (String) getValue("sIndstCdx");
+    }
 
     public JSONObject setBranchCode(String branchCode) {
         return setValue("sBranchCd", branchCode);
@@ -68,6 +76,14 @@ public class Model_Inv_Serial extends Model {
 
     public String getBranchCode() {
         return (String) getValue("sBranchCd");
+    }
+    
+    public JSONObject setWarehouseId(String warehouseId) {
+        return setValue("sWHouseID", warehouseId);
+    }
+
+    public String getWarehouseId() {
+        return (String) getValue("sWHouseID");
     }
     
     public JSONObject setClientId(String branchCode) {
@@ -109,6 +125,14 @@ public class Model_Inv_Serial extends Model {
     public String getStockId() {
         return (String) getValue("sStockIDx");
     }
+    
+    public JSONObject setLedgerNo(String ledgerNo) {
+        return setValue("nLedgerNo", ledgerNo);
+    }
+
+    public String getLedgerNo() {
+        return (String) getValue("nLedgerNo");
+    }
 
     public JSONObject setLocation(String location) {
         return setValue("cLocation", location);
@@ -148,6 +172,14 @@ public class Model_Inv_Serial extends Model {
 
     public String getWarranty() {
         return (String) getValue("sWarranty");
+    }
+    
+    public JSONObject setCondition(String condition) {
+        return setValue("cConditnx", condition);
+    }
+
+    public String getCondition() {
+        return (String) getValue("cConditnx");
     }
 
     public JSONObject setModifiedDate(Date modifiedDate) {
