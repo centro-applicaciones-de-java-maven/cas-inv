@@ -731,7 +731,6 @@ public class InventoryTransaction {
                       ", cConditnx = " + SQLUtil.toSQL(loSerial.pcConditnx) +
                       ", cSoldStat = " + SQLUtil.toSQL(loSerial.pcSoldStat) +
                       ", cReversex = " + SQLUtil.toSQL((pbIsReverse ? "1" : "0")) +
-                      ", sModified = " + SQLUtil.toSQL(psUserIDxx) +
                       ", dModified = " + SQLUtil.toSQL(poDriver.getServerDate());
             System.out.println(lsSQL);
             poDriver.executeQuery(lsSQL, "Inv_Serial", psBranchCD, "", psIndstCdx);
