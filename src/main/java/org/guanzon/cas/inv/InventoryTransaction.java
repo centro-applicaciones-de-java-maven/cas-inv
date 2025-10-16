@@ -216,7 +216,7 @@ public class InventoryTransaction {
                                " AND b.sIndstCdx = a.sIndstCdx" + 
                                " AND a.sBranchCd = " + SQLUtil.toSQL(psBranchCD) +
                                " AND a.cConditnx = " + SQLUtil.toSQL(fcConditnx) + 
-                               " AND a.nQtyOnHnd > 0" +
+                               " AND a.nQtyOnHnd >= 0.00" +
                        " WHERE b.sStockIDx = " + SQLUtil.toSQL(fsStockIDx) +
                          " AND b.sIndstCdx = " + SQLUtil.toSQL(fsIndstCdx) +
                        " ORDER  BY a.sStockIDx DESC";        
@@ -579,7 +579,7 @@ public class InventoryTransaction {
                           ", sPayLoadx = " + SQLUtil.toSQL("") +  
                           ", cRecdStat = " + SQLUtil.toSQL("1") +
                           ", sModified = " + SQLUtil.toSQL(psUserIDxx) +
-                          ", dModified = " + SQLUtil.toSQL(poDriver.getServerDate()) +
+                          ", dModified = " + SQLUtil.toSQL(poDriver.getServerDate());
                         
                 poDriver.executeQuery(lsSQL, "Inv_Master", psBranchCD, "", psIndstCdx);
 
