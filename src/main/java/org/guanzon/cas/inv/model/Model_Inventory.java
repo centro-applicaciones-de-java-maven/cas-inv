@@ -2,24 +2,24 @@ package org.guanzon.cas.inv.model;
 
 import java.sql.SQLException;
 import java.util.Date;
-import org.guanzon.appdriver.agent.services.Model;
+import org.guanzon.appdriver.impl.Model;
 import org.guanzon.appdriver.base.GuanzonException;
 import org.guanzon.appdriver.base.MiscUtil;
 import org.guanzon.appdriver.constant.EditMode;
 import org.guanzon.appdriver.constant.Logical;
 import org.guanzon.appdriver.constant.RecordStatus;
-import org.guanzon.cas.parameter.model.Model_Brand;
-import org.guanzon.cas.parameter.model.Model_Category;
-import org.guanzon.cas.parameter.model.Model_Category_Level2;
-import org.guanzon.cas.parameter.model.Model_Category_Level3;
-import org.guanzon.cas.parameter.model.Model_Category_Level4;
-import org.guanzon.cas.parameter.model.Model_Color;
-import org.guanzon.cas.parameter.model.Model_Industry;
-import org.guanzon.cas.parameter.model.Model_Inv_Type;
-import org.guanzon.cas.parameter.model.Model_Measure;
-import org.guanzon.cas.parameter.model.Model_Model;
-import org.guanzon.cas.parameter.model.Model_Model_Variant;
-import org.guanzon.cas.parameter.services.ParamModels;
+import ph.com.guanzongroup.cas.parameter.model.Model_Brand;
+import ph.com.guanzongroup.cas.parameter.model.Model_Category;
+import ph.com.guanzongroup.cas.parameter.model.Model_Category_Level2;
+import ph.com.guanzongroup.cas.parameter.model.Model_Category_Level3;
+import ph.com.guanzongroup.cas.parameter.model.Model_Category_Level4;
+import ph.com.guanzongroup.cas.parameter.model.Model_Color;
+import ph.com.guanzongroup.cas.parameter.model.Model_Industry;
+import ph.com.guanzongroup.cas.parameter.model.Model_Inv_Type;
+import ph.com.guanzongroup.cas.parameter.model.Model_Measure;
+import ph.com.guanzongroup.cas.parameter.model.Model_Model;
+import ph.com.guanzongroup.cas.parameter.model.Model_Model_Variant;
+import ph.com.guanzongroup.cas.parameter.services.ParamModels;
 import org.json.simple.JSONObject;
 
 public class Model_Inventory extends Model {

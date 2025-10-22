@@ -2,7 +2,7 @@ package org.guanzon.cas.inv.model;
 
 import java.sql.SQLException;
 import java.util.Date;
-import org.guanzon.appdriver.agent.services.Model;
+import org.guanzon.appdriver.impl.Model;
 import org.guanzon.appdriver.base.MiscUtil;
 import org.guanzon.appdriver.constant.EditMode;
 import org.json.simple.JSONObject;

@@ -3,17 +3,17 @@ package org.guanzon.cas.inv;
 import java.sql.SQLException;
 import org.guanzon.cas.inv.services.InvControllers;
 import org.guanzon.appdriver.agent.ShowDialogFX;
-import org.guanzon.appdriver.agent.services.Parameter;
+import org.guanzon.appdriver.agent.impl.Parameter;
 import org.guanzon.appdriver.base.GuanzonException;
 import org.guanzon.appdriver.base.MiscUtil;
 import org.guanzon.appdriver.base.SQLUtil;
 import org.guanzon.appdriver.constant.Logical;
 import org.guanzon.appdriver.constant.UserRight;
 import org.guanzon.cas.inv.model.Model_Inv_Master;
-import org.guanzon.cas.parameter.Branch;
-import org.guanzon.cas.parameter.InvLocation;
-import org.guanzon.cas.parameter.services.ParamControllers;
-import org.guanzon.cas.parameter.Warehouse;
+import ph.com.guanzongroup.cas.parameter.Branch;
+import ph.com.guanzongroup.cas.parameter.InvLocation;
+import ph.com.guanzongroup.cas.parameter.services.ParamControllers;
+import ph.com.guanzongroup.cas.parameter.Warehouse;
 import org.json.simple.JSONObject;
 
 public class InvMaster extends Parameter{
