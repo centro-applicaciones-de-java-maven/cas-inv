@@ -12,6 +12,7 @@ import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
+import ph.com.guanzongroup.cas.core.ObjectInitiator;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class testInventory {
@@ -19,15 +20,12 @@ public class testInventory {
     static Inventory record;
 
     @BeforeClass
-    public static void setUpClass() {
+    public static void setUpClass() throws SQLException, GuanzonException{
         System.setProperty("sys.default.path.metadata", "D:/GGC_Maven_Systems/config/metadata/new/");
 
-        instance = MiscUtil.Connect();
+        instance = MiscUtil.Connect("M001250018");
         
-        record = new Inventory();
-        record.setApplicationDriver(instance);
-        record.setWithParentClass(false);
-        record.initialize();
+        record = ObjectInitiator.createParameter(Inventory.class, instance, false, null);
     }
 
     @Test

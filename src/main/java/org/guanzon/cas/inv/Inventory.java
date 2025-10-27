@@ -8,19 +8,21 @@ import org.guanzon.appdriver.base.MiscUtil;
 import org.guanzon.appdriver.base.SQLUtil;
 import org.guanzon.appdriver.constant.Logical;
 import org.guanzon.appdriver.constant.UserRight;
-import org.guanzon.cas.inv.model.Model_Inventory;
-import org.guanzon.cas.inv.services.InvModels;
+import ph.com.guanzongroup.cas.model.Model_Inventory;
 import org.json.simple.JSONObject;
+import ph.com.guanzongroup.cas.constants.Tables;
+import ph.com.guanzongroup.cas.core.ObjectInitiator;
 
 public class Inventory extends Parameter{
     Model_Inventory poModel;
     
     @Override
-    public void initialize() {
+    public void initialize() throws SQLException, GuanzonException {
         psRecdStat = Logical.YES;
+
+        poModel = ObjectInitiator.createModel(Model_Inventory.class, poGRider, Tables.INVENTORY);
         
-        InvModels inv = new InvModels(poGRider);
-        poModel = inv.Inventory();
+        super.initialize();
     }
     
     @Override

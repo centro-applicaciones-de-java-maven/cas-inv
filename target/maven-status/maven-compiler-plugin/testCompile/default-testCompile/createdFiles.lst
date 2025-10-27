@@ -1,6 +1,5 @@
 testClassificationConfig.class
 testInvSerial.class
-testInventory.class
 testInventoryTransaction.class
 testGetROQ.class
 testClassify.class

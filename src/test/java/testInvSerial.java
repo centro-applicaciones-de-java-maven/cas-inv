@@ -3,7 +3,6 @@ import org.guanzon.appdriver.base.GRiderCAS;
 import org.guanzon.appdriver.base.GuanzonException;
 import org.guanzon.appdriver.base.MiscUtil;
 import org.guanzon.cas.inv.InvSerial;
-import org.guanzon.cas.inv.services.InvControllers;
 import org.json.simple.JSONObject;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -11,6 +10,7 @@ import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
+import ph.com.guanzongroup.cas.core.ObjectInitiator;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class testInvSerial {
@@ -24,7 +24,7 @@ public class testInvSerial {
         instance = MiscUtil.Connect();
         
         try {
-            record = new InvControllers(instance, null).InventorySerial();
+            record = ObjectInitiator.createParameter(InvSerial.class, instance, false, null);
         } catch (SQLException | GuanzonException e) {
             Assert.fail(e.getMessage());
         }

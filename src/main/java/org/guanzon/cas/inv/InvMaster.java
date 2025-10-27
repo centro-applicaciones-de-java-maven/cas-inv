@@ -1,7 +1,6 @@
 package org.guanzon.cas.inv;
 
 import java.sql.SQLException;
-import org.guanzon.cas.inv.services.InvControllers;
 import org.guanzon.appdriver.agent.ShowDialogFX;
 import org.guanzon.appdriver.agent.impl.Parameter;
 import org.guanzon.appdriver.base.GuanzonException;
@@ -9,21 +8,19 @@ import org.guanzon.appdriver.base.MiscUtil;
 import org.guanzon.appdriver.base.SQLUtil;
 import org.guanzon.appdriver.constant.Logical;
 import org.guanzon.appdriver.constant.UserRight;
-import org.guanzon.cas.inv.model.Model_Inv_Master;
+import ph.com.guanzongroup.cas.model.Model_Inv_Master;
 import ph.com.guanzongroup.cas.parameter.Branch;
 import ph.com.guanzongroup.cas.parameter.InvLocation;
-import ph.com.guanzongroup.cas.parameter.services.ParamControllers;
 import ph.com.guanzongroup.cas.parameter.Warehouse;
 import org.json.simple.JSONObject;
+import ph.com.guanzongroup.cas.constants.Tables;
+import ph.com.guanzongroup.cas.core.ObjectInitiator;
 
 public class InvMaster extends Parameter{
     //object model
     Model_Inv_Master poModel;
     
     //reference objects
-    ParamControllers poParams;
-    InvControllers poInv;
-    
     Branch poBranch;
     InvLocation poLocation;
     Inventory poInventory;
@@ -56,25 +53,25 @@ public class InvMaster extends Parameter{
     
     @Override
     public void initialize() throws SQLException, GuanzonException{
-        psRecdStat = Logical.YES;
+        try {
+            psRecdStat = Logical.YES;
         
-        poModel = new Model_Inv_Master();
-        poModel.setApplicationDriver(poGRider);
-        poModel.setXML("Model_Inv_Master");
-        poModel.setTableName("Inv_Master");
-        poModel.initialize();
-        
-        psBranchCd = poGRider.getBranchCode();
-        
-        //initialize reference objects
-        poParams = new ParamControllers(poGRider, logwrapr);
-        poBranch = poParams.Branch();
-        poLocation = poParams.InventoryLocation();
-        poWarehouse = poParams.Warehouse();
-        
-        poInv = new InvControllers(poGRider, logwrapr);
-        poInventory = poInv.Inventory();
-        //end - initialize reference objects
+            poModel = ObjectInitiator.createModel(Model_Inv_Master.class, poGRider, Tables.INVENTORY_MASTER);
+
+            psBranchCd = poGRider.getBranchCode();
+
+            //initialize reference objects
+            poBranch = ObjectInitiator.createParameter(Branch.class, poGRider, true, logwrapr);
+            poLocation = ObjectInitiator.createParameter(InvLocation.class, poGRider, true, logwrapr);
+            poWarehouse = ObjectInitiator.createParameter(Warehouse.class, poGRider, true, logwrapr);
+            poInventory = ObjectInitiator.createParameter(Inventory.class, poGRider, true, logwrapr);
+            //end - initialize reference objects
+            
+            super.initialize();
+        } catch (SQLException | GuanzonException e) {
+            logwrapr.severe(e.getMessage());
+            System.exit(1);
+        }
     }
     
     @Override

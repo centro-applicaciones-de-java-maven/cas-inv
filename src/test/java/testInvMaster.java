@@ -1,10 +1,8 @@
-import java.awt.Polygon;
 import java.sql.SQLException;
 import org.guanzon.appdriver.base.GRiderCAS;
 import org.guanzon.appdriver.base.GuanzonException;
 import org.guanzon.appdriver.base.MiscUtil;
 import org.guanzon.cas.inv.InvMaster;
-import org.guanzon.cas.inv.services.InvControllers;
 import org.json.simple.JSONObject;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -12,6 +10,7 @@ import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
+import ph.com.guanzongroup.cas.core.ObjectInitiator;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class testInvMaster {
@@ -25,7 +24,7 @@ public class testInvMaster {
         instance = MiscUtil.Connect();
         
         try {
-            record = new InvControllers(instance, null).InventoryMaster();
+            record = ObjectInitiator.createParameter(InvMaster.class, instance, false, null);
         } catch (SQLException | GuanzonException e) {
             Assert.fail(e.getMessage());
         }
@@ -38,7 +37,7 @@ public class testInvMaster {
 
             loJSON = record.newRecord();
             if ("error".equals((String) loJSON.get("result"))) {
-                record = new InvControllers(instance, null).InventoryMaster();
+                record = ObjectInitiator.createParameter(InvMaster.class, instance, false, null);
             }    
 
             loJSON = record.getModel().setStockId("M00125000004");

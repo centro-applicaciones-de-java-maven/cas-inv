@@ -9,12 +9,12 @@ import org.guanzon.appdriver.base.GuanzonException;
 import org.guanzon.appdriver.base.SQLUtil;
 import org.guanzon.appdriver.constant.EditMode;
 import org.guanzon.appdriver.constant.Logical;
-import org.guanzon.appdriver.constant.UserRight;
-import org.guanzon.cas.inv.model.Model_Inv_Serial;
-import org.guanzon.cas.inv.model.Model_Inv_Serial_Ledger;
-import org.guanzon.cas.inv.model.Model_Inv_Serial_Registration;
-import org.guanzon.cas.inv.services.InvModels;
+import ph.com.guanzongroup.cas.model.Model_Inv_Serial;
+import ph.com.guanzongroup.cas.model.Model_Inv_Serial_Ledger;
+import ph.com.guanzongroup.cas.model.Model_Inv_Serial_Registration;
 import org.json.simple.JSONObject;
+import ph.com.guanzongroup.cas.constants.Tables;
+import ph.com.guanzongroup.cas.core.ObjectInitiator;
 
 public class InvSerial extends Parameter{
     Model_Inv_Serial poModel;
@@ -23,14 +23,17 @@ public class InvSerial extends Parameter{
 
     @Override
     public void initialize() throws SQLException, GuanzonException{
-        psRecdStat = Logical.YES;
+        try {
+            psRecdStat = Logical.YES;
 
-        InvModels inv = new InvModels(poGRider);
-        poModel = inv.InventorySerial();       
-        
-        poRegistration = inv.InventorySerialRegistration();   
-        
-        super.initialize();
+            poModel = ObjectInitiator.createModel(Model_Inv_Serial.class, poGRider, Tables.INVENTORY_SERIAL);
+            poRegistration = ObjectInitiator.createModel(Model_Inv_Serial_Registration.class, poGRider, Tables.INVENTORY_SERIAL_REGISTRATION);
+
+            super.initialize();
+        } catch (SQLException | GuanzonException e) {
+            logwrapr.severe(e.getMessage());
+            System.exit(1);
+        }
     }
     
     public Model_Inv_Serial_Registration SerialRegistration(){
@@ -180,8 +183,7 @@ public class InvSerial extends Parameter{
         
         paLedger = new ArrayList<>();
         while(loRS.next()){
-            InvModels inv = new InvModels(poGRider);
-            Model_Inv_Serial_Ledger ledger = inv.InventorySerialLedger();
+            Model_Inv_Serial_Ledger ledger = ObjectInitiator.createModel(Model_Inv_Serial_Ledger.class, poGRider, Tables.INVENTORY_SERIAL_LEDGER);
             
             poJSON = ledger.openRecord(loRS.getString("sSerialID"), 
                                         loRS.getString("sBranchCd"), 

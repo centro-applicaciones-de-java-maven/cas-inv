@@ -5,9 +5,10 @@ import org.guanzon.appdriver.agent.impl.Parameter;
 import org.guanzon.appdriver.base.GuanzonException;
 import org.guanzon.appdriver.constant.Logical;
 import org.guanzon.appdriver.constant.UserRight;
-import org.guanzon.cas.inv.model.Model_Classification_Config;
-import org.guanzon.cas.inv.services.InvModels;
+import ph.com.guanzongroup.cas.model.Model_Classification_Config;
 import org.json.simple.JSONObject;
+import ph.com.guanzongroup.cas.constants.Tables;
+import ph.com.guanzongroup.cas.core.ObjectInitiator;
 
 public class ClassificationConfig extends Parameter{
     Model_Classification_Config poModel;
@@ -15,9 +16,8 @@ public class ClassificationConfig extends Parameter{
     @Override
     public void initialize() throws SQLException, GuanzonException {
         psRecdStat = Logical.YES;
-        
-        InvModels model = new InvModels(poGRider);
-        poModel = model.ClassificationConfig();
+
+        poModel = ObjectInitiator.createModel(Model_Classification_Config.class, poGRider, Tables.CLASSIFICATION_CONFIG);
         
         super.initialize();
     }
