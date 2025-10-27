@@ -9,22 +9,23 @@ import org.guanzon.appdriver.base.SQLUtil;
 import org.guanzon.appdriver.constant.Logical;
 import org.guanzon.appdriver.constant.UserRight;
 import ph.com.guanzongroup.cas.model.Model_Inv_Master;
-import ph.com.guanzongroup.cas.parameter.Branch;
-import ph.com.guanzongroup.cas.parameter.InvLocation;
-import ph.com.guanzongroup.cas.parameter.Warehouse;
 import org.json.simple.JSONObject;
 import ph.com.guanzongroup.cas.constants.Tables;
 import ph.com.guanzongroup.cas.core.ObjectInitiator;
+import ph.com.guanzongroup.cas.model.Model_Branch;
+import ph.com.guanzongroup.cas.model.Model_Inv_Location;
+import ph.com.guanzongroup.cas.model.Model_Inventory;
+import ph.com.guanzongroup.cas.model.Model_Warehouse;
 
 public class InvMaster extends Parameter{
     //object model
     Model_Inv_Master poModel;
     
     //reference objects
-    Branch poBranch;
-    InvLocation poLocation;
-    Inventory poInventory;
-    Warehouse poWarehouse;
+    Model_Branch poBranch;
+    Model_Inv_Location poLocation;
+    Model_Inventory poInventory;
+    Model_Warehouse poWarehouse;
     //end - reference objects
     
     //optional only
@@ -34,19 +35,19 @@ public class InvMaster extends Parameter{
     }
     
     //return reference objects
-    public Branch Branch(){
+    public Model_Branch Branch(){
         return poBranch;
     }
     
-    public InvLocation InvLocation(){
+    public Model_Inv_Location InvLocation(){
         return poLocation;
     }
     
-    public Inventory Inventory(){
+    public Model_Inventory Inventory(){
         return poInventory;
     }
     
-    public Warehouse Warehouse(){
+    public Model_Warehouse Warehouse(){
         return poWarehouse;
     }
     //end - return reference objects
@@ -61,10 +62,10 @@ public class InvMaster extends Parameter{
             psBranchCd = poGRider.getBranchCode();
 
             //initialize reference objects
-            poBranch = ObjectInitiator.createParameter(Branch.class, poGRider, true, logwrapr);
-            poLocation = ObjectInitiator.createParameter(InvLocation.class, poGRider, true, logwrapr);
-            poWarehouse = ObjectInitiator.createParameter(Warehouse.class, poGRider, true, logwrapr);
-            poInventory = ObjectInitiator.createParameter(Inventory.class, poGRider, true, logwrapr);
+            poBranch = ObjectInitiator.createModel(Model_Branch.class, poGRider, Tables.BRANCH);
+            poLocation = ObjectInitiator.createModel(Model_Inv_Location.class, poGRider, Tables.INVENTORY_LOCATION);
+            poWarehouse = ObjectInitiator.createModel(Model_Warehouse.class, poGRider, Tables.WAREHOUSE);
+            poInventory = ObjectInitiator.createModel(Model_Inventory.class, poGRider, Tables.INVENTORY);
             //end - initialize reference objects
             
             super.initialize();

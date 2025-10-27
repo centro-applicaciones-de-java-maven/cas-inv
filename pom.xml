@@ -12,8 +12,8 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.guanzon</groupId>
-            <artifactId>cas-parameter</artifactId>
+            <groupId>ph.com.guanzongroup</groupId>
+            <artifactId>cas-core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

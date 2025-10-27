@@ -21,7 +21,7 @@ public class testInvMaster {
     public static void setUpClass() {
         System.setProperty("sys.default.path.metadata", "D:/GGC_Maven_Systems/config/metadata/new/");
 
-        instance = MiscUtil.Connect();
+        instance = MiscUtil.Connect("M001250018");
         
         try {
             record = ObjectInitiator.createParameter(InvMaster.class, instance, false, null);
@@ -44,7 +44,12 @@ public class testInvMaster {
             if ("error".equals((String) loJSON.get("result"))) {
                 Assert.fail((String) loJSON.get("message"));
             }     
-
+            
+            loJSON = record.getModel().setIndustryCode("02");
+            if ("error".equals((String) loJSON.get("result"))) {
+                Assert.fail((String) loJSON.get("message"));
+            } 
+            
             loJSON = record.getModel().setBranchCode("M0W1");
             if ("error".equals((String) loJSON.get("result"))) {
                 Assert.fail((String) loJSON.get("message"));
