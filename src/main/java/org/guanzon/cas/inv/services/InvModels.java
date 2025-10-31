@@ -7,6 +7,7 @@ import org.guanzon.cas.inv.model.Model_Inv_Serial;
 import org.guanzon.cas.inv.model.Model_Inv_Serial_Ledger;
 import org.guanzon.cas.inv.model.Model_Inv_Serial_Registration;
 import org.guanzon.cas.inv.model.Model_Inventory;
+import org.guanzon.cas.inv.model.Model_Inventory_Supplier;
 
 public class InvModels {
 
@@ -133,51 +134,29 @@ public class InvModels {
 
         return poClassificationConfig;
     }
-//
-//    public Model_Inv_Classification_Detail InventoryClassificationDetail() {
-//        if (poGRider == null) {
-//            System.err.println("InvModels.InventoryClassificationDetail: Application driver is not set.");
-//            return null;
-//        }
-//
-//        if (poInvClassLedger == null) {
-//            poInvClassLedger = new Model_Inv_Classification_Master();
-//            poInvClassLedger.setApplicationDriver(poGRider);
-//            poInvClassLedger.setXML("Model_Inv_Classification_Detail");
-//            poInvClassLedger.setTableName("Inv_Classification_Detail");
-//            poInvClassLedger.initialize();
-//        }
-//
-//        return poInvClassDetail;
-//    }
-//
-//    public Model_Inv_Classification_Master InventoryClassificationMaster() {
-//        if (poGRider == null) {
-//            System.err.println("InvModels.InventoryClassificationMaster: Application driver is not set.");
-//            return null;
-//        }
-//
-//        if (poInvClassLedger == null) {
-//            poInvClassLedger = new Model_Inv_Classification_Master();
-//            poInvClassLedger.setApplicationDriver(poGRider);
-//            poInvClassLedger.setXML("Model_Inv_Classification_Master");
-//            poInvClassLedger.setTableName("Inv_Classification_Master");
-//            poInvClassLedger.initialize();
-//        }
-//
-//        return poInvClassMaster;
-//    }
+    
+    public Model_Inventory_Supplier InventorySupplier() {
+        if (this.poGRider == null) {
+            System.err.println("DeliveryParamModels.InventorySupplier: Application driver is not set.");
+            return null;
+        }
+        if (this.poSupplier == null) {
+            this.poSupplier = new Model_Inventory_Supplier();
+            this.poSupplier.setApplicationDriver(this.poGRider);
+            this.poSupplier.setXML("Model_Inv_Supplier");
+            this.poSupplier.setTableName("Inv_Supplier");
+            this.poSupplier.initialize();
+        }
+        return this.poSupplier;
+    }
     
     private final GRiderCAS poGRider;
 
     private Model_Inventory poInventory;
     private Model_Inv_Master poInvMaster;
-//    private Model_Inv_Ledger poInvLedger;
-//    private Model_Inv_Classification_Master poInvClassLedger;
+    private Model_Inventory_Supplier poSupplier;
     private Model_Inv_Serial poInvSerial;
     private Model_Inv_Serial_Ledger poInvSerialLeger;
     private Model_Inv_Serial_Registration poInvSerialReg;
     private Model_Classification_Config poClassificationConfig;
-//    private Model_Inv_Classification_Detail poInvClassDetail;
-//    private Model_Inv_Classification_Master poInvClassMaster;
 }
