@@ -23,3 +23,10 @@
 hs_err_pid*
 replay_pid*
 /nbproject/
+target/classes/.netbeans_automatic_build
+target/maven-archiver/pom.properties
+target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
+target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
+target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst
+target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst
+target/test-classes/.netbeans_automatic_build

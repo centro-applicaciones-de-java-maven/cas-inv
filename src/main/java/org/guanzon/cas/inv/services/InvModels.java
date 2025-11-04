@@ -7,6 +7,7 @@ import org.guanzon.cas.inv.model.Model_Inv_Serial;
 import org.guanzon.cas.inv.model.Model_Inv_Serial_Ledger;
 import org.guanzon.cas.inv.model.Model_Inv_Serial_Registration;
 import org.guanzon.cas.inv.model.Model_Inventory;
+import org.guanzon.cas.inv.model.Model_InventorySuperseded;
 import org.guanzon.cas.inv.model.Model_Inventory_Supplier;
 
 public class InvModels {
@@ -32,6 +33,23 @@ public class InvModels {
         return poInventory;
     }
 
+    public Model_InventorySuperseded InventorySuperseded() {
+        if (poGRider == null) {
+            System.err.println("InvModels.InventorySuperseded: Application driver is not set.");
+            return null;
+        }
+
+        if (poInventory == null) {
+            poInventorySuperseded = new Model_InventorySuperseded();
+            poInventorySuperseded.setApplicationDriver(poGRider);
+            poInventorySuperseded.setXML("Model_Inventory");
+            poInventorySuperseded.setTableName("Inventory");
+            poInventorySuperseded.initialize();
+        }
+
+        return poInventorySuperseded;
+    }
+
     public Model_Inv_Master InventoryMaster() {
         if (poGRider == null) {
             System.err.println("InvModels.InventoryMaster: Application driver is not set.");
@@ -48,7 +66,7 @@ public class InvModels {
 
         return poInvMaster;
     }
-    
+
     public Model_Inv_Serial InventorySerial() {
         if (poGRider == null) {
             System.err.println("InvModels.InventorySerial: Application driver is not set.");
@@ -100,7 +118,7 @@ public class InvModels {
 
         return poInvSerialLeger;
     }
-    
+
     public Model_Inv_Serial_Registration InventorySerialRegistration() {
         if (poGRider == null) {
             System.err.println("InvModels.InventorySerialRegistration: Application driver is not set.");
@@ -117,7 +135,7 @@ public class InvModels {
 
         return poInvSerialReg;
     }
-    
+
     public Model_Classification_Config ClassificationConfig() {
         if (poGRider == null) {
             System.err.println("InvModels.ClassificationConfig: Application driver is not set.");
@@ -134,7 +152,7 @@ public class InvModels {
 
         return poClassificationConfig;
     }
-    
+
     public Model_Inventory_Supplier InventorySupplier() {
         if (this.poGRider == null) {
             System.err.println("DeliveryParamModels.InventorySupplier: Application driver is not set.");
@@ -149,10 +167,11 @@ public class InvModels {
         }
         return this.poSupplier;
     }
-    
+
     private final GRiderCAS poGRider;
 
     private Model_Inventory poInventory;
+    private Model_InventorySuperseded poInventorySuperseded;
     private Model_Inv_Master poInvMaster;
     private Model_Inventory_Supplier poSupplier;
     private Model_Inv_Serial poInvSerial;
