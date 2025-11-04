@@ -71,13 +71,31 @@ public class Inventory extends Parameter {
 
             if (poModel.getBarCode().isEmpty()) {
                 poJSON.put("result", "error");
-                poJSON.put("message", "Item bar code must not be empty.");
+                poJSON.put("message", "Item barcode must not be empty.");
                 return poJSON;
             }
 
             if (poModel.getDescription().isEmpty()) {
                 poJSON.put("result", "error");
                 poJSON.put("message", "Item description must not be empty.");
+                return poJSON;
+            }
+
+            if (poModel.getCategoryFirstLevelId() == null || poModel.getCategoryFirstLevelId().isEmpty()) {
+                poJSON.put("result", "error");
+                poJSON.put("message", "Item category must not be empty.");
+                return poJSON;
+            }
+
+            if (poModel.getCategoryIdSecondLevel() == null || poModel.getCategoryIdSecondLevel().isEmpty()) {
+                poJSON.put("result", "error");
+                poJSON.put("message", "Item category 2  must not be empty.");
+                return poJSON;
+            }
+
+            if (poModel.getInventoryTypeId() == null || poModel.getInventoryTypeId().isEmpty()) {
+                poJSON.put("result", "error");
+                poJSON.put("message", "Item category 2  must not be empty.");
                 return poJSON;
             }
 
@@ -1016,7 +1034,7 @@ public class Inventory extends Parameter {
         if (!psIndustryCode.isEmpty()) {
             lsSQL = MiscUtil.addCondition(lsSQL, "a.sIndstCdx = " + SQLUtil.toSQL(psIndustryCode));
         }
-        
+
         System.out.println("Search Record Query : " + lsSQL);
         poJSON = new JSONObject();
         poJSON = ShowDialogFX.Search(poGRider,
