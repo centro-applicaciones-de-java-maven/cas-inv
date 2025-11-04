@@ -877,9 +877,9 @@ public class Inventory extends Parameter {
         loBrowse.initialize();
         String lsSQL = "SELECT * FROM " + loBrowse.getTable() + " WHERE cRecdStat = " + SQLUtil.toSQL(RecordStatus.ACTIVE);
 
-        if (!psIndustryCode.isEmpty()) {
-            lsSQL = MiscUtil.addCondition(lsSQL, "sIndstCdx = " + SQLUtil.toSQL(psIndustryCode));
-        }
+//        if (!psIndustryCode.isEmpty()) {
+//            lsSQL = MiscUtil.addCondition(lsSQL, "sIndstCdx = " + SQLUtil.toSQL(psIndustryCode));
+//        }
 
         System.out.println("Search Record Query : " + lsSQL);
         poJSON = new JSONObject();
@@ -916,9 +916,9 @@ public class Inventory extends Parameter {
         loBrowse.initialize();
         String lsSQL = "SELECT * FROM " + loBrowse.getTable() + " WHERE cRecdStat = " + SQLUtil.toSQL(RecordStatus.ACTIVE);
 
-        if (!psIndustryCode.isEmpty()) {
-            lsSQL = MiscUtil.addCondition(lsSQL, "sIndstCdx = " + SQLUtil.toSQL(psIndustryCode));
-        }
+//        if (!psIndustryCode.isEmpty()) {
+//            lsSQL = MiscUtil.addCondition(lsSQL, "sIndstCdx = " + SQLUtil.toSQL(psIndustryCode));
+//        }
 
         System.out.println("Search Record Query : " + lsSQL);
         poJSON = new JSONObject();
@@ -955,9 +955,9 @@ public class Inventory extends Parameter {
         loBrowse.initialize();
         String lsSQL = "SELECT * FROM " + loBrowse.getTable() + " WHERE cRecdStat = " + SQLUtil.toSQL(RecordStatus.ACTIVE);
 
-        if (!psIndustryCode.isEmpty()) {
-            lsSQL = MiscUtil.addCondition(lsSQL, "sIndstCdx = " + SQLUtil.toSQL(psIndustryCode));
-        }
+//        if (!psIndustryCode.isEmpty()) {
+//            lsSQL = MiscUtil.addCondition(lsSQL, "sIndstCdx = " + SQLUtil.toSQL(psIndustryCode));
+//        }
 
         System.out.println("Search Record Query : " + lsSQL);
         poJSON = new JSONObject();
