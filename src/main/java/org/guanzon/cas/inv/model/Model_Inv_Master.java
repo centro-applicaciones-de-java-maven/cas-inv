@@ -16,23 +16,29 @@ import org.guanzon.cas.parameter.model.Model_Warehouse;
 import org.guanzon.cas.parameter.services.ParamModels;
 import org.json.simple.JSONObject;
 
-public class Model_Inv_Master extends Model{      
+public class Model_Inv_Master extends Model {
+
     //reference objects
     Model_Branch poBranch;
     Model_Warehouse poWarehouse;
     Model_Inventory poInventory;
     Model_Inv_Location poLocation;
-    
+
     @Override
     public void initialize() {
         try {
             poEntity = MiscUtil.xml2ResultSet(System.getProperty("sys.default.path.metadata") + XML, getTable());
-            
+
             poEntity.last();
             poEntity.moveToInsertRow();
 
             MiscUtil.initRowSet(poEntity);
-            
+
+            poEntity.insertRow();
+            poEntity.moveToCurrentRow();
+
+            poEntity.absolute(1);
+
             //assign default values
             poEntity.updateObject("dAcquired", "1900-01-01");
             poEntity.updateObject("dBegInvxx", "1900-01-01");
@@ -50,221 +56,216 @@ public class Model_Inv_Master extends Model{
             poEntity.updateObject("dLastTran", "1900-01-01");
             poEntity.updateString("cPrimaryx", Logical.NO);
             poEntity.updateString("cRecdStat", RecordStatus.ACTIVE);
+
             //end - assign default values
-
-            poEntity.insertRow();
-            poEntity.moveToCurrentRow();
-
-            poEntity.absolute(1);
-
             ID = "sStockIDx";
             ID2 = "sBranchCd";
-            
+
             //initialize reference objects
             ParamModels model = new ParamModels(poGRider);
             poBranch = model.Branch();
             poWarehouse = model.Warehouse();
             poLocation = model.InventoryLocation();
-            
+
             poInventory = new InvModels(poGRider).Inventory();
             //end - initialize reference objects
-            
+
             pnEditMode = EditMode.UNKNOWN;
         } catch (SQLException e) {
             logwrapr.severe(e.getMessage());
             System.exit(1);
         }
     }
-    
-    public JSONObject setStockId(String stockId){
+
+    public JSONObject setStockId(String stockId) {
         return setValue("sStockIDx", stockId);
     }
-    
-    public String getStockId(){
+
+    public String getStockId() {
         return (String) getValue("sStockIDx");
     }
-    
-    public JSONObject setBranchCode(String branchCode){
+
+    public JSONObject setBranchCode(String branchCode) {
         return setValue("sBranchCd", branchCode);
     }
-    
-    public String getBranchCode(){
+
+    public String getBranchCode() {
         return (String) getValue("sBranchCd");
     }
-    
-    public JSONObject setWarehouseId(String warehouseId){
+
+    public JSONObject setWarehouseId(String warehouseId) {
         return setValue("sWHouseID", warehouseId);
     }
-    
-    public String getWarehouseId(){
+
+    public String getWarehouseId() {
         return (String) getValue("sWHouseID");
     }
-    
-    public JSONObject setLocationId(String briefDescription){
+
+    public JSONObject setLocationId(String briefDescription) {
         return setValue("sLocatnID", briefDescription);
     }
-    
-    public String getLocationId(){
+
+    public String getLocationId() {
         return (String) getValue("sLocatnID");
     }
-    
-    public JSONObject setBinId(String binId){
+
+    public JSONObject setBinId(String binId) {
         return setValue("sBinNumbr", binId);
     }
-    
-    public String getBinId(){
+
+    public String getBinId() {
         return (String) getValue("sBinNumbr");
     }
-    
-    public JSONObject setDateAcquired(Date dateAcquired){
+
+    public JSONObject setDateAcquired(Date dateAcquired) {
         return setValue("dAcquired", dateAcquired);
     }
-    
-    public Date getDateAcquired(){
+
+    public Date getDateAcquired() {
         return (Date) getValue("dAcquired");
     }
-    
-    public JSONObject setBeginningInventoryDate(Date beginningInventoryDate){
+
+    public JSONObject setBeginningInventoryDate(Date beginningInventoryDate) {
         return setValue("dBegInvxx", beginningInventoryDate);
     }
-    
-    public Date getBeginningInventoryDate(){
+
+    public Date getBeginningInventoryDate() {
         return (Date) getValue("dBegInvxx");
     }
-    
-    public JSONObject setBeginningInventoryQuantity(double beginningInventoryQuantity){
+
+    public JSONObject setBeginningInventoryQuantity(double beginningInventoryQuantity) {
         return setValue("nBegQtyxx", beginningInventoryQuantity);
     }
-    
-    public double getBeginningInventoryQuantity(){
+
+    public double getBeginningInventoryQuantity() {
         return Double.parseDouble(String.valueOf(getValue("nBegQtyxx")));
-    }   
-    
-    public JSONObject setQuantityOnHand(double quantityOnHand){
+    }
+
+    public JSONObject setQuantityOnHand(double quantityOnHand) {
         return setValue("nQtyOnHnd", quantityOnHand);
     }
-    
-    public double getQuantityOnHand(){
+
+    public double getQuantityOnHand() {
         return Double.parseDouble(String.valueOf(getValue("nQtyOnHnd")));
-    }  
-    
-    public JSONObject setLedgerCount(int ledgerCount){
+    }
+
+    public JSONObject setLedgerCount(int ledgerCount) {
         return setValue("nLedgerNo", ledgerCount);
     }
-    
-    public int getLedgerCount(){
+
+    public int getLedgerCount() {
         return (int) getValue("nLedgerNo");
-    }   
-    
-    public JSONObject setMinimumLevel(double minimumInventoryLevel){
+    }
+
+    public JSONObject setMinimumLevel(double minimumInventoryLevel) {
         return setValue("nMinLevel", minimumInventoryLevel);
     }
-    
-    public double getMinimumLevel(){
+
+    public double getMinimumLevel() {
         return Double.parseDouble(String.valueOf(getValue("nMinLevel")));
-    }   
-    
-    public JSONObject setMaximumLevel(double maximumInventoryLevel){
+    }
+
+    public JSONObject setMaximumLevel(double maximumInventoryLevel) {
         return setValue("nMaxLevel", maximumInventoryLevel);
     }
-    
-    public double getMaximumLevel(){
+
+    public double getMaximumLevel() {
         return Double.parseDouble(String.valueOf(getValue("nMaxLevel")));
-    }   
-    
-    public JSONObject setAverageMonthlySale(double averageMonthlySale){
+    }
+
+    public JSONObject setAverageMonthlySale(double averageMonthlySale) {
         return setValue("nMaxLevel", averageMonthlySale);
     }
-    
-    public double getAverageMonthlySales(){
-        return Double.parseDouble(String.valueOf(getValue("nAvgMonSl")));        
-    }   
-    
-    public JSONObject setAverageCost(double averageCost){
+
+    public double getAverageMonthlySales() {
+        return Double.parseDouble(String.valueOf(getValue("nAvgMonSl")));
+    }
+
+    public JSONObject setAverageCost(double averageCost) {
         return setValue("nAvgCostx", averageCost);
     }
-    
-    public double getAverageCost(){
-        return Double.parseDouble(String.valueOf(getValue("nAvgCostx")));                
-    }   
-    
-    public JSONObject setInventoryClassification(String inventoryClassification){
+
+    public double getAverageCost() {
+        return Double.parseDouble(String.valueOf(getValue("nAvgCostx")));
+    }
+
+    public JSONObject setInventoryClassification(String inventoryClassification) {
         return setValue("cClassify", inventoryClassification);
     }
-    
-    public String getInventoryClassification(){
+
+    public String getInventoryClassification() {
         return (String) getValue("cClassify");
     }
-    
-    public JSONObject setBackOrderQuantity(double backOrderQuantity){
+
+    public JSONObject setBackOrderQuantity(double backOrderQuantity) {
         return setValue("nBackOrdr", backOrderQuantity);
     }
-    
-    public double getBackOrderQuantity(){
-        return Double.parseDouble(String.valueOf(getValue("nAvgMonSl")));        
-    }   
-    
-    public JSONObject setReserveOrderQuantity(double reserveOrderQuantity){
+
+    public double getBackOrderQuantity() {
+        return Double.parseDouble(String.valueOf(getValue("nAvgMonSl")));
+    }
+
+    public JSONObject setReserveOrderQuantity(double reserveOrderQuantity) {
         return setValue("nResvOrdr", reserveOrderQuantity);
     }
-    
-    public double getReserveOrderQuantity(){
+
+    public double getReserveOrderQuantity() {
         return Double.parseDouble(String.valueOf(getValue("nResvOrdr")));
-    }   
-    
-    public JSONObject setFloatQuantity(double reserveQuantity){
+    }
+
+    public JSONObject setFloatQuantity(double reserveQuantity) {
         return setValue("nFloatQty", reserveQuantity);
     }
-    
-    public double getFloatQuantity(){
+
+    public double getFloatQuantity() {
         return Double.parseDouble(String.valueOf(getValue("nFloatQty")));
-    }   
-    
-    public JSONObject setLastTransactionDate(Date lastTransactionDate){
+    }
+
+    public JSONObject setLastTransactionDate(Date lastTransactionDate) {
         return setValue("dLastTran", lastTransactionDate);
     }
-    
-    public Date getLastTransactionDate(){
+
+    public Date getLastTransactionDate() {
         return (Date) getValue("dLastTran");
     }
-    
-    public JSONObject isPrimary(boolean isPrimary){
+
+    public JSONObject isPrimary(boolean isPrimary) {
         return setValue("cPrimaryx", isPrimary ? "1" : "0");
     }
 
-    public boolean isPrimary(){
+    public boolean isPrimary() {
         return ((String) getValue("cPrimaryx")).equals("1");
     }
-        
-    public JSONObject setRecordStatus(String recordStatus){
+
+    public JSONObject setRecordStatus(String recordStatus) {
         return setValue("cRecdStat", recordStatus);
     }
-    
-    public String getRecordStatus(){
+
+    public String getRecordStatus() {
         return (String) getValue("cRecdStat");
     }
-    
-    public JSONObject setModifyingId(String modifyingId){
+
+    public JSONObject setModifyingId(String modifyingId) {
         return setValue("sModified", modifyingId);
     }
-    
-    public String getModifyingId(){
+
+    public String getModifyingId() {
         return (String) getValue("sModified");
     }
-    
-    public JSONObject setModifiedDate(Date modifiedDate){
+
+    public JSONObject setModifiedDate(Date modifiedDate) {
         return setValue("dModified", modifiedDate);
     }
-    
-    public Date getModifiedDate(){
+
+    public Date getModifiedDate() {
         return (Date) getValue("dModified");
     }
-    
+
     @Override
     public String getNextCode() {
         return "";
     }
-    
+
     @Override
     public JSONObject openRecord(String Id1) {
         JSONObject loJSON = new JSONObject();
@@ -272,33 +273,33 @@ public class Model_Inv_Master extends Model{
         loJSON.put("message", "This feature is not supported.");
         return loJSON;
     }
-    
+
     @Override
-    public JSONObject openRecord(String Id1, Object Id2, Object Id3){
+    public JSONObject openRecord(String Id1, Object Id2, Object Id3) {
         JSONObject loJSON = new JSONObject();
         loJSON.put("result", "error");
         loJSON.put("message", "This feature is not supported.");
         return loJSON;
     }
-    
+
     @Override
-    public JSONObject openRecord(String Id1, Object Id2, Object Id3, Object Id4){
+    public JSONObject openRecord(String Id1, Object Id2, Object Id3, Object Id4) {
         JSONObject loJSON = new JSONObject();
         loJSON.put("result", "error");
         loJSON.put("message", "This feature is not supported.");
         return loJSON;
     }
-    
+
     @Override
-    public JSONObject openRecord(String Id1, Object Id2, Object Id3, Object Id4, Object Id5){
+    public JSONObject openRecord(String Id1, Object Id2, Object Id3, Object Id4, Object Id5) {
         JSONObject loJSON = new JSONObject();
         loJSON.put("result", "error");
         loJSON.put("message", "This feature is not supported.");
         return loJSON;
     }
-    
+
     //reference object models
-    public Model_Branch Branch() throws SQLException, GuanzonException{
+    public Model_Branch Branch() throws SQLException, GuanzonException {
         if (!"".equals((String) getValue("sBranchCd"))) {
             if (poBranch.getEditMode() == EditMode.READY
                     && poBranch.getBranchCode().equals((String) getValue("sBranchCd"))) {
@@ -318,8 +319,8 @@ public class Model_Inv_Master extends Model{
             return poBranch;
         }
     }
-    
-    public Model_Warehouse Warehouse() throws SQLException, GuanzonException{
+
+    public Model_Warehouse Warehouse() throws SQLException, GuanzonException {
         if (!"".equals((String) getValue("sWHouseID"))) {
             if (poWarehouse.getEditMode() == EditMode.READY
                     && poWarehouse.getWarehouseId().equals((String) getValue("sWHouseID"))) {
@@ -339,8 +340,8 @@ public class Model_Inv_Master extends Model{
             return poWarehouse;
         }
     }
-    
-    public Model_Inv_Location Location() throws SQLException, GuanzonException{
+
+    public Model_Inv_Location Location() throws SQLException, GuanzonException {
         if (!"".equals((String) getValue("sLocatnID"))) {
             if (poLocation.getEditMode() == EditMode.READY
                     && poLocation.getLocationId().equals((String) getValue("sLocatnID"))) {
@@ -360,8 +361,8 @@ public class Model_Inv_Master extends Model{
             return poLocation;
         }
     }
-    
-    public Model_Inventory Inventory() throws SQLException, GuanzonException{
+
+    public Model_Inventory Inventory() throws SQLException, GuanzonException {
         if (!"".equals((String) getValue("sStockIDx"))) {
             if (poInventory.getEditMode() == EditMode.READY
                     && poInventory.getStockId().equals((String) getValue("sStockIDx"))) {

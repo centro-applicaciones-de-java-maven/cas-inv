@@ -167,6 +167,12 @@ public class Inventory extends Parameter {
             }
         }
 
+        if (psCategoryCode != null) {
+            if (!psCategoryCode.isEmpty()) {
+                lsSQL = MiscUtil.addCondition(lsSQL, "a.sCategCd1 = " + SQLUtil.toSQL(psCategoryCode));
+            }
+        }
+
         System.out.println("Search Record Query : " + lsSQL);
         poJSON = ShowDialogFX.Search(poGRider,
                 lsSQL,
@@ -880,7 +886,6 @@ public class Inventory extends Parameter {
 //        if (!psIndustryCode.isEmpty()) {
 //            lsSQL = MiscUtil.addCondition(lsSQL, "sIndstCdx = " + SQLUtil.toSQL(psIndustryCode));
 //        }
-
         System.out.println("Search Record Query : " + lsSQL);
         poJSON = new JSONObject();
         poJSON = ShowDialogFX.Search(poGRider,
@@ -919,7 +924,6 @@ public class Inventory extends Parameter {
 //        if (!psIndustryCode.isEmpty()) {
 //            lsSQL = MiscUtil.addCondition(lsSQL, "sIndstCdx = " + SQLUtil.toSQL(psIndustryCode));
 //        }
-
         System.out.println("Search Record Query : " + lsSQL);
         poJSON = new JSONObject();
         poJSON = ShowDialogFX.Search(poGRider,
@@ -958,7 +962,6 @@ public class Inventory extends Parameter {
 //        if (!psIndustryCode.isEmpty()) {
 //            lsSQL = MiscUtil.addCondition(lsSQL, "sIndstCdx = " + SQLUtil.toSQL(psIndustryCode));
 //        }
-
         System.out.println("Search Record Query : " + lsSQL);
         poJSON = new JSONObject();
         poJSON = ShowDialogFX.Search(poGRider,
@@ -1033,6 +1036,12 @@ public class Inventory extends Parameter {
         String lsSQL = getSQ_Browse();
         if (!psIndustryCode.isEmpty()) {
             lsSQL = MiscUtil.addCondition(lsSQL, "a.sIndstCdx = " + SQLUtil.toSQL(psIndustryCode));
+        }
+
+        if (psCategoryCode != null) {
+            if (!psCategoryCode.isEmpty()) {
+                lsSQL = MiscUtil.addCondition(lsSQL, "a.sCategCd1 = " + SQLUtil.toSQL(psCategoryCode));
+            }
         }
 
         System.out.println("Search Record Query : " + lsSQL);
