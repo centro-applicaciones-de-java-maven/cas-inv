@@ -41,11 +41,8 @@ public class Inventory extends Parameter {
 
     @Override
     public void initialize() throws SQLException, GuanzonException {
-        psRecdStat = Logical.YES;
-
-        InvModels inv = new InvModels(poGRider);
-        poModel = inv.Inventory();
-
+        
+        poModel = new InvModels(poGRider).Inventory();
         paRecord = new ArrayList<Model>();
         super.initialize();
     }
