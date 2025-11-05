@@ -10,6 +10,7 @@ import org.guanzon.appdriver.constant.InventoryClassification;
 import org.guanzon.appdriver.constant.Logical;
 import org.guanzon.appdriver.constant.RecordStatus;
 import org.guanzon.cas.inv.services.InvModels;
+import org.guanzon.cas.parameter.model.Model_Bin;
 import org.guanzon.cas.parameter.model.Model_Branch;
 import org.guanzon.cas.parameter.model.Model_Inv_Location;
 import org.guanzon.cas.parameter.model.Model_Warehouse;
@@ -23,6 +24,7 @@ public class Model_Inv_Master extends Model {
     Model_Warehouse poWarehouse;
     Model_Inventory poInventory;
     Model_Inv_Location poLocation;
+    Model_Bin poBinLevel;
 
     @Override
     public void initialize() {
@@ -40,22 +42,28 @@ public class Model_Inv_Master extends Model {
             poEntity.absolute(1);
 
             //assign default values
-            poEntity.updateObject("dAcquired", "1900-01-01");
-            poEntity.updateObject("dBegInvxx", "1900-01-01");
-            poEntity.updateObject("nBegQtyxx", 0);
-            poEntity.updateObject("nQtyOnHnd", 0);
+            poEntity.updateNull("sWHouseID");
+            poEntity.updateNull("sLocatnID");
+            poEntity.updateNull("sBinNumbr");
+            poEntity.updateNull("dAcquired");
+            poEntity.updateNull("dBegInvxx");
+            poEntity.updateObject("nBegQtyxx", 0.0d);
+            poEntity.updateObject("nQtyOnHnd", 0.0d);
             poEntity.updateObject("nLedgerNo", 0);
-            poEntity.updateObject("nMinLevel", 0);
-            poEntity.updateObject("nMaxLevel", 0);
-            poEntity.updateObject("nAvgMonSl", 0);
-            poEntity.updateObject("nAvgCostx", 0.00);
+            poEntity.updateObject("nMinLevel", 0.0d);
+            poEntity.updateObject("nMaxLevel", 0.0d);
+            poEntity.updateObject("nAvgMonSl", 0.0d);
+            poEntity.updateObject("nAvgCostx", 0.00d);
             poEntity.updateString("cClassify", InventoryClassification.NEW_ITEMS);
-            poEntity.updateObject("nBackOrdr", 0);
-            poEntity.updateObject("nResvOrdr", 0);
-            poEntity.updateObject("nFloatQty", 0);
-            poEntity.updateObject("dLastTran", "1900-01-01");
+            poEntity.updateObject("nBackOrdr", 0.0d);
+            poEntity.updateObject("nResvOrdr", 0.0d);
+            poEntity.updateObject("nFloatQty", 0.0d);
+            poEntity.updateNull("dLastTran");
             poEntity.updateString("cPrimaryx", Logical.NO);
+            poEntity.updateString("cConditnx", Logical.NO);
+            poEntity.updateNull("sPayLoadx");
             poEntity.updateString("cRecdStat", RecordStatus.ACTIVE);
+            poEntity.updateObject("dModified", poGRider.getServerDate());
 
             //end - assign default values
             ID = "sStockIDx";
@@ -66,6 +74,7 @@ public class Model_Inv_Master extends Model {
             poBranch = model.Branch();
             poWarehouse = model.Warehouse();
             poLocation = model.InventoryLocation();
+            poBinLevel = model.Bin();
 
             poInventory = new InvModels(poGRider).Inventory();
             //end - initialize reference objects
@@ -83,6 +92,14 @@ public class Model_Inv_Master extends Model {
 
     public String getStockId() {
         return (String) getValue("sStockIDx");
+    }
+
+    public JSONObject setIndustryCode(String industryCode) {
+        return setValue("sIndstCdx", industryCode);
+    }
+
+    public String getIndustryCode() {
+        return (String) getValue("sIndstCdx");
     }
 
     public JSONObject setBranchCode(String branchCode) {
@@ -229,6 +246,22 @@ public class Model_Inv_Master extends Model {
         return (Date) getValue("dLastTran");
     }
 
+    public JSONObject setCondition(String condition) {
+        return setValue("cConditnx", condition);
+    }
+
+    public String getCondition() {
+        return (String) getValue("cConditnx");
+    }
+
+    public JSONObject setPayload(String payLoad) {
+        return setValue("sPayLoadx", payLoad);
+    }
+
+    public String getPayload() {
+        return (String) getValue("sPayLoadx");
+    }
+
     public JSONObject isPrimary(boolean isPrimary) {
         return setValue("cPrimaryx", isPrimary ? "1" : "0");
     }
@@ -359,6 +392,27 @@ public class Model_Inv_Master extends Model {
         } else {
             poLocation.initialize();
             return poLocation;
+        }
+    }
+
+    public Model_Bin BinLevel() throws SQLException, GuanzonException {
+        if (!"".equals((String) getValue("sBinNumbr"))) {
+            if (poBinLevel.getEditMode() == EditMode.READY
+                    && poBinLevel.getBinId().equals((String) getValue("sBinNumbr"))) {
+                return poBinLevel;
+            } else {
+                poJSON = poBinLevel.openRecord((String) getValue("sBinNumbr"));
+
+                if ("success".equals((String) poJSON.get("result"))) {
+                    return poBinLevel;
+                } else {
+                    poBinLevel.initialize();
+                    return poBinLevel;
+                }
+            }
+        } else {
+            poBinLevel.initialize();
+            return poBinLevel;
         }
     }
 
