@@ -1,8 +1,11 @@
 package org.guanzon.cas.inv;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.guanzon.appdriver.agent.ShowDialogFX;
 import org.guanzon.appdriver.agent.services.Model;
 import org.guanzon.appdriver.agent.services.Parameter;
@@ -11,7 +14,10 @@ import org.guanzon.appdriver.base.MiscUtil;
 import org.guanzon.appdriver.base.SQLUtil;
 import org.guanzon.appdriver.constant.RecordStatus;
 import org.guanzon.appdriver.constant.UserRight;
+import org.guanzon.cas.inv.model.Model_Inv_Ledger;
 import org.guanzon.cas.inv.model.Model_Inv_Master;
+import org.guanzon.cas.inv.model.Model_Inv_Serial;
+import org.guanzon.cas.inv.model.Model_Inventory;
 import org.guanzon.cas.inv.services.InvModels;
 import org.guanzon.cas.parameter.model.Model_Bin;
 import org.guanzon.cas.parameter.model.Model_Inv_Location;
@@ -56,39 +62,49 @@ public class InvMaster extends Parameter {
     public JSONObject isEntryOkay() throws SQLException {
         poJSON = new JSONObject();
 
-        if (poGRider.getUserLevel() < UserRight.SYSADMIN) {
+//        if (poGRider.getUserLevel() < UserRight.SYSADMIN) {
+//            poJSON.put("result", "error");
+//            poJSON.put("message", "User is not allowed to save record.");
+//            return poJSON;
+//        } else {
+        poJSON = new JSONObject();
+
+        if (poModel.getStockId().isEmpty()) {
             poJSON.put("result", "error");
-            poJSON.put("message", "User is not allowed to save record.");
+            poJSON.put("message", "Item must not be empty.");
             return poJSON;
-        } else {
-            poJSON = new JSONObject();
-
-            if (poModel.getStockId().isEmpty()) {
-                poJSON.put("result", "error");
-                poJSON.put("message", "Item must not be empty.");
-                return poJSON;
-            }
-
-            if (poModel.getBranchCode().isEmpty()) {
-                poJSON.put("result", "error");
-                poJSON.put("message", "Branch location must not be empty.");
-                return poJSON;
-            }
-
-            if (poModel.getLocationId() == null || poModel.getLocationId().isEmpty()) {
-                poJSON.put("result", "error");
-                poJSON.put("message", "Location must not be empty.");
-                return poJSON;
-            }
-            //todo:
-            //  more validations/use of validators per category
-            poModel.setModifyingId(poGRider.Encrypt(poGRider.getUserID()));
-            poModel.setModifiedDate(poGRider.getServerDate());
-//            poModel.setIndustryCode(psIndustryCode);
         }
+
+        if (poModel.getBranchCode().isEmpty()) {
+            poJSON.put("result", "error");
+            poJSON.put("message", "Branch location must not be empty.");
+            return poJSON;
+        }
+
+        if (poModel.getLocationId() == null || poModel.getLocationId().isEmpty()) {
+            poJSON.put("result", "error");
+            poJSON.put("message", "Location must not be empty.");
+            return poJSON;
+        }
+        //todo:
+        //  more validations/use of validators per category
+        poModel.setModifyingId(poGRider.Encrypt(poGRider.getUserID()));
+        poModel.setModifiedDate(poGRider.getServerDate());
+//            poModel.setIndustryCode(psIndustryCode);
+//        }
 
         poJSON.put("result", "success");
         return poJSON;
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<Model_Inv_Ledger> getLedgerList() {
+        return (List<Model_Inv_Ledger>) (List<?>) paRecordLedger;
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<Model_Inv_Serial> getSerialList() {
+        return (List<Model_Inv_Serial>) (List<?>) paRecordSerial;
     }
 
     @Override
@@ -508,5 +524,146 @@ public class InvMaster extends Parameter {
                 + " LEFT JOIN Inv_Supplier h ON a.sStockIDx = h.sStockIDx";
 
         return MiscUtil.addCondition(lsSQL, lsCondition);
+    }
+
+    public JSONObject loadLedgerList(String dateFrom, String dateThru)
+            throws SQLException, GuanzonException, CloneNotSupportedException {
+
+        if (getModel().getStockId() == null || getModel().getStockId().isEmpty()) {
+            poJSON.put("result", "error");
+            poJSON.put("message", "No Inventory loaded.");
+        }
+        paRecordLedger.clear();
+        String lsSQL = "SELECT"
+                + "  a.sStockIDx"
+                + ", a.sIndstCdx"
+                + ", a.sBranchCd"
+                + ", a.sWHouseID"
+                + ", a.nLedgerNo"
+                + ", a.dTransact"
+                + ", a.sSourceCd"
+                + ", a.sSourceNo"
+                + ", a.nQtyInxxx"
+                + ", a.nQtyOutxx"
+                + ", a.nQtyOrder"
+                + ", a.nQtyIssue"
+                + ", a.nPurPrice"
+                + ", a.nUnitPrce"
+                + ", a.dExpiryxx"
+                + ", a.cConditnx"
+                + ", a.cReversex"
+                + " FROM Inv_Ledger a ";
+
+        if (!psIndustryCode.isEmpty()) {
+            lsSQL = MiscUtil.addCondition(lsSQL, "a.sIndstCdx = " + SQLUtil.toSQL(psIndustryCode));
+        }
+
+        lsSQL = MiscUtil.addCondition(lsSQL, "a.sBranchCd = " + SQLUtil.toSQL(poGRider.getBranchCode()));
+        if (!dateFrom.isEmpty() && !dateThru.isEmpty()) {
+            lsSQL = MiscUtil.addCondition(lsSQL, " a.dTransact BETWEEN " + SQLUtil.toSQL(dateFrom)
+                    + " AND " + SQLUtil.toSQL(dateThru));
+        }
+
+        lsSQL = MiscUtil.addCondition(lsSQL, "a.sStockIDx = " + SQLUtil.toSQL(getModel().getStockId()));
+        ResultSet loRS = poGRider.executeQuery(lsSQL);
+        System.out.println("Load Record list query is " + lsSQL);
+
+        if (MiscUtil.RecordCount(loRS)
+                <= 0) {
+            poJSON.put("result", "error");
+            poJSON.put("message", "No record found.");
+            return poJSON;
+        }
+
+        while (loRS.next()) {
+            String stockId = loRS.getString("sStockIDx");
+
+            Model_Inv_Ledger loInventoryLedger = new InvModels(poGRider).InventoryLedger();
+
+            poJSON = loInventoryLedger.openRecord(stockId, poGRider.getBranchCode());
+
+            if ("success".equals((String) poJSON.get("result"))) {
+                paRecordLedger.add((Model) loInventoryLedger);
+            } else {
+                return poJSON;
+            }
+        }
+
+        poJSON = new JSONObject();
+        poJSON.put("result", "success");
+        return poJSON;
+    }
+
+    public JSONObject loadSerialList(String unitType)
+            throws SQLException, GuanzonException, CloneNotSupportedException {
+
+        paRecordSerial.clear();
+        String lsSQL = "SELECT"
+                + "  a.sSerialID"
+                + ", a.sIndstCdx"
+                + ", a.sBranchCd"
+                + ", a.sWHouseID"
+                + ", a.sClientID"
+                + ", a.sSerial01"
+                + ", a.sSerial02"
+                + ", a.nUnitPrce"
+                + ", a.sStockIDx"
+                + ", a.nLedgerNo"
+                + ", a.cLocation"
+                + ", a.cSoldStat"
+                + ", a.cUnitType"
+                + ", a.sCompnyID"
+                + ", a.sWarranty"
+                + ", a.cConditnx"
+                + ", a.sPayloadx"
+                + " FROM Inv_Serial a";
+
+        if (!psIndustryCode.isEmpty()) {
+            lsSQL = MiscUtil.addCondition(lsSQL, "a.sIndstCdx = " + SQLUtil.toSQL(psIndustryCode));
+        }
+
+        if (!unitType.isEmpty()) {
+            lsSQL = MiscUtil.addCondition(lsSQL, "a.cUnitType = " + SQLUtil.toSQL(unitType));
+        }
+        lsSQL = MiscUtil.addCondition(lsSQL, "a.sBranchCd = " + SQLUtil.toSQL(poGRider.getBranchCode()
+                + " AND cLocation IN ('0','1')"));
+
+        lsSQL = MiscUtil.addCondition(lsSQL, "a.sStockIDx = " + SQLUtil.toSQL(getModel().getStockId()));
+        ResultSet loRS = poGRider.executeQuery(lsSQL);
+        System.out.println("Load Transaction list query is " + lsSQL);
+
+        if (MiscUtil.RecordCount(loRS) <= 0) {
+            poJSON.put("result", "error");
+            poJSON.put("message", "No record found.");
+            return poJSON;
+        }
+
+        Set<String> processedTrans = new HashSet<>();
+
+        while (loRS.next()) {
+            String serialID = loRS.getString("sSerialID");
+
+            // Skip if we already processed this stock number
+            if (processedTrans.contains(serialID)) {
+                continue;
+            }
+
+            Model_Inv_Serial loInventorySerial = new InvModels(poGRider).InventorySerial();
+
+            poJSON = loInventorySerial.openRecord(serialID, poGRider.getBranchCode());
+
+            if ("success".equals((String) poJSON.get("result"))) {
+                paRecordSerial.add((Model) loInventorySerial);
+
+                // Mark this transaction as processed
+                processedTrans.add(serialID);
+            } else {
+                return poJSON;
+            }
+        }
+
+        poJSON = new JSONObject();
+        poJSON.put("result", "success");
+        return poJSON;
     }
 }

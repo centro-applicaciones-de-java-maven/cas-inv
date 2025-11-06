@@ -2,6 +2,7 @@ package org.guanzon.cas.inv.services;
 
 import org.guanzon.appdriver.base.GRiderCAS;
 import org.guanzon.cas.inv.model.Model_Classification_Config;
+import org.guanzon.cas.inv.model.Model_Inv_Ledger;
 import org.guanzon.cas.inv.model.Model_Inv_Master;
 import org.guanzon.cas.inv.model.Model_Inv_Serial;
 import org.guanzon.cas.inv.model.Model_Inv_Serial_Ledger;
@@ -168,6 +169,21 @@ public class InvModels {
         return this.poSupplier;
     }
 
+    public Model_Inv_Ledger InventoryLedger() {
+        if (this.poGRider == null) {
+            System.err.println("DeliveryParamModels.InventoryLedger: Application driver is not set.");
+            return null;
+        }
+        if (this.poInvLedger == null) {
+            this.poInvLedger = new Model_Inv_Ledger();
+            this.poInvLedger.setApplicationDriver(this.poGRider);
+            this.poInvLedger.setXML("Model_Inv_Ledger");
+            this.poInvLedger.setTableName("Inv_Ledger");
+            this.poInvLedger.initialize();
+        }
+        return this.poInvLedger;
+    }
+
     private final GRiderCAS poGRider;
 
     private Model_Inventory poInventory;
@@ -178,4 +194,5 @@ public class InvModels {
     private Model_Inv_Serial_Ledger poInvSerialLeger;
     private Model_Inv_Serial_Registration poInvSerialReg;
     private Model_Classification_Config poClassificationConfig;
+    private Model_Inv_Ledger poInvLedger;
 }

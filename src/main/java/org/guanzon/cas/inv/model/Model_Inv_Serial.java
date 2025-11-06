@@ -6,12 +6,14 @@ import org.guanzon.appdriver.agent.services.Model;
 import org.guanzon.appdriver.base.GuanzonException;
 import org.guanzon.appdriver.base.MiscUtil;
 import org.guanzon.appdriver.constant.EditMode;
+import org.guanzon.appdriver.constant.Logical;
 import org.guanzon.cas.inv.services.InvModels;
 import org.guanzon.cas.parameter.model.Model_Branch;
 import org.guanzon.cas.parameter.services.ParamModels;
 import org.json.simple.JSONObject;
 
 public class Model_Inv_Serial extends Model {
+
     private Model_Inventory poInventory;
     private Model_Branch poBranch;
 
@@ -25,17 +27,27 @@ public class Model_Inv_Serial extends Model {
 
             MiscUtil.initRowSet(poEntity);
 
-            //assign default values
-            poEntity.updateObject("nUnitPrce", 0.00);
-            poEntity.updateObject("cLocation", "0");
-            poEntity.updateObject("cSoldStat", "0");
-            poEntity.updateObject("cUnitType", "1");
-            //end - assign default values
-
-             poEntity.insertRow();
+            poEntity.insertRow();
             poEntity.moveToCurrentRow();
 
             poEntity.absolute(1);
+
+            //assign default values
+            poEntity.updateNull("sBranchCd");
+            poEntity.updateNull("sWHouseID");
+            poEntity.updateNull("sClientID");
+            poEntity.updateNull("sSerial01");
+            poEntity.updateNull("sSerial02");
+            poEntity.updateObject("nUnitPrce", 0.00d);
+            poEntity.updateNull("sStockIDx");
+            poEntity.updateObject("cLocation", Logical.NO);
+            poEntity.updateObject("cSoldStat", Logical.NO);
+            poEntity.updateObject("cUnitType", Logical.NO);
+            poEntity.updateObject("cConditnx", Logical.NO);
+            poEntity.updateNull("sCompnyID");
+            poEntity.updateNull("sWarranty");
+            poEntity.updateNull("sPayloadx");
+            //end - assign default values
 
             ID = "sSerialID";
             ID2 = "sBranchCd";
@@ -43,10 +55,10 @@ public class Model_Inv_Serial extends Model {
 
             InvModels inv = new InvModels(poGRider);
             poInventory = inv.Inventory();
-            
+
             ParamModels model = new ParamModels(poGRider);
             poBranch = model.Branch();
-            
+
             pnEditMode = EditMode.UNKNOWN;
         } catch (SQLException e) {
             logwrapr.severe(e.getMessage());
@@ -61,7 +73,7 @@ public class Model_Inv_Serial extends Model {
     public String getSerialId() {
         return (String) getValue("sSerialID");
     }
-    
+
     public JSONObject setIndustryCode(String industryCode) {
         return setValue("sIndstCdx", industryCode);
     }
@@ -77,7 +89,7 @@ public class Model_Inv_Serial extends Model {
     public String getBranchCode() {
         return (String) getValue("sBranchCd");
     }
-    
+
     public JSONObject setWarehouseId(String warehouseId) {
         return setValue("sWHouseID", warehouseId);
     }
@@ -85,7 +97,7 @@ public class Model_Inv_Serial extends Model {
     public String getWarehouseId() {
         return (String) getValue("sWHouseID");
     }
-    
+
     public JSONObject setClientId(String branchCode) {
         return setValue("sClientID", branchCode);
     }
@@ -125,7 +137,7 @@ public class Model_Inv_Serial extends Model {
     public String getStockId() {
         return (String) getValue("sStockIDx");
     }
-    
+
     public JSONObject setLedgerNo(String ledgerNo) {
         return setValue("nLedgerNo", ledgerNo);
     }
@@ -141,7 +153,7 @@ public class Model_Inv_Serial extends Model {
     public String getLocation() {
         return (String) getValue("cLocation");
     }
-    
+
     public JSONObject setSoldStatus(String soldStatus) {
         return setValue("cSoldStat", soldStatus);
     }
@@ -173,13 +185,21 @@ public class Model_Inv_Serial extends Model {
     public String getWarranty() {
         return (String) getValue("sWarranty");
     }
-    
+
     public JSONObject setCondition(String condition) {
         return setValue("cConditnx", condition);
     }
 
     public String getCondition() {
         return (String) getValue("cConditnx");
+    }
+
+    public JSONObject setPayLoad(String payLoad) {
+        return setValue("sPayloadx", payLoad);
+    }
+
+    public String getPayLoad() {
+        return (String) getValue("sPayloadx");
     }
 
     public JSONObject setModifiedDate(Date modifiedDate) {
@@ -194,8 +214,8 @@ public class Model_Inv_Serial extends Model {
     public String getNextCode() {
         return MiscUtil.getNextCode(getTable(), ID, true, poGRider.getGConnection().getConnection(), poGRider.getBranchCode());
     }
-    
-    public Model_Inventory Inventory() throws SQLException, GuanzonException{
+
+    public Model_Inventory Inventory() throws SQLException, GuanzonException {
         if (!"".equals((String) getValue("sStockIDx"))) {
             if (poInventory.getEditMode() == EditMode.READY
                     && poInventory.getStockId().equals((String) getValue("sStockIDx"))) {
@@ -215,8 +235,8 @@ public class Model_Inv_Serial extends Model {
             return poInventory;
         }
     }
-    
-    public Model_Branch Branch() throws SQLException, GuanzonException{
+
+    public Model_Branch Branch() throws SQLException, GuanzonException {
         if (!"".equals((String) getValue("sBranchCd"))) {
             if (poBranch.getEditMode() == EditMode.READY
                     && poBranch.getBranchCode().equals((String) getValue("sBranchCd"))) {
@@ -236,6 +256,6 @@ public class Model_Inv_Serial extends Model {
             return poBranch;
         }
     }
-    
+
     //todo: connection to clients object
 }

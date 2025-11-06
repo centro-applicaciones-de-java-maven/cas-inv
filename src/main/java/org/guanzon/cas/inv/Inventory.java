@@ -12,7 +12,6 @@ import org.guanzon.appdriver.agent.services.Parameter;
 import org.guanzon.appdriver.base.GuanzonException;
 import org.guanzon.appdriver.base.MiscUtil;
 import org.guanzon.appdriver.base.SQLUtil;
-import org.guanzon.appdriver.constant.Logical;
 import org.guanzon.appdriver.constant.RecordStatus;
 import org.guanzon.appdriver.constant.UserRight;
 import org.guanzon.cas.inv.model.Model_Inventory;
@@ -41,7 +40,7 @@ public class Inventory extends Parameter {
 
     @Override
     public void initialize() throws SQLException, GuanzonException {
-        
+
         poModel = new InvModels(poGRider).Inventory();
         paRecord = new ArrayList<Model>();
         super.initialize();
