@@ -232,7 +232,6 @@ public class InventoryTransaction {
         
         if(!loRS.next()){
             throw new GuanzonException(GuanzonException.GE_NOTFOUND_EXCEPTION, "Stock Item does not exist!");
-//            throw new GuanzonException(GuanzonException.GE_HOSTNAME_EXCEPTION);
         }
 
         if(fnQuantity > 0){
