@@ -625,12 +625,12 @@ public class InvMaster extends Parameter {
         if (!unitType.isEmpty()) {
             lsSQL = MiscUtil.addCondition(lsSQL, "a.cUnitType = " + SQLUtil.toSQL(unitType));
         }
-        lsSQL = MiscUtil.addCondition(lsSQL, "a.sBranchCd = " + SQLUtil.toSQL(poGRider.getBranchCode()
-                + " AND cLocation IN ('0','1')"));
+        lsSQL = MiscUtil.addCondition(lsSQL, "a.sBranchCd = " + SQLUtil.toSQL(poGRider.getBranchCode())
+                + " AND cLocation IN ('0','1')");
 
         lsSQL = MiscUtil.addCondition(lsSQL, "a.sStockIDx = " + SQLUtil.toSQL(getModel().getStockId()));
         ResultSet loRS = poGRider.executeQuery(lsSQL);
-        System.out.println("Load Transaction list query is " + lsSQL);
+        System.out.println("Load Serial list query is " + lsSQL);
 
         if (MiscUtil.RecordCount(loRS) <= 0) {
             poJSON.put("result", "error");

@@ -335,8 +335,8 @@ public class Model_Inv_Ledger extends Model {
 
     public Model_xxxTransactionSource TransactionSource() throws SQLException, GuanzonException {
         if (!"".equals(getValue("sSourceCd"))) {
-            if (this.poTransactionSource.getEditMode() == 1 && this.poIndustry
-                    .getIndustryId().equals(getValue("sSourceCd"))) {
+            if (this.poTransactionSource.getEditMode() == 1 && this.poTransactionSource
+                    .getSourceCode().equals(getValue("sSourceCd"))) {
                 return this.poTransactionSource;
             }
             this.poJSON = this.poTransactionSource.openRecord((String) getValue("sSourceCd"));

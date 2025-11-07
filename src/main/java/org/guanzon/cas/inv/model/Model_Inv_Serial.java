@@ -161,6 +161,14 @@ public class Model_Inv_Serial extends Model {
     public String getSoldStatus() {
         return (String) getValue("cSoldStat");
     }
+    
+     public JSONObject isSold(boolean isSold) {
+        return setValue("cSoldStat", isSold ? "1" : "0");
+    }
+
+    public boolean isSold() {
+        return ((String) getValue("cSoldStat")).equals("1");
+    }
 
     public JSONObject setUnitType(String unitType) {
         return setValue("cUnitType", unitType);
