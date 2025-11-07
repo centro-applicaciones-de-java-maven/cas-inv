@@ -12,6 +12,7 @@ import org.guanzon.appdriver.constant.RecordStatus;
 import org.guanzon.cas.inv.services.InvModels;
 import org.guanzon.cas.parameter.model.Model_Bin;
 import org.guanzon.cas.parameter.model.Model_Branch;
+import org.guanzon.cas.parameter.model.Model_Industry;
 import org.guanzon.cas.parameter.model.Model_Inv_Location;
 import org.guanzon.cas.parameter.model.Model_Warehouse;
 import org.guanzon.cas.parameter.services.ParamModels;
@@ -25,6 +26,7 @@ public class Model_Inv_Master extends Model {
     Model_Inventory poInventory;
     Model_Inv_Location poLocation;
     Model_Bin poBinLevel;
+    Model_Industry poIndustry;
 
     @Override
     public void initialize() {
@@ -75,6 +77,7 @@ public class Model_Inv_Master extends Model {
             poWarehouse = model.Warehouse();
             poLocation = model.InventoryLocation();
             poBinLevel = model.Bin();
+            this.poIndustry = (new ParamModels(this.poGRider)).Industry();
 
             poInventory = new InvModels(poGRider).Inventory();
             //end - initialize reference objects
@@ -435,6 +438,23 @@ public class Model_Inv_Master extends Model {
             poInventory.initialize();
             return poInventory;
         }
+    }
+
+    public Model_Industry Industry() throws SQLException, GuanzonException {
+        if (!"".equals(getValue("sIndstCdx"))) {
+            if (this.poIndustry.getEditMode() == 1 && this.poIndustry
+                    .getIndustryId().equals(getValue("sIndstCdx"))) {
+                return this.poIndustry;
+            }
+            this.poJSON = this.poIndustry.openRecord((String) getValue("sIndstCdx"));
+            if ("success".equals(this.poJSON.get("result"))) {
+                return this.poIndustry;
+            }
+            this.poIndustry.initialize();
+            return this.poIndustry;
+        }
+        this.poIndustry.initialize();
+        return this.poIndustry;
     }
     //end - reference object models
 }
