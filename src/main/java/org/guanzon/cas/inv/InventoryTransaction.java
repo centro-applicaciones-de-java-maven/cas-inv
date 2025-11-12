@@ -232,15 +232,14 @@ public class InventoryTransaction {
         
         if(!loRS.next()){
             throw new GuanzonException(GuanzonException.GE_NOTFOUND_EXCEPTION, "Stock Item does not exist!");
-//            throw new GuanzonException(GuanzonException.GE_HOSTNAME_EXCEPTION);
         }
 
         if(fnQuantity > 0){
             if(loRS.getString("sStockIDx") == null){
                 //If item is not existing and transaction type is not accept delivery, throw an error
                 if(!(InvTransCons.BRANCH_TRANSFER_ACCEPTANCE).toUpperCase().contains(psSourceCD.toUpperCase())){
-                    //throw new GuanzonException(GuanzonException.GE_NOTFOUND_EXCEPTION, "Please create the inventory for the branch!");
-                    throw new GuanzonException(GuanzonException.GE_HOSTNAME_EXCEPTION);
+                    throw new GuanzonException(GuanzonException.GE_NOTFOUND_EXCEPTION, "Please create the inventory for the branch!");
+                    //throw new GuanzonException(GuanzonException.GE_HOSTNAME_EXCEPTION);
                 }
             }
             

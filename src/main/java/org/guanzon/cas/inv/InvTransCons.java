@@ -14,6 +14,9 @@ public class InvTransCons {
     
     public final static String BRANCH_JOBORDER = "JOxx";          //JOxx
     
+    public final static String PURCHASE_ORDER_QUOTATION = "POQt";           //POxx
+    public final static String PURCHASE_ORDER_QUOTATION_REQUEST = "POQR";           //POxx
+
     public final static String PURCHASE_ORDER = "POxx";           //POxx
     public final static String PURCHASE_ORDER_CANCELLATION = "POCx";           //POxx
     public final static String PURCHASE_RECEIVING = "PODA";       //PODA 
