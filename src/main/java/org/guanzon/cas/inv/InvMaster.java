@@ -116,6 +116,18 @@ public class InvMaster extends Parameter {
     public JSONObject searchRecord(String value, boolean byCode) throws SQLException, GuanzonException {
         String lsSQL = getSQ_Browse();
 
+        if (psIndustryCode != null) {
+            if (!psIndustryCode.isEmpty()) {
+                lsSQL = MiscUtil.addCondition(lsSQL, "a.sIndstCdx = " + SQLUtil.toSQL(psIndustryCode));
+            }
+        }
+
+        if (psCategoryCode != null) {
+            if (!psCategoryCode.isEmpty()) {
+                lsSQL = MiscUtil.addCondition(lsSQL, "a.sCategCd1 = " + SQLUtil.toSQL(psCategoryCode));
+            }
+        }
+
         poJSON = ShowDialogFX.Search(poGRider,
                 lsSQL,
                 value,
@@ -136,6 +148,18 @@ public class InvMaster extends Parameter {
 
     public JSONObject searchRecord(String value, boolean byCode, String supplierId) throws SQLException, GuanzonException {
         String lsSQL = getSQ_Browse();
+
+        if (psIndustryCode != null) {
+            if (!psIndustryCode.isEmpty()) {
+                lsSQL = MiscUtil.addCondition(lsSQL, "a.sIndstCdx = " + SQLUtil.toSQL(psIndustryCode));
+            }
+        }
+
+        if (psCategoryCode != null) {
+            if (!psCategoryCode.isEmpty()) {
+                lsSQL = MiscUtil.addCondition(lsSQL, "a.sCategCd1 = " + SQLUtil.toSQL(psCategoryCode));
+            }
+        }
 
         if (supplierId != null) {
             lsSQL = MiscUtil.addCondition(lsSQL, "h.sSupplier = " + SQLUtil.toSQL(supplierId));
@@ -170,6 +194,18 @@ public class InvMaster extends Parameter {
             lsSQL = MiscUtil.addCondition(lsSQL, "a.sIndstCdx = " + SQLUtil.toSQL(industryCode));
         }
 
+        if (psIndustryCode != null) {
+            if (!psIndustryCode.isEmpty()) {
+                lsSQL = MiscUtil.addCondition(lsSQL, "a.sIndstCdx = " + SQLUtil.toSQL(psIndustryCode));
+            }
+        }
+
+        if (psCategoryCode != null) {
+            if (!psCategoryCode.isEmpty()) {
+                lsSQL = MiscUtil.addCondition(lsSQL, "a.sCategCd1 = " + SQLUtil.toSQL(psCategoryCode));
+            }
+        }
+
         poJSON = ShowDialogFX.Search(poGRider,
                 lsSQL,
                 value,
@@ -190,6 +226,18 @@ public class InvMaster extends Parameter {
 
     public JSONObject searchRecord(String value, boolean byCode, String supplierId, String industryCode, String brandId) throws SQLException, GuanzonException {
         String lsSQL = getSQ_Browse();
+
+        if (psIndustryCode != null) {
+            if (!psIndustryCode.isEmpty()) {
+                lsSQL = MiscUtil.addCondition(lsSQL, "a.sIndstCdx = " + SQLUtil.toSQL(psIndustryCode));
+            }
+        }
+
+        if (psCategoryCode != null) {
+            if (!psCategoryCode.isEmpty()) {
+                lsSQL = MiscUtil.addCondition(lsSQL, "a.sCategCd1 = " + SQLUtil.toSQL(psCategoryCode));
+            }
+        }
 
         if (supplierId != null) {
             lsSQL = MiscUtil.addCondition(lsSQL, "h.sSupplier = " + SQLUtil.toSQL(supplierId));
@@ -224,6 +272,18 @@ public class InvMaster extends Parameter {
     public JSONObject searchRecordOfVariants(String value, boolean byCode) throws SQLException, GuanzonException {
         String lsSQL = getSQ_Browse();
 
+        if (psIndustryCode != null) {
+            if (!psIndustryCode.isEmpty()) {
+                lsSQL = MiscUtil.addCondition(lsSQL, "a.sIndstCdx = " + SQLUtil.toSQL(psIndustryCode));
+            }
+        }
+
+        if (psCategoryCode != null) {
+            if (!psCategoryCode.isEmpty()) {
+                lsSQL = MiscUtil.addCondition(lsSQL, "a.sCategCd1 = " + SQLUtil.toSQL(psCategoryCode));
+            }
+        }
+
         poJSON = ShowDialogFX.Search(poGRider,
                 lsSQL,
                 value,
@@ -245,6 +305,18 @@ public class InvMaster extends Parameter {
     public JSONObject searchRecordOfVariants(String value, boolean byCode, String supplierId) throws SQLException, GuanzonException {
         String lsSQL = getSQ_Browse();
 
+        if (psIndustryCode != null) {
+            if (!psIndustryCode.isEmpty()) {
+                lsSQL = MiscUtil.addCondition(lsSQL, "a.sIndstCdx = " + SQLUtil.toSQL(psIndustryCode));
+            }
+        }
+
+        if (psCategoryCode != null) {
+            if (!psCategoryCode.isEmpty()) {
+                lsSQL = MiscUtil.addCondition(lsSQL, "a.sCategCd1 = " + SQLUtil.toSQL(psCategoryCode));
+            }
+        }
+        
         if (supplierId != null) {
             lsSQL = MiscUtil.addCondition(lsSQL, "h.sSupplier = " + SQLUtil.toSQL(supplierId));
         }
