@@ -316,7 +316,7 @@ public class InvMaster extends Parameter {
                 lsSQL = MiscUtil.addCondition(lsSQL, "a.sCategCd1 = " + SQLUtil.toSQL(psCategoryCode));
             }
         }
-        
+
         if (supplierId != null) {
             lsSQL = MiscUtil.addCondition(lsSQL, "h.sSupplier = " + SQLUtil.toSQL(supplierId));
         }
@@ -649,10 +649,12 @@ public class InvMaster extends Parameter {
 
         while (loRS.next()) {
             String stockId = loRS.getString("sStockIDx");
+            String sourcecode = loRS.getString("sSourceCd");
+            String sourceno = loRS.getString("sSourceNo");
 
             Model_Inv_Ledger loInventoryLedger = new InvModels(poGRider).InventoryLedger();
 
-            poJSON = loInventoryLedger.openRecord(stockId, poGRider.getBranchCode());
+            poJSON = loInventoryLedger.openRecord(stockId, poGRider.getBranchCode(), sourcecode, sourceno);
 
             if ("success".equals((String) poJSON.get("result"))) {
                 paRecordLedger.add((Model) loInventoryLedger);

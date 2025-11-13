@@ -42,9 +42,9 @@ public class Model_Inv_Ledger extends Model {
             //end - assign default values
             ID = "sStockIDx";
             ID2 = "sBranchCd";
-            ID3 = "sWHouseID";
-            ID4 = "sSourceCd";
-            ID5 = "sSourceNo";
+            ID3 = "sSourceCd";
+            ID4 = "sSourceNo";
+            ID5 = "sWHouseID";
 
             //initialize reference objects
             ParamModels model = new ParamModels(poGRider);
@@ -244,13 +244,6 @@ public class Model_Inv_Ledger extends Model {
         return loJSON;
     }
 
-    @Override
-    public JSONObject openRecord(String Id1, Object Id2, Object Id3, Object Id4) {
-        JSONObject loJSON = new JSONObject();
-        loJSON.put("result", "error");
-        loJSON.put("message", "This feature is not supported.");
-        return loJSON;
-    }
 
     //reference object models
     public Model_Branch Branch() throws SQLException, GuanzonException {
