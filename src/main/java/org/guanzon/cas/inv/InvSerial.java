@@ -9,7 +9,6 @@ import org.guanzon.appdriver.base.GuanzonException;
 import org.guanzon.appdriver.base.SQLUtil;
 import org.guanzon.appdriver.constant.EditMode;
 import org.guanzon.appdriver.constant.Logical;
-import org.guanzon.appdriver.constant.UserRight;
 import org.guanzon.cas.inv.model.Model_Inv_Serial;
 import org.guanzon.cas.inv.model.Model_Inv_Serial_Ledger;
 import org.guanzon.cas.inv.model.Model_Inv_Serial_Registration;
@@ -76,10 +75,13 @@ public class InvSerial extends Parameter{
                 return poJSON;
             }
             
-            if (poModel.getSerial02().isEmpty()){
-                poJSON.put("result", "error");
-                poJSON.put("message", "Serial 2 must not be empty.");
-                return poJSON;
+            //do not validate serial 2 on PSD
+            if (!System.getProperty("user.selected.industry").equals("09")){
+                if (poModel.getSerial02().isEmpty()){
+                    poJSON.put("result", "error");
+                    poJSON.put("message", "Serial 2 must not be empty.");
+                    return poJSON;
+                }
             }
             
             if (poModel.getStockId().isEmpty()){
