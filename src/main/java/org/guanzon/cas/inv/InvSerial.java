@@ -234,13 +234,15 @@ public class InvSerial extends Parameter{
     
     @Override
     protected JSONObject saveOthers() throws SQLException, GuanzonException{
-        if (poRegistration.getEditMode() == EditMode.ADDNEW){
-            poRegistration.setSerialId(poModel.getSerialId());
+        if (!System.getProperty("user.selected.industry").equals("09")){
+            if (poRegistration.getEditMode() == EditMode.ADDNEW){
+                poRegistration.setSerialId(poModel.getSerialId());
+            }
+
+            poJSON = poRegistration.saveRecord();
+            if (!"success".equals((String) poJSON.get("result"))) return poJSON;
         }
-        
-        poJSON = poRegistration.saveRecord();
-        if (!"success".equals((String) poJSON.get("result"))) return poJSON;
-        
+                
         poJSON = new JSONObject();
         poJSON.put("result", "success");
         return poJSON;
