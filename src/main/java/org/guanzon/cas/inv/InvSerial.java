@@ -218,9 +218,12 @@ public class InvSerial extends Parameter{
     
     @Override
     protected JSONObject initFields() throws SQLException, GuanzonException{
-        poJSON = poRegistration.newRecord();
+        if (!System.getProperty("user.selected.industry").equals("09")){
+            poJSON = poRegistration.newRecord();
         
-        if (!"success".equals((String) poJSON.get("result"))) return poJSON;
+            if (!"success".equals((String) poJSON.get("result"))) return poJSON;
+        }
+        
         
         poJSON = new JSONObject();
         poJSON.put("result", "success");
