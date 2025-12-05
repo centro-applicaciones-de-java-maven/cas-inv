@@ -53,7 +53,15 @@ public class Model_Inv_Serial_Registration extends Model {
     public String getSerialId() {
         return (String) getValue("sSerialID");
     }
+    
+    public JSONObject setIndustryCode(String industryCode) {
+        return setValue("sIndstCdx", industryCode);
+    }
 
+    public String getIndustryCode() {
+        return (String) getValue("sIndstCdx");
+    }
+    
     public JSONObject setFileNumber(String fileNumber) {
         return setValue("sFileNoxx", fileNumber);
     }

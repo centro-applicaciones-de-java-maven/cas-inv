@@ -36,6 +36,8 @@ import java.util.Optional;
 import org.guanzon.appdriver.base.GRiderCAS;
 import org.guanzon.appdriver.base.GuanzonException;
 import org.guanzon.appdriver.base.SQLUtil;
+import org.guanzon.cas.parameter.model.Model_Branch;
+import org.guanzon.cas.parameter.services.ParamModels;
 import org.json.simple.JSONObject;
 
 public class InventoryTransaction {
@@ -70,6 +72,27 @@ public class InventoryTransaction {
         psIndstCdx = fsIndstCdx;
         psUserIDxx = fsUserIDxx;
         pbIsWhsexx = fbIsWarehouse;
+        pbIsReverse = false;
+        paDetailEntry = new ArrayList<>();
+        paSerialEntry = new ArrayList<>();
+    }
+    
+    public InventoryTransaction(GRiderCAS foGRider, String fsBranchCD) throws SQLException, GuanzonException{
+        poDriver = foGRider;
+        psBranchCD = fsBranchCD;
+        psUserIDxx = poDriver.getUserID();
+        
+        Model_Branch loBranch = new ParamModels(poDriver).Branch();
+        JSONObject loJSON = loBranch.openRecord(fsBranchCD);
+        
+        if (!"success".equals((String) loJSON.get("result"))) {
+            System.err.println((String) loJSON.get("message"));
+            System.exit(1);
+        }
+        
+        psIndstCdx = loBranch.getIndustryCode();
+        pbIsWhsexx = loBranch.isWarehouse();
+        
         pbIsReverse = false;
         paDetailEntry = new ArrayList<>();
         paSerialEntry = new ArrayList<>();
