@@ -69,7 +69,8 @@ public class Model_Inv_Master extends Model {
 
             //end - assign default values
             ID = "sStockIDx";
-            ID2 = "sBranchCd";
+            ID2 = "sIndstCdx";
+            ID3 = "sBranchCd";
 
             //initialize reference objects
             ParamModels model = new ParamModels(poGRider);
@@ -311,7 +312,7 @@ public class Model_Inv_Master extends Model {
     }
 
     @Override
-    public JSONObject openRecord(String Id1, Object Id2, Object Id3) {
+    public JSONObject openRecord(String Id1, Object Id2) {
         JSONObject loJSON = new JSONObject();
         loJSON.put("result", "error");
         loJSON.put("message", "This feature is not supported.");

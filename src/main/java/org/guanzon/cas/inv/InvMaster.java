@@ -515,7 +515,7 @@ public class InvMaster extends Parameter {
 
         if (poJSON != null) {
             String stockID = (String) poJSON.get("sStockIDx");
-            loJSON = poModel.openRecord(stockID, poGRider.getBranchCode());
+            loJSON = poModel.openRecord(stockID, poGRider.getIndustry(),poGRider.getBranchCode());
             if (!"success".equals(loJSON.get("result"))) {
                 loJSON = new JSONObject();
                 loJSON = newRecord();
