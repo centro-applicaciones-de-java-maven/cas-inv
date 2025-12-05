@@ -135,7 +135,7 @@ public class InvMaster extends Parameter {
                 byCode ? 0 : 1);
 
         if (poJSON != null) {
-            return poModel.openRecord((String) poJSON.get("sStockIDx"), (String) poJSON.get("xBranchCd"));
+            return poModel.openRecord((String) poJSON.get("sStockIDx"),poGRider.getIndustry(), (String) poJSON.get("xBranchCd"));
         } else {
             poJSON = new JSONObject();
             poJSON.put("result", "error");
@@ -172,7 +172,7 @@ public class InvMaster extends Parameter {
                 byCode ? 0 : 1);
 
         if (poJSON != null) {
-            return poModel.openRecord((String) poJSON.get("sStockIDx"), (String) poJSON.get("xBranchCd"));
+            return poModel.openRecord((String) poJSON.get("sStockIDx"),poGRider.getIndustry(), (String) poJSON.get("xBranchCd"));
         } else {
             poJSON = new JSONObject();
             poJSON.put("result", "error");
@@ -213,7 +213,7 @@ public class InvMaster extends Parameter {
                 byCode ? 0 : 1);
 
         if (poJSON != null) {
-            return poModel.openRecord((String) poJSON.get("sStockIDx"), (String) poJSON.get("xBranchCd"));
+            return poModel.openRecord((String) poJSON.get("sStockIDx"),poGRider.getIndustry(), (String) poJSON.get("xBranchCd"));
         } else {
             poJSON = new JSONObject();
             poJSON.put("result", "error");
@@ -258,7 +258,7 @@ public class InvMaster extends Parameter {
                 byCode ? 0 : 1);
 
         if (poJSON != null) {
-            return poModel.openRecord((String) poJSON.get("sStockIDx"), (String) poJSON.get("xBranchCd"));
+            return poModel.openRecord((String) poJSON.get("sStockIDx"),poGRider.getIndustry(), (String) poJSON.get("xBranchCd"));
         } else {
             poJSON = new JSONObject();
             poJSON.put("result", "error");
@@ -291,7 +291,7 @@ public class InvMaster extends Parameter {
                 byCode ? 0 : 1);
 
         if (poJSON != null) {
-            return poModel.openRecord((String) poJSON.get("sStockIDx"), (String) poJSON.get("xBranchCd"));
+            return poModel.openRecord((String) poJSON.get("sStockIDx"),poGRider.getIndustry(), (String) poJSON.get("xBranchCd"));
         } else {
             poJSON = new JSONObject();
             poJSON.put("result", "error");
@@ -328,7 +328,7 @@ public class InvMaster extends Parameter {
                 byCode ? 0 : 1);
 
         if (poJSON != null) {
-            return poModel.openRecord((String) poJSON.get("sStockIDx"), (String) poJSON.get("xBranchCd"));
+            return poModel.openRecord((String) poJSON.get("sStockIDx"),poGRider.getIndustry(), (String) poJSON.get("xBranchCd"));
         } else {
             poJSON = new JSONObject();
             poJSON.put("result", "error");
@@ -352,58 +352,58 @@ public class InvMaster extends Parameter {
         }
 
         String lsSQL = "SELECT"
-                            + "  a.sStockIDx"
-                            + ", a.sBarCodex"
-                            + ", a.sDescript"
-                            + ", a.sBriefDsc"
-                            + ", a.sAltBarCd"
-                            + ", a.sCategCd1"
-                            + ", a.sCategCd2"
-                            + ", a.sCategCd3"
-                            + ", a.sCategCd4"
-                            + ", a.sBrandIDx"
-                            + ", a.sModelIDx"
-                            + ", a.sColorIDx"
-                            + ", a.sVrntIDxx"
-                            + ", a.sMeasurID"
-                            + ", a.sInvTypCd"
-                            + ", a.sIndstCdx"
-                            + ", a.nUnitPrce"
-                            + ", a.nSelPrice"
-                            + ", a.nDiscLev1"
-                            + ", a.nDiscLev2"
-                            + ", a.nDiscLev3"
-                            + ", a.nDealrDsc"
-                            + ", a.nMinLevel"
-                            + ", a.nMaxLevel"
-                            + ", a.cComboInv"
-                            + ", a.cWthPromo"
-                            + ", a.cSerialze"
-                            + ", a.cUnitType"
-                            + ", a.cInvStatx"
-                            + ", a.nShlfLife"
-                            + ", a.sSupersed"
-                            + ", a.cRecdStat"
-                            + ", a.sModified"
-                            + ", a.dModified"
-                            + ", IFNULL(b.sDescript, '') xBrandNme"
-                            + ", IFNULL(c.sDescript, '') xModelNme"
-                            + ", IFNULL(d.sDescript, '') xColorNme"
-                            + ", IFNULL(e.sDescript, '') xMeasurNm"
-                            + ", TRIM(CONCAT(IFNULL(f.sDescript, ''), ' ', IFNULL(f.nYearMdlx, ''))) xVrntName"
-                            + ", IFNULL(c.sModelCde, '') xModelCde"
-                            + ", g.nQtyOnHnd xQtyOnHnd"
-                            + ", g.sBranchCd xBranchCd"
-                        + " FROM Inventory a"
-                                + " LEFT JOIN Brand b ON a.sBrandIDx = b.sBrandIDx AND a.sIndstCdx = b.sIndstCdx"
-                                + " LEFT JOIN Model c ON a.sModelIDx = c.sModelIDx AND a.sIndstCdx = c.sIndstCdx"
-                                + " LEFT JOIN Color d ON a.sColorIDx = d.sColorIDx"
-                                + " LEFT JOIN Measure e ON a.sMeasurID = e.sMeasurID"
-                                + " LEFT JOIN Model_Variant f ON a.sVrntIDxx = f.sVrntIDxx"
-                                + " LEFT JOIN Inv_Supplier h ON a.sStockIDx = h.sStockIDx AND a.sIndstCdx = h.sIndstCdx"
-                            + ", Inv_Master g"
-                        + " WHERE a.sStockIDx = g.sStockIDx"
-                            + " AND a.sIndstCdx = g.sIndstCdx";
+                + "  a.sStockIDx"
+                + ", a.sBarCodex"
+                + ", a.sDescript"
+                + ", a.sBriefDsc"
+                + ", a.sAltBarCd"
+                + ", a.sCategCd1"
+                + ", a.sCategCd2"
+                + ", a.sCategCd3"
+                + ", a.sCategCd4"
+                + ", a.sBrandIDx"
+                + ", a.sModelIDx"
+                + ", a.sColorIDx"
+                + ", a.sVrntIDxx"
+                + ", a.sMeasurID"
+                + ", a.sInvTypCd"
+                + ", a.sIndstCdx"
+                + ", a.nUnitPrce"
+                + ", a.nSelPrice"
+                + ", a.nDiscLev1"
+                + ", a.nDiscLev2"
+                + ", a.nDiscLev3"
+                + ", a.nDealrDsc"
+                + ", a.nMinLevel"
+                + ", a.nMaxLevel"
+                + ", a.cComboInv"
+                + ", a.cWthPromo"
+                + ", a.cSerialze"
+                + ", a.cUnitType"
+                + ", a.cInvStatx"
+                + ", a.nShlfLife"
+                + ", a.sSupersed"
+                + ", a.cRecdStat"
+                + ", a.sModified"
+                + ", a.dModified"
+                + ", IFNULL(b.sDescript, '') xBrandNme"
+                + ", IFNULL(c.sDescript, '') xModelNme"
+                + ", IFNULL(d.sDescript, '') xColorNme"
+                + ", IFNULL(e.sDescript, '') xMeasurNm"
+                + ", TRIM(CONCAT(IFNULL(f.sDescript, ''), ' ', IFNULL(f.nYearMdlx, ''))) xVrntName"
+                + ", IFNULL(c.sModelCde, '') xModelCde"
+                + ", g.nQtyOnHnd xQtyOnHnd"
+                + ", g.sBranchCd xBranchCd"
+                + " FROM Inventory a"
+                + " LEFT JOIN Brand b ON a.sBrandIDx = b.sBrandIDx AND a.sIndstCdx = b.sIndstCdx"
+                + " LEFT JOIN Model c ON a.sModelIDx = c.sModelIDx AND a.sIndstCdx = c.sIndstCdx"
+                + " LEFT JOIN Color d ON a.sColorIDx = d.sColorIDx"
+                + " LEFT JOIN Measure e ON a.sMeasurID = e.sMeasurID"
+                + " LEFT JOIN Model_Variant f ON a.sVrntIDxx = f.sVrntIDxx"
+                + " LEFT JOIN Inv_Supplier h ON a.sStockIDx = h.sStockIDx AND a.sIndstCdx = h.sIndstCdx"
+                + ", Inv_Master g"
+                + " WHERE a.sStockIDx = g.sStockIDx"
+                + " AND a.sIndstCdx = g.sIndstCdx";
 
         if (psBranchCd != null) {
             if (!psBranchCd.isEmpty()) {
@@ -515,7 +515,7 @@ public class InvMaster extends Parameter {
 
         if (poJSON != null) {
             String stockID = (String) poJSON.get("sStockIDx");
-            loJSON = poModel.openRecord(stockID, poGRider.getIndustry(),poGRider.getBranchCode());
+            loJSON = poModel.openRecord(stockID, poGRider.getIndustry(), poGRider.getBranchCode());
             if (!"success".equals(loJSON.get("result"))) {
                 loJSON = new JSONObject();
                 loJSON = newRecord();
