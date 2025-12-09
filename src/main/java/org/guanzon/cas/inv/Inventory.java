@@ -91,7 +91,7 @@ public class Inventory extends Parameter {
 
             if (poModel.getInventoryTypeId() == null || poModel.getInventoryTypeId().isEmpty()) {
                 poJSON.put("result", "error");
-                poJSON.put("message", "Item category 2  must not be empty.");
+                poJSON.put("message", "Item Inventory Type  must not be empty.");
                 return poJSON;
             }
 
@@ -487,19 +487,19 @@ public class Inventory extends Parameter {
                 + ", a.cRecdStat"
                 + ", a.sModified"
                 + ", a.dModified"
-                + ", IFNULL(b.sDescript, '') xBrandNme"
+                + ", IFNULL(b.sDescript, '') xBrandNme" 
                 + ", IFNULL(c.sDescript, '') xModelNme"
                 + ", IFNULL(d.sDescript, '') xColorNme"
                 + ", IFNULL(e.sDescript, '') xMeasurNm"
                 + ", TRIM(CONCAT(IFNULL(f.sDescript, ''), ' ', IFNULL(f.nYearMdlx, ''))) xVrntName"
                 + ", IFNULL(c.sModelCde, '') xModelCde"
                 + " FROM Inventory a"
-                + " LEFT JOIN Brand b ON a.sBrandIDx = b.sBrandIDx"
-                + " LEFT JOIN Model c ON a.sModelIDx = c.sModelIDx"
+                + " LEFT JOIN Brand b ON a.sBrandIDx = b.sBrandIDx AND a.sIndstCdx = b.sIndstCdx"
+                + " LEFT JOIN Model c ON a.sModelIDx = c.sModelIDx AND a.sIndstCdx = c.sIndstCdx"
                 + " LEFT JOIN Color d ON a.sColorIDx = d.sColorIDx"
                 + " LEFT JOIN Measure e ON a.sMeasurID = e.sMeasurID"
                 + " LEFT JOIN Model_Variant f ON a.sVrntIDxx = f.sVrntIDxx"
-                + " LEFT JOIN Inv_Supplier g ON a.sStockIDx = g.sStockIDx";
+                + " LEFT JOIN Inv_Supplier g ON a.sStockIDx = g.sStockIDx AND a.sIndstCdx = g.sIndstCdx";
 
         return MiscUtil.addCondition(lsSQL, lsCondition);
     }
