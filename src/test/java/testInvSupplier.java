@@ -3,10 +3,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/JUnit4TestClass.java to edit this template
  */
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import org.guanzon.appdriver.base.GConnectionCAS;
 import org.guanzon.appdriver.base.GRiderCAS;
 import org.guanzon.appdriver.base.GuanzonException;
 import org.guanzon.cas.inv.InvSupplierPrice;
@@ -29,14 +34,18 @@ public class testInvSupplier {
     }
     
     @BeforeClass
-    public static void setUpClass() throws SQLException, GuanzonException {
+    public static void setUpClass() throws SQLException, GuanzonException, IOException {
         System.out.println("setUpClass()");
-        instance = new GRiderCAS("test");
+        System.setProperty("sys.default.path.config", "D:/GGC_Maven_Systems/");
+
+        instance = new GRiderCAS(true);
         
-        createCoreTable();
+        //prepareData(instance.getGConnection());
         createInventoryTable();
-        
         populateInventoryTable();
+        createCoreTable();
+        
+
     }
     
     @AfterClass
@@ -61,6 +70,7 @@ public class testInvSupplier {
      public void test() throws SQLException, GuanzonException {
         System.out.println("testPORcv_MC()");
         String lsSQL;
+        //load old record
         lsSQL = "SELECT * FROM Inv_Master" + 
                " WHERE sBranchCD = 'M095'" + 
                  " AND sStockIDx IN ('M00124110')" + 
@@ -110,7 +120,11 @@ public class testInvSupplier {
                          .setScale(4, RoundingMode.HALF_UP)
                          .doubleValue();
         }
-        assertEquals(loRSNewInvMas01.getDouble("nAvgCostx"), lnAvgCostx, 4);
+        assertEquals(loRSNewInvMas01.getDouble("nAvgCostx"), lnAvgCostx, 0.000);
+        
+        System.out.println(loRSNewInvMas01.getDouble("nAvgCostx"));
+        System.out.println(lnAvgCostx);
+        
         
         lsSQL = "SELECT * FROM Inv_Supplier" + 
                " WHERE sStockIDx IN ('M00124110')" + 
@@ -292,4 +306,26 @@ public class testInvSupplier {
         lsSQL = "INSERT INTO Inv_Master SET sStockIDx = 'M00125055', sBranchCd = 'M001', sWHouseID = '001', sIndstCdx = '02', sLocatnID = '', nBegQtyxx = 0, nQtyOnHnd = 4, nLedgerNo = 1, nBackOrdr = 4, nResvOrdr = 5, nFloatQty = 0, cPrimaryx = '1', cConditnx = '0', sPayLoadx = '', cRecdStat = '1', sModified = '', dModified = null";
         instance.executeUpdate(lsSQL);
     }
+    
+    public static void prepareData(GConnectionCAS foCon) throws IOException, SQLException {	
+    	
+             Statement stmt = foCon.getConnection().createStatement();  	
+	
+            // Load core schema.sql	
+            String schemaSql = new String(Files.readAllBytes(Paths.get("D:/GGC_Maven_Systems/resources/core/core-schema.sql")));	
+            stmt.execute(schemaSql);	
+	
+            // Load core data.sql	
+            String dataSql = new String(Files.readAllBytes(Paths.get("D:/GGC_Maven_Systems/resources/core/core-data.sql")));	
+            stmt.execute(dataSql);	
+	
+            // Load module schema.sql	
+            //schemaSql = new String(Files.readAllBytes(Paths.get("D:/GGC_Maven_Systems/resources/module/po-module-schema.sql")));	
+            //stmt.execute(schemaSql);	
+	
+            // Load core data.sql	
+            //dataSql = new String(Files.readAllBytes(Paths.get("D:/GGC_Maven_Systems/resources/module/po-module-data.sql")));	
+            //stmt.execute(dataSql);	
+	
+    }	    
 }
