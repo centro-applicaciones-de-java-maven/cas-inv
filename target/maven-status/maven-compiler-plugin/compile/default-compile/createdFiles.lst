@@ -6,6 +6,7 @@ org\guanzon\cas\inv\roq\ROQ_MC.class
 org\guanzon\cas\inv\InventorySupplier.class
 org\guanzon\cas\inv\InvMaster.class
 org\guanzon\cas\inv\roq\ClassifySP.class
+org\guanzon\cas\inv\InvSupplierPrice$DetailEntry.class
 org\guanzon\cas\inv\roq\iClassify.class
 org\guanzon\cas\inv\roq\ROQFactory.class
 org\guanzon\cas\inv\model\Model_Inv_Ledger.class
@@ -18,6 +19,7 @@ org\guanzon\cas\inv\model\Model_Inventory.class
 org\guanzon\cas\inv\InventoryClassification.class
 org\guanzon\cas\inv\roq\ROQ_MCSP.class
 org\guanzon\cas\inv\model\Model_Inv_Serial.class
+org\guanzon\cas\inv\InvSupplierPrice.class
 org\guanzon\cas\inv\InvTransCons.class
 org\guanzon\cas\inv\InventoryTransaction$DetailEntry.class
 org\guanzon\cas\inv\services\InvControllers.class
