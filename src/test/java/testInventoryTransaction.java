@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/JUnit4TestClass.java to edit this template
  */
 
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.guanzon.appdriver.base.GRiderCAS;
@@ -10,7 +11,6 @@ import org.guanzon.appdriver.base.GuanzonException;
 import org.guanzon.appdriver.base.SQLUtil;
 import org.guanzon.cas.inv.InvTransCons;
 import org.guanzon.cas.inv.InventoryTransaction;
-import org.json.simple.JSONObject;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -28,7 +28,7 @@ public class testInventoryTransaction {
 //    }
     
     @BeforeClass
-    public static void setUpClass() throws SQLException, GuanzonException {
+    public static void setUpClass() throws SQLException, GuanzonException, IOException {
         System.out.println("setUpClass()");
         instance = new GRiderCAS("test");
         

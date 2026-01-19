@@ -10,7 +10,7 @@ import org.guanzon.cas.inv.roq.ClassifySP;
 import org.json.simple.JSONObject;
 
 public class testClassify {
-    public static void main(String[] args) throws SQLException, GuanzonException {
+    public static void main(String[] args) throws SQLException, GuanzonException, IOException {
         String path;
         if (System.getProperty("os.name").toLowerCase().contains("win")) {
             path = "D:/GGC_Maven_Systems";
