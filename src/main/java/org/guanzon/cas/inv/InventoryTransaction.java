@@ -149,6 +149,10 @@ public class InventoryTransaction {
     public void PurchaseOrder(String fsSourceNo, Date fdTransact, boolean fbIsReverse){
         initTransaction(InvTransCons.PURCHASE_ORDER, fsSourceNo, fdTransact, fbIsReverse);
     }
+    
+    public void StockRequest(String fsSourceNo, Date fdTransact, boolean fbIsReverse){
+        initTransaction(InvTransCons.INVENTORY_STOCK_REQUEST, fsSourceNo, fdTransact, fbIsReverse);
+    }
 
     /**
      * Initiate the cancellation thru the PO Cancellation Module
@@ -244,6 +248,7 @@ public class InventoryTransaction {
                          " AND b.sIndstCdx = " + SQLUtil.toSQL(fsIndstCdx) +
                        " ORDER  BY a.sStockIDx DESC";        
 
+        System.out.println("Load Stock ID Query : " +lsSQL);
         ResultSet loRS = poDriver.executeQuery(lsSQL);
         
 //        //create scrollable ResultSet

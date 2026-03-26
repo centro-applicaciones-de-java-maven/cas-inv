@@ -50,6 +50,8 @@ public class InvTransCons {
     public final static String WHOLESALE_RETURN = "WLRt";
     public final static String WHOLESALE_REPLACEMENT = "WLRp";
     
+    public final static String INVENTORY_STOCK_REQUEST = "InvR";
+    
     public final static String GCARD_REDEMPTION = "GCRd";             //GCRd 
     
     public final static String CREDIT_MEMO = "AJCm";
@@ -131,7 +133,8 @@ public class InvTransCons {
                CUSTOMER_ORDER + ":" + 
                RETAIL_ORDER + ":" +
                RETAIL_ORDER_CANCELLATION + ":" + 
-               CUSTOMER_ORDER_CANCELLATION; 
+               CUSTOMER_ORDER_CANCELLATION + ":" + 
+               INVENTORY_STOCK_REQUEST; 
     }
     
 }
