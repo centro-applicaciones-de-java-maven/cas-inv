@@ -984,7 +984,7 @@ public class InventoryBrowse {
         if (this.poJSON != null) {
             JSONObject result = new JSONObject();
 
-            result = this.poInvMaster.openRecord((String) this.poJSON.get("sStockIDx"), (String) this.poJSON.get("sBranchCd"));
+            result = this.poInvMaster.openRecord((String) this.poJSON.get("sStockIDx"),(String) this.poJSON.get("sIndstCdx"), (String) this.poJSON.get("sBranchCd"));
             if ("error".equals((String) result.get("result"))) {
                 return result;
             }
@@ -1313,7 +1313,7 @@ public class InventoryBrowse {
                 + "  LEFT JOIN Measure e ON a.sMeasurID = e.sMeasurID"
                 + "  LEFT JOIN Model_Variant f ON a.sVrntIDxx = f.sVrntIDxx"
                 + "  LEFT JOIN Inv_Supplier ba ON a.sStockIDx = ba.sStockIDx "
-                + "  LEFT JOIN Inv_Master bb ON a.sStockIDx = bb.sStockIDx "
+                + "  LEFT JOIN Inv_Master bb ON a.sStockIDx = bb.sStockIDx AND a.sIndstCdx = bb.sIndstCdx "
                 + "  LEFT JOIN Branch bc ON bb.sBranchCd = bc.sBranchCd";
         return lsSQL;
     }
@@ -1381,7 +1381,7 @@ public class InventoryBrowse {
                 + "  LEFT JOIN Measure f ON b.sMeasurID = f.sMeasurID"
                 + "  LEFT JOIN Model_Variant g ON b.sVrntIDxx = g.sVrntIDxx"
                 + "  LEFT JOIN Inv_Supplier ba ON b.sStockIDx = ba.sStockIDx "
-                + "  LEFT JOIN Inv_Master bb ON b.sStockIDx = bb.sStockIDx AND a.sBranchCd = bb.sBranchCd "
+                + "  LEFT JOIN Inv_Master bb ON b.sStockIDx = bb.sStockIDx AND a.sIndstCdx = bb.sIndstCdx "
                 + "  LEFT JOIN Branch bc ON bb.sBranchCd = bc.sBranchCd";
         return lsSQL;
     }
@@ -1402,6 +1402,7 @@ public class InventoryBrowse {
                 + ",  IFNULL(bc.sBranchCd, '') sBranchCd"
                 + ",  IFNULL(b.sSerialID, '') sSerialID"
                 + ",  a.sStockIDx"
+                + ",  a.sIndstCdx"
                 + " FROM Inventory a"
                 + "  LEFT JOIN Inv_Serial b ON a.sStockIDx = b.sStockIDx"
                 + "  LEFT JOIN Brand c ON a.sBrandIDx = c.sBrandIDx"
@@ -1410,7 +1411,7 @@ public class InventoryBrowse {
                 + "  LEFT JOIN Measure f ON a.sMeasurID = f.sMeasurID"
                 + "  LEFT JOIN Model_Variant g ON a.sVrntIDxx = g.sVrntIDxx"
                 + "  LEFT JOIN Inv_Supplier ba ON a.sStockIDx = ba.sStockIDx"
-                + "  LEFT JOIN Inv_Master bb ON a.sStockIDx = bb.sStockIDx"
+                + "  LEFT JOIN Inv_Master bb ON a.sStockIDx = bb.sStockIDx AND a.sIndstCdx = bb.sIndstCdx "
                 + "  LEFT JOIN Branch bc ON bb.sBranchCd = bc.sBranchCd";
 //                + "         ORDER BY xSerialNme DESC, sBarcodex ASC, nQtyOnHnd DESC";
         return lsSQL;
